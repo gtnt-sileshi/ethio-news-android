@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/_25sdp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/bg_dialog"
+        android:orientation="vertical"
+        android:padding="@dimen/_5sdp">
+
+        <!-- Header row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/_1sdp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:contentDescription="@string/todo"
+                android:padding="@dimen/_7sdp"
+                android:src="@drawable/ic_sleep_timer"
+                app:tint="?ns_primary" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="@dimen/_9sdp"
+                android:text="@string/sleep_timer"
+                android:textColor="?ns_title"
+                android:textSize="@dimen/_13ssp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/iv_sleep_close"
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:background="@drawable/bar_selector"
+                android:contentDescription="@string/todo"
+                android:padding="@dimen/_5sdp"
+                android:src="@drawable/ic_close"
+                app:tint="?ns_title" />
+
+        </LinearLayout>
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="?ns_border"
+            android:layout_marginBottom="@dimen/_4sdp" />
+
+        <!-- Preset options -->
+        <RadioGroup
+            android:id="@+id/rg_sleep_timer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="@dimen/_10sdp">
+
+            <RadioButton
+                android:id="@+id/rd_15"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:text="@string/sleep_timer_15"
+                android:textAlignment="viewStart"
+                android:textColor="?ns_title"
+                android:buttonTint="?ns_primary"
+                android:layout_marginBottom="@dimen/_6sdp" />
+
+            <RadioButton
+                android:id="@+id/rd_30"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:text="@string/sleep_timer_30"
+                android:textAlignment="viewStart"
+                android:textColor="?ns_title"
+                android:buttonTint="?ns_primary"
+                android:layout_marginBottom="@dimen/_6sdp" />
+
+            <RadioButton
+                android:id="@+id/rd_45"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:text="@string/sleep_timer_45"
+                android:textAlignment="viewStart"
+                android:textColor="?ns_title"
+                android:buttonTint="?ns_primary"
+                android:layout_marginBottom="@dimen/_6sdp" />
+
+            <RadioButton
+                android:id="@+id/rd_60"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:text="@string/sleep_timer_60"
+                android:textAlignment="viewStart"
+                android:textColor="?ns_title"
+                android:buttonTint="?ns_primary"
+                android:layout_marginBottom="@dimen/_6sdp" />
+
+            <RadioButton
+                android:id="@+id/rd_custom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:text="@string/sleep_timer_custom"
+                android:textAlignment="viewStart"
+                android:textColor="?ns_title"
+                android:buttonTint="?ns_primary" />
+
+        </RadioGroup>
+
+        <!-- Custom minutes input — shown only when "Custom" is selected -->
+        <LinearLayout
+            android:id="@+id/ll_custom_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_6sdp"
+            android:gravity="center_vertical"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/et_custom_minutes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_card_edit_text"
+                android:hint="@string/sleep_timer_custom_hint"
+                android:inputType="number"
+                android:maxLines="1"
+                android:padding="@dimen/_8sdp"
+                android:textColor="?ns_title"
+                android:textColorHint="?ns_title_sub"
+                android:textSize="@dimen/_13ssp"
+                android:importantForAutofill="no" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:text="@string/sleep_timer_min_unit"
+                android:textColor="?ns_title_sub"
+                android:textSize="@dimen/_12ssp" />
+
+        </LinearLayout>
+
+        <!-- Cancel timer row — shown when a timer is already active -->
+        <TextView
+            android:id="@+id/tv_cancel_timer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:padding="@dimen/_8sdp"
+            android:background="@drawable/btn_border"
+            android:textColor="?ns_title"
+            android:textSize="@dimen/_12ssp"
+            android:visibility="gone" />
+
+        <!-- Footer buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/_10sdp">
+
+            <TextView
+                android:id="@+id/tv_sleep_cancel"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_danger"
+                android:gravity="center"
+                android:text="@string/cancel"
+                android:textColor="?ns_white"
+                android:textSize="@dimen/_13ssp"
+                android:layout_marginEnd="@dimen/_10sdp" />
+
+            <TextView
+                android:id="@+id/tv_sleep_set"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_primary"
+                android:gravity="center"
+                android:text="@string/sleep_timer_set_btn"
+                android:textColor="?ns_white"
+                android:textSize="@dimen/_13ssp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

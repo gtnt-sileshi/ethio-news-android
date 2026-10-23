@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/_200sdp"
+    android:layout_height="@dimen/_120sdp"
+    android:layout_marginEnd="@dimen/_10sdp">
+
+    <ImageView
+        android:id="@+id/iv_home_banner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@color/ns_yellow_50"
+        app:hv_corner_radius="@dimen/_5sdp"
+        android:scaleType="centerCrop" />
+
+    <View
+        android:id="@+id/view_home_banner"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_100sdp"
+        android:layout_alignParentBottom="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/iv_home_banner"
+        android:layout_alignEnd="@+id/iv_home_banner"
+        android:layout_alignBottom="@+id/iv_home_banner"
+        android:orientation="vertical"
+        android:padding="@dimen/_5sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_home_banner_desc"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_11ssp"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_home_banner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textStyle="bold"
+            android:text="@string/app_name"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_13ssp"/>
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/play_songs"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_alignEnd="@+id/iv_home_banner"
+        android:layout_alignBottom="@+id/iv_home_banner"
+        android:layout_margin="@dimen/_10sdp"
+        android:background="@drawable/bg_home_banner"
+        android:backgroundTint="#59FFFFFF"
+        android:padding="@dimen/_5sdp"
+        android:tint="@color/white"
+        app:srcCompat="@drawable/ic_folder" />
+
+</RelativeLayout>

@@ -1,0 +1,41 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_cast_play"
+        android:icon="@drawable/ic_round_cast"
+        android:title="@string/app_name"
+        android:visible="false"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_fields"
+        android:icon="@drawable/ic_text_fields"
+        android:title="@string/app_name"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_feedback"
+        android:icon="@drawable/ic_menu_feedback"
+        android:title="@string/feedback"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_share"
+        android:icon="@drawable/ic_round_share"
+        android:title="@string/share"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/menu_background_play"
+        android:icon="@drawable/ic_play"
+        android:title="@string/background_play"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/menu_stop_background"
+        android:icon="@drawable/ic_close"
+        android:title="@string/stop_playback"
+        app:showAsAction="never"/>
+
+</menu>

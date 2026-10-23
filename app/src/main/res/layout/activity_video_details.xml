@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.VideoDetailsActivity"
+    android:background="?ns_bg">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?ns_bg"
+        android:minHeight="?attr/actionBarSize"
+        app:navigationIcon="?ns_icon_back"
+        app:navigationIconTint="?ns_bg_dark"
+        app:titleTextColor="?ns_bg_dark" />
+
+    <RelativeLayout
+        android:id="@+id/lytParent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_below="@+id/toolbar">
+
+        <FrameLayout
+            android:id="@+id/playerSection"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_150sdp"
+            android:background="?ns_bg_sub"
+            android:orientation="vertical" />
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
+            android:layout_below="@id/playerSection"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:background="?ns_border" />
+
+                <RelativeLayout
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_details_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:layout_toStartOf="@+id/iv_sta"
+                        android:text="@string/app_name"
+                        android:textAlignment="viewStart"
+                        android:textColor="?ns_title"
+                        android:textSize="@dimen/_15ssp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/iv_sta"
+                        android:layout_width="@dimen/_35sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:layout_centerVertical="true"
+                        android:layout_toStartOf="@+id/iv_fav"
+                        android:contentDescription="@string/todo"
+                        android:src="@drawable/ic_star"
+                        android:background="@drawable/bar_selector_tv"
+                        app:tint="?ns_bg_dark" />
+
+                    <ImageView
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:id="@+id/iv_fav"
+                        android:layout_width="@dimen/_35sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:contentDescription="@string/todo"
+                        android:src="@drawable/ic_turned_in_not"
+                        android:background="@drawable/bar_selector_tv"
+                        app:tint="?ns_bg_dark" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp">
+
+                    <RatingBar
+                        android:id="@+id/rb_video"
+                        style="@style/ratingBarWhite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:max="5"
+                        android:numStars="5" />
+
+                    <TextView
+                        android:id="@+id/tv_avg_rate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:background="@drawable/yellow_btn"
+                        android:paddingEnd="@dimen/_8sdp"
+                        android:paddingStart="@dimen/_8sdp"
+                        android:textColor="?ns_bg"
+                        android:textSize="@dimen/_9ssp"
+                        android:gravity="center"
+                        android:text="0"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:id="@+id/tv_views"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/app_name"
+                        android:textColor="?ns_title_sub"
+                        android:textSize="@dimen/_10ssp" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:background="?ns_border" />
+
+                <WebView
+                    android:id="@+id/webView_det"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    tools:ignore="WebViewLayout" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:id="@+id/ll_adView"
+                    android:background="?ns_bg"
+                    android:backgroundTint="?ns_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:background="?ns_border" />
+
+                <LinearLayout
+                    android:id="@+id/ll_similar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_5sdp"
+                            android:layout_weight="1"
+                            android:padding="@dimen/_4sdp"
+                            android:text="Similar"
+                            android:textAlignment="viewStart"
+                            android:textColor="?ns_title"
+                            android:textSize="@dimen/_15sdp"
+                            android:textStyle="bold"
+                            tools:ignore="HardcodedText" />
+
+                        <ImageView
+                            android:id="@+id/iv_similar"
+                            android:layout_width="@dimen/_35sdp"
+                            android:layout_height="@dimen/_35sdp"
+                            android:layout_marginEnd="@dimen/_5sdp"
+                            android:background="@drawable/bar_selector"
+                            android:contentDescription="@string/todo"
+                            android:padding="@dimen/_5sdp"
+                            android:src="@drawable/ic_round_list"
+                            app:tint="?ns_bg_dark" />
+
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_similar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clipToPadding="false"
+                        android:paddingStart="@dimen/_5sdp"
+                        android:paddingEnd="@dimen/_5sdp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:id="@+id/ll_adView_2"
+                    android:background="?ns_bg"
+                    android:backgroundTint="?ns_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"/>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_below="@id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:background="?ns_border" />
+
+    <ProgressBar
+        android:id="@+id/pb"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_centerInParent="true"
+        android:indeterminate="true"
+        app:pb_color="#FFee44"
+        app:pb_colors="@array/progress_colors"
+        app:pb_max_sweep_angle="300"
+        app:pb_min_sweep_angle="10"
+        app:pb_rotation_speed="1.0"
+        app:pb_stroke_width="@dimen/_2sdp"
+        app:pb_sweep_speed="1.0" />
+
+</RelativeLayout>

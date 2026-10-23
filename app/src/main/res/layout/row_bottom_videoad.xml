@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/_15sdp"
+    android:background="@drawable/bg_bottomsheet">
+
+    <ImageView
+        android:layout_gravity="center"
+        android:id="@+id/view1"
+        android:layout_width="40dp"
+        android:layout_height="3dp"
+        app:hv_corner_radius="20dp"
+        android:background="?ns_title_sub"
+        app:hv_mutate_background="true" />
+
+    <TextView
+        android:id="@+id/tv1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:textColor="?ns_title"
+        android:textSize="16sp"
+        android:text="@string/watch_ad" />
+
+    <TextView
+        android:id="@+id/tv2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:textColor="?ns_title_sub"
+        android:text="@string/watch_video_for"/>
+
+    <LinearLayout
+        android:id="@+id/ll_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:layout_marginTop="10dp"
+        android:background="?attr/selectableItemBackground">
+
+        <CheckBox
+            android:id="@+id/cb_videoad"
+            android:layout_width="20dp"
+            android:layout_height="20dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:text="@string/dont_show_alert"
+            android:textColor="?ns_title_sub"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="15dp"
+        android:background="?ns_border" />
+
+    <LinearLayout
+        android:paddingTop="@dimen/_10sdp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/btn_bottom_subscribe"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/subscribe_now"
+            android:textColor="?ns_white"
+            android:textSize="@dimen/_13ssp"
+            android:background="@drawable/btn_success"/>
+
+        <View
+            android:id="@+id/vw_dialog_bar"
+            android:layout_width="@dimen/_10sdp"
+            android:layout_height="@dimen/_1sdp"/>
+
+        <TextView
+            android:id="@+id/btn_bottom_logout"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/watch_ad"
+            android:textColor="?ns_white"
+            android:textSize="@dimen/_13ssp"
+            android:background="@drawable/btn_primary"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_marginTop="@dimen/_15sdp"
+        android:id="@+id/btn_bottom_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_35sdp"
+        android:gravity="center"
+        android:text="@string/cancel"
+        android:textColor="?ns_white"
+        android:textSize="@dimen/_13ssp"
+        android:background="@drawable/btn_danger"/>
+
+</LinearLayout>

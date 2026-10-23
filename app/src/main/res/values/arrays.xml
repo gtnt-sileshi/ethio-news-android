@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="progress_colors">
+        <item>#FFee44</item>
+        <item>#FF9800</item>
+        <item>#F44336</item>
+        <item>#4CAF50</item>
+    </string-array>
+</resources>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Ethio News Classic (Light) - Blue brand-->
+    <color name="ns_classic_primary">#1565C0</color>
+    <color name="ns_classic_primary_sub">#261565C0</color>
+    <color name="ns_classic_bg">#FAFAFA</color>
+    <color name="ns_classic_bg_sub">#F0F4FA</color>
+    <color name="ns_classic_title">#111827</color>
+    <color name="ns_classic_title_sub">#6B7280</color>
+    <color name="ns_classic_border">#1A1565C0</color>
+    <color name="ns_classic_body_dark">#000000</color>
+
+    <!--Ethio News Dark - Blue on dark-->
+    <color name="ns_dark_primary">#1E88E5</color>
+    <color name="ns_dark_primary_sub">#261E88E5</color>
+    <color name="ns_dark_bg">#0A0D12</color>
+    <color name="ns_dark_bg_sub">#10151F</color>
+    <color name="ns_dark_title">#F0F4F8</color>
+    <color name="ns_dark_title_sub">#E9A0A0A0</color>
+    <color name="ns_dark_border">#CC0D1526</color>
+
+    <!--Ethio News Dark Blue variant-->
+    <color name="ns_blue_primary">#1E88E5</color>
+    <color name="ns_blue_primary_sub">#261E88E5</color>
+    <color name="ns_blue_bg">#0E1015</color>
+    <color name="ns_blue_bg_sub">#161820</color>
+    <color name="ns_blue_title">#F1F2F8</color>
+    <color name="ns_blue_title_sub">#6B6E83</color>
+    <color name="ns_blue_border">#F30C0D1A</color>
+
+    <!--Ethio News Dark Grey variant-->
+    <color name="ns_grey_primary">#1E88E5</color>
+    <color name="ns_grey_primary_sub">#261E88E5</color>
+    <color name="ns_grey_bg">#121212</color>
+    <color name="ns_grey_bg_sub">#1E1E1E</color>
+    <color name="ns_grey_title">#F0F4F8</color>
+    <color name="ns_grey_title_sub">#E9A0A0A0</color>
+    <color name="ns_grey_border">#1A1A1D</color>
+
+    <color name="ns_black">#FF000000</color>
+    <color name="ns_white">#FFFFFFFF</color>
+    <color name="ns_yellow_50">#FFFDE7</color>
+    <color name="ns_star_gold">#FFC107</color>
+
+    <!-- Aliases required by drawables that reference @color/black and @color/white -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Ethio News brand colors -->
+    <color name="ethio_red">#1565C0</color>
+    <color name="ethio_red_dark">#0D47A1</color>
+    <color name="ethio_red_light">#42A5F5</color>
+
+    <color name="color_setting_1">#1565C0</color>
+    <color name="color_setting_2">#0D47A1</color>
+    <color name="color_setting_3">#42A5F5</color>
+    <color name="color_setting_4">#2E86AB</color>
+    <color name="color_setting_5">#27AE60</color>
+    <color name="color_setting_6">#E67E22</color>
+    <color name="color_setting_7">#8E44AD</color>
+
+    <!-- Ethio News specific semantic colors -->
+    <!-- LIVE badge — always red regardless of theme -->
+    <color name="news_live_red">#D32F2F</color>
+    <!-- Breaking news badge — amber -->
+    <color name="news_breaking_amber">#F57C00</color>
+    <!-- Toolbar underline / accent strip -->
+    <color name="news_toolbar_accent">#1565C0</color>
+    <!-- Scrim over banners -->
+    <color name="news_scrim_dark">#CC000000</color>
+
+</resources>

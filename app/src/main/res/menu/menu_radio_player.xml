@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_sleep_timer"
+        android:icon="@drawable/ic_sleep_timer"
+        android:title="@string/sleep_timer"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_feedback"
+        android:icon="@drawable/ic_menu_feedback"
+        android:title="@string/feedback"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_share"
+        android:icon="@drawable/ic_round_share"
+        android:title="@string/share"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_stop_playback"
+        android:icon="@drawable/ic_close"
+        android:title="@string/stop_playback"
+        app:showAsAction="never" />
+
+</menu>

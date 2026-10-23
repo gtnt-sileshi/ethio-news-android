@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Podcast / Radio player — full redesign for Ethio News -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?ns_bg"
+    tools:context=".activity.RadioPlayerActivity">
+
+    <!-- Toolbar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?ns_bg"
+        app:navigationIcon="?ns_icon_back"
+        app:navigationIconTint="?ns_bg_dark"
+        app:titleTextColor="?ns_bg_dark" />
+
+    <!-- Accent bar below toolbar -->
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_2sdp"
+        android:layout_below="@id/toolbar"
+        android:background="?ns_primary" />
+
+    <!-- Scroll content -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/divider"
+        android:layout_above="@id/ll_adView">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:paddingTop="@dimen/_28sdp"
+            android:paddingStart="@dimen/_24sdp"
+            android:paddingEnd="@dimen/_24sdp"
+            android:paddingBottom="@dimen/_24sdp">
+
+            <!-- Podcast artwork with shadow card -->
+            <androidx.cardview.widget.CardView
+                app:cardElevation="@dimen/_12sdp"
+                app:cardCornerRadius="@dimen/_16sdp"
+                app:cardBackgroundColor="@color/ns_classic_bg_sub"
+                android:layout_width="@dimen/_160sdp"
+                android:layout_height="@dimen/_160sdp"
+                android:layout_marginBottom="@dimen/_24sdp">
+
+                <ImageView
+                    android:id="@+id/iv_radio_logo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/material_design_default"
+                    android:contentDescription="@string/app_name" />
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- "PODCASTS" category label -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_live_tag"
+                android:paddingStart="@dimen/_10sdp"
+                android:paddingEnd="@dimen/_10sdp"
+                android:paddingTop="@dimen/_3sdp"
+                android:paddingBottom="@dimen/_3sdp"
+                android:text="@string/live_radio"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_10ssp"
+                android:textStyle="bold"
+                android:letterSpacing="0.08"
+                android:layout_marginBottom="@dimen/_10sdp" />
+
+            <!-- Station name -->
+            <TextView
+                android:id="@+id/tv_radio_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textColor="?ns_title"
+                android:textSize="@dimen/_20ssp"
+                android:textStyle="bold"
+                android:layout_marginBottom="@dimen/_4sdp"
+                tools:text="Fana FM" />
+
+            <!-- Genre / description -->
+            <TextView
+                android:id="@+id/tv_radio_genre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textColor="?ns_title_sub"
+                android:textSize="@dimen/_12ssp"
+                android:layout_marginBottom="@dimen/_20sdp"
+                tools:text="News · Talk · Music" />
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:background="?ns_border"
+                android:layout_marginBottom="@dimen/_20sdp" />
+
+            <!-- Status text -->
+            <TextView
+                android:id="@+id/tv_radio_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?ns_primary"
+                android:textSize="@dimen/_12ssp"
+                android:textStyle="bold"
+                android:layout_marginBottom="@dimen/_8sdp"
+                tools:text="Playing…" />
+
+            <!-- Buffering indicator -->
+            <ProgressBar
+                android:id="@+id/pb_radio_buffer"
+                android:layout_width="@dimen/_36sdp"
+                android:layout_height="@dimen/_36sdp"
+                android:indeterminate="true"
+                android:indeterminateTint="?ns_primary"
+                android:visibility="gone"
+                android:layout_marginBottom="@dimen/_8sdp" />
+
+            <!-- Play / Pause button -->
+            <ImageButton
+                android:id="@+id/btn_play_pause"
+                android:layout_width="@dimen/_72sdp"
+                android:layout_height="@dimen/_72sdp"
+                android:background="@drawable/bg_btn"
+                android:contentDescription="@string/todo"
+                android:padding="@dimen/_16sdp"
+                android:src="@drawable/ic_play"
+                android:tint="@color/white"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_28sdp" />
+
+            <!-- Favourite + Share -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginBottom="@dimen/_20sdp">
+
+                <ImageView
+                    android:id="@+id/iv_fav"
+                    android:layout_width="@dimen/_45sdp"
+                    android:layout_height="@dimen/_45sdp"
+                    android:padding="@dimen/_10sdp"
+                    android:contentDescription="@string/todo"
+                    android:src="@drawable/ic_turned_in_not"
+                    android:tint="?ns_title_sub"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:layout_marginEnd="@dimen/_24sdp" />
+
+                <ImageView
+                    android:id="@+id/iv_share"
+                    android:layout_width="@dimen/_45sdp"
+                    android:layout_height="@dimen/_45sdp"
+                    android:padding="@dimen/_10sdp"
+                    android:contentDescription="@string/todo"
+                    android:src="@drawable/ic_round_share"
+                    android:tint="?ns_title_sub"
+                    android:background="?attr/selectableItemBackgroundBorderless" />
+
+            </LinearLayout>
+
+            <!-- Description -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:background="?ns_border"
+                android:layout_marginBottom="@dimen/_12sdp" />
+
+            <TextView
+                android:id="@+id/tv_radio_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?ns_title_sub"
+                android:textSize="@dimen/_12ssp"
+                android:lineSpacingMultiplier="1.5" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Bottom ad banner -->
+    <LinearLayout
+        android:id="@+id/ll_adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:background="?ns_bg" />
+
+</RelativeLayout>

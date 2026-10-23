@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Google AdServices config — required by the Google Mobile Ads SDK (AdMob) when
+    targeting API 33+. Enables the Attribution Reporting API and Protected Audience API
+    for ad measurement. See:
+    https://developers.google.com/admob/android/privacy/ad-services-config
+-->
+<ad-services-config>
+    <attribution>
+        <allowed-reporting-origins />
+    </attribution>
+    <custom-audiences allowAllCustomAudiencesForTesting="false" />
+</ad-services-config>

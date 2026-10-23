@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Selected tab: brand red -->
+    <item android:state_checked="true"  android:color="?ns_primary" />
+    <!-- Unselected tab: muted text color -->
+    <item android:state_checked="false" android:color="?ns_title_sub" />
+</selector>

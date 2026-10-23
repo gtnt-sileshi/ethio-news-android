@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Thumbnail image -->
+    <ImageView
+        android:id="@+id/iv_home_banner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@color/ns_yellow_50"
+        app:hv_corner_radius="@dimen/_8sdp"
+        android:scaleType="centerCrop" />
+
+    <!-- Dark gradient scrim for text legibility -->
+    <View
+        android:id="@+id/view_home_banner"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_110sdp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bg_banner_scrim" />
+
+    <!-- "LIVE" badge at top-start -->
+    <TextView
+        android:id="@+id/tv_banner_live_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_8sdp"
+        android:background="@drawable/bg_live_tag"
+        android:paddingStart="@dimen/_8sdp"
+        android:paddingEnd="@dimen/_8sdp"
+        android:paddingTop="@dimen/_3sdp"
+        android:paddingBottom="@dimen/_3sdp"
+        android:text="@string/tag_live"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_10ssp"
+        android:textStyle="bold"
+        android:letterSpacing="0.08"
+        android:visibility="gone" />
+
+    <!-- Title + category text at bottom -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/iv_home_banner"
+        android:layout_alignEnd="@+id/iv_home_banner"
+        android:layout_alignBottom="@+id/iv_home_banner"
+        android:orientation="vertical"
+        android:padding="@dimen/_5sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_48sdp"
+        android:layout_marginBottom="@dimen/_10sdp">
+
+        <!-- Category / source label -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_home_banner_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/app_name"
+            android:textColor="#CCFFFFFF"
+            android:textSize="@dimen/_10ssp"
+            android:letterSpacing="0.05" />
+
+        <!-- Channel / headline title -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_home_banner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textStyle="bold"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_13ssp"
+            android:lineSpacingMultiplier="1.1" />
+
+    </LinearLayout>
+
+    <!-- Play button at bottom-end -->
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/play_songs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/iv_home_banner"
+        android:layout_alignBottom="@+id/iv_home_banner"
+        android:layout_margin="@dimen/_10sdp"
+        android:background="@drawable/bg_home_banner"
+        android:backgroundTint="#80FFFFFF"
+        android:padding="@dimen/_10sdp"
+        android:tint="@color/white"
+        app:srcCompat="@drawable/ic_folder"
+        android:contentDescription="@string/tag_watch" />
+
+</RelativeLayout>

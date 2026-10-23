@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Small circle used as a colour swatch inside theme picker buttons.
+     The border ensures the swatch is always visible regardless of the
+     surrounding button background colour (e.g. white swatch on white bg). -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <stroke
+        android:width="@dimen/_1sdp"
+        android:color="?ns_border" />
+</shape>

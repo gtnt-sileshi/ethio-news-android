@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="banner_height">50dp</dimen>
+
+    <dimen name="default_corner_radii">8dp</dimen>
+
+    <dimen name="_1sdp">1dp</dimen>
+    <dimen name="_2sdp">2dp</dimen>
+    <dimen name="_3sdp">3dp</dimen>
+    <dimen name="_4sdp">4dp</dimen>
+    <dimen name="_5sdp">5dp</dimen>
+    <dimen name="_6sdp">6dp</dimen>
+    <dimen name="_7sdp">7dp</dimen>
+    <dimen name="_8sdp">8dp</dimen>
+    <dimen name="_9sdp">9dp</dimen>
+    <dimen name="_10sdp">10dp</dimen>
+    <dimen name="_minus4sdp">-4dp</dimen>
+    <dimen name="_minus5sdp">-5dp</dimen>
+    <dimen name="_minus10sdp">-10dp</dimen>
+    <dimen name="_11sdp">11dp</dimen>
+    <dimen name="_12sdp">12dp</dimen>
+    <dimen name="_13sdp">13dp</dimen>
+    <dimen name="_14sdp">14dp</dimen>
+    <dimen name="_15sdp">15dp</dimen>
+    <dimen name="_16sdp">16dp</dimen>
+    <dimen name="_18sdp">18dp</dimen>
+    <dimen name="_20sdp">20dp</dimen>
+    <dimen name="_23sdp">23dp</dimen>
+    <dimen name="_24sdp">24dp</dimen>
+    <dimen name="_25sdp">25dp</dimen>
+    <dimen name="_28sdp">28dp</dimen>
+    <dimen name="_30sdp">30dp</dimen>
+    <dimen name="_35sdp">35dp</dimen>
+    <dimen name="_36sdp">36dp</dimen>
+    <dimen name="_40sdp">40dp</dimen>
+    <dimen name="_45sdp">45dp</dimen>
+    <dimen name="_48sdp">48dp</dimen>
+    <dimen name="_50sdp">50dp</dimen>
+    <dimen name="_55sdp">55dp</dimen>
+    <dimen name="_60sdp">60dp</dimen>
+    <dimen name="_70sdp">70dp</dimen>
+    <dimen name="_72sdp">72dp</dimen>
+    <dimen name="_75sdp">75dp</dimen>
+    <dimen name="_80sdp">80dp</dimen>
+    <dimen name="_90sdp">90dp</dimen>
+    <dimen name="_100sdp">100dp</dimen>
+    <dimen name="_105sdp">105dp</dimen>
+    <dimen name="_110sdp">110dp</dimen>
+    <dimen name="_120sdp">120dp</dimen>
+    <dimen name="_125sdp">125dp</dimen>
+    <dimen name="_130sdp">130dp</dimen>
+    <dimen name="_140sdp">140dp</dimen>
+    <dimen name="_150sdp">150dp</dimen>
+    <dimen name="_160sdp">160dp</dimen>
+    <dimen name="_200sdp">200dp</dimen>
+    <dimen name="_235sdp">235dp</dimen>
+    <dimen name="_400sdp">400dp</dimen>
+
+    <!-- ssp (scalable sp) values -->
+    <dimen name="_5ssp">5sp</dimen>
+    <dimen name="_8ssp">8sp</dimen>
+    <dimen name="_9ssp">9sp</dimen>
+    <dimen name="_10ssp">10sp</dimen>
+    <dimen name="_11ssp">11sp</dimen>
+    <dimen name="_12ssp">12sp</dimen>
+    <dimen name="_13ssp">13sp</dimen>
+    <dimen name="_14ssp">14sp</dimen>
+    <dimen name="_15ssp">15sp</dimen>
+    <dimen name="_16ssp">16sp</dimen>
+    <dimen name="_18ssp">18sp</dimen>
+    <dimen name="_20ssp">20sp</dimen>
+    <dimen name="_24ssp">24sp</dimen>
+</resources>

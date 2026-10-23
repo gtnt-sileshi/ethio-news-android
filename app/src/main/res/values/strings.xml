@@ -1,0 +1,278 @@
+<resources>
+    <string name="app_name" >Ethio News</string>
+
+    <!-- TODO: Replace with your actual Web Client ID from Firebase Console →
+         Authentication → Sign-in method → Google → Web SDK configuration → Web client ID.
+         Also re-download google-services.json after enabling Google Sign-In in Firebase Auth,
+         which will auto-populate this value. -->
+    <string name="default_web_client_id">YOUR_WEB_CLIENT_ID_HERE</string>
+
+    <string name="navigation_drawer_open" >Open navigation drawer</string>
+    <string name="navigation_drawer_close" >Close navigation drawer</string>
+
+    <!--Navigation drawer -->
+    <string name="nav_home">Home</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_profile">Profile</string>
+    <string name="categories">Categories</string>
+    <string name="latest">Breaking</string>
+    <string name="recently">History</string>
+    <string name="trending">Most Read</string>
+    <string name="countries">Countries</string>
+    <string name="favourite">Favourite</string>
+    <string name="banner">Banner</string>
+    <string name="live">live</string>
+    <string name="live_event">Live Event</string>
+
+    <!-- Search  -->
+    <string name="search_live">Search Live</string>
+    <string name="search_categories">Search Categories</string>
+    <string name="search_event">Search Event</string>
+
+
+    <!--Login/Register -->
+    <string name="dashboard">Dashboard</string>
+    <string name="search">Search</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
+    <string name="welcome">Welcome</string>
+    <string name="email_id">Email ID</string>
+    <string name="password">Password</string>
+    <string name="remember_me">Remember Me</string>
+    <string name="logout_success">Logout Successful</string>
+    <string name="new_to_logistics">New to the App?</string>
+    <string name="login_with_google">Login with Google</string>
+    <string name="sign_in_to_continue">Sign In to continue</string>
+    <string name="sign_up">Sign up</string>
+    <string name="register">Register</string>
+    <string name="registering">Registering..</string>
+    <string name="full_name">Full name</string>
+    <string name="telephone_number">Mobile</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="terms_and_conditions">Terms and Conditions</string>
+    <string name="by_signing_up_re_agree_to_oue">By signing up,You are agree to our</string>
+    <string name="and">and</string>
+    <string name="skip">Skip</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="privacy_policy">Privacy Policy</string>
+
+    <!--Forgot Password-->
+    <string name="forgot_pass">Forgot Your Password?</string>
+    <string name="forgot_password_message">Enter your valid email address below and we will send you email with instructions on how to change your password</string>
+
+    <!-- Email Verification -->
+    <string name="verify_email">Verify Your Email</string>
+    <string name="verify_email_message">A 6-digit verification code has been sent to your email address.</string>
+    <string name="verify_email_sent_to">A 6-digit code was sent to %1$s</string>
+    <string name="enter_otp">Enter 6-digit code</string>
+    <string name="verify">Verify</string>
+    <string name="didnt_receive_code">Didn\'t receive the code?</string>
+    <string name="resend">Resend</string>
+    <string name="err_otp_length">Code must be 6 digits</string>
+
+    <!--Profile-->
+    <string name="profile">Profile</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="edit_account">Edit Account</string>
+    <string name="sure_delete_account">Are you sure you want to delete this Account?</string>
+    <string name="not_log">Not Logged In</string>
+
+    <!--About-->
+    <string name="about">About Us</string>
+    <string name="rate_the_app">Rate the app</string>
+    <string name="love_this_app">Love this app? Let us Know in the Google Play Store how we can make it even better</string>
+    <string name="share_the_app">Share the app with your friends and family</string>
+    <string name="company">Developer</string>
+    <string name="email">Email</string>
+    <string name="version">Version</string>
+    <string name="version_name">v%1$s</string>
+    <string name="website">Website</string>
+    <string name="contact">Contact</string>
+    <string name="share">Share</string>
+    <string name="more_apps">More Apps</string>
+    <string name="more_apps_desc">Explore our other apps on the Play Store</string>
+
+    <!--Feedback-->
+    <string name="feedback">Feedback</string>
+    <string name="send_feedback">Send Feedback</string>
+    <string name="report_any_issues">Report any issues you may have en countered with the app content or its functionality.</string>
+    <string name="please_describe_the_problem">Please describe the problem…</string>
+    <string name="submit">Submit</string>
+
+    <!--Rating-->
+    <string name="rating">Rating</string>
+    <string name="submit_rating">Submit Rating</string>
+    <string name="select_rating">Select Rating</string>
+    <string name="thanks_for_rating">Thanks for Rating</string>
+    <string name="report_message">Enter your text here…</string>
+
+    <!-- Suggestion -->
+    <string name="suggestion">Suggestion</string>
+    <string name="title_suggestion">Title</string>
+    <string name="enter_your_title_here_suggestion">Enter your title here</string>
+    <string name="description_suggestion">Description</string>
+    <string name="enter_your_description_here_suggestion">Enter your description here</string>
+
+    <!--Dialog-->
+    <string name="no">NO</string>
+    <string name="ok">OK</string>
+    <string name="yes">YES</string>
+    <string name="exit">Exit</string>
+    <string name="retry">Retry</string>
+    <string name="cancel">Cancel</string>
+    <string name="loading">Loading…</string>
+    <string name="invalid_user">Invalid User</string>
+    <string name="sure_exit">Are you sure you want to exit app?</string>
+    <string name="upgrade">Upgrade</string>
+    <string name="its_time_to_upgrade">Its time to Upgrade to the latest version of our application to get the best experience.</string>
+    <string name="do_it_now">DO IT NOW</string>
+    <string name="maintenance">Maintenance</string>
+    <string name="temporarily_down_for_maintenance">Temporarily Down for Maintenance</string>
+    <string name="we_are_performing_scheduled">we are performing scheduled maintenance. we should be back online shortly.</string>
+    <string name="try_again_later">Try again later</string>
+    <string name="select_language">Select Language</string>
+    <string name="sniffing_detected">Sniffing Detected</string>
+    <string name="turn_off_all_sniffers_tools">Turn off all sniffers Tools and Vpn tools to access app</string>
+    <string name="developer_mode">Developer Mode</string>
+    <string name="turn_off_developer_mode">Turn off Developer Mode to access the app</string>
+    <string name="audio_tracks">Audio Tracks</string>
+    <string name="video_tracks">Video Tracks</string>
+    <string name="select_font_size">Select Font Size</string>
+
+    <!--MSG-->
+    <string name="err_name">Please Enter Name</string>
+    <string name="err_email">Please Enter Email</string>
+    <string name="err_password">Please Enter Password</string>
+    <string name="err_cpassword">Please Enter Confirm Password</string>
+    <string name="err_pass_not_match">Confirm Password not matched</string>
+    <string name="err_pass_end_space">Please do not add space at end</string>
+    <string name="err_password_sort">This password is too shor</string>
+    <string name="err_invalid_email">Invalid Email</string>
+    <string name="err_phone">Enter Phone</string>
+    <string name="err_gender">Selected gender</string>
+    <string name="err_cannot_use_features">Cannot use some of the features without requested permission</string>
+    <string name="err_cannot_empty">Field cannot be empty</string>
+    <string name="err_login_google">Error while login with google</string>
+    <string name="err_no_data_found">No Data Found</string>
+    <string name="err_no_cat_found">No Categories Found</string>
+    <string name="err_server">Server Error</string>
+    <string name="err_unauthorized_access">Unauthorized Access</string>
+    <string name="err_server_not_connected">Server not connected</string>
+    <string name="err_internet_not_connected">Please connect to internet</string>
+    <string name="err_try_internet_connected">Please connect to internet and try again</string>
+    <string name="upload_success">Upload Success</string>
+    <string name="already_added">Already Added</string>
+    <string name="stream_not_found">Unfortunately stream url does not found please report it</string>
+    <string name="select_image">Select Image</string>
+    <string name="try_again">Try Again</string>
+    <string name="refresh">Refresh</string>
+    <string name="no_notification">No Notification</string>
+    <string name="error_no_radio_selected">no radio selected</string>
+    <string name="sure_delete">Are you sure you want to delete this?</string>
+    <string name="delete">Delete</string>
+    <string name="please_wait_a_minute">Please wait a minute</string>
+
+    <!--Settings-->
+    <string name="settings">Settings</string>
+    <string name="app_theme">App Theme</string>
+    <string name="dark_or_light_mode">Dark or Light Mode</string>
+    <string name="theme_classic" >Classic</string>
+    <string name="theme_dark_grey" >Dark Grey</string>
+    <string name="theme_dark_blue" >Dark Blue</string>
+    <string name="theme_dark" >Dark</string>
+    <string name="cache">Cache</string>
+    <string name="clear_cache">Clear cache data</string>
+    <string name="cache_cleared">Cache Cleared</string>
+    <string name="clearing_cache">Clearing Cache..</string>
+    <string name="this_app_privacy_policy">This app privacy policy</string>
+    <string name="social_links">Social links, policy</string>
+    <string name="this_app_terms">This app Terms and Conditions</string>
+    <string name="enable_push_notification">Enable Push Notification</string>
+    <string name="on_off_notification">On/off Notification</string>
+    <string name="deletion_policy">Data Deletion Policy</string>
+    <string name="completely_delete_you_account">You can completely delete you account</string>
+    <string name="notification">Notification</string>
+    <string name="to_receive_notification">To receive notification in time</string>
+
+    <!--Subscribe-->
+    <string name="subscription_plan">Subscription Plan</string>
+    <string name="subscription_msg">Choose plan based on your usage. Below there are plan name,price and validity days.</string>
+    <string name="select_subscription_plan">Select Your Subscription Plan</string>
+    <string name="subscription_proceed">PROCEED</string>
+    <string name="plan_day_for">For %s</string>
+    <string name="premium_pack">Premium Pack</string>
+    <string name="premium_note">With our pack. You can enjoy an ad-free experience!</string>
+    <string name="premium_a_title">Premium Live News</string>
+    <string name="premium_a_note">Unlimited Live News TV</string>
+    <string name="premium_b_title">Adblock</string>
+    <string name="premium_b_note">Use app more free without ads</string>
+    <string name="user_info">User Information</string>
+    <string name="choose_plan">You have selected</string>
+    <string name="choose_plan_1">You are logged in as</string>
+    <string name="change_plan">Change Plan</string>
+    <string name="premium_content">You dont have access to premium content kindly purchase subscription to watch this content or LOGIN with premium account.</string>
+    <string name="premium">Premium</string>
+    <string name="casty_introduction_text">Use this button to connect with Chromecast</string>
+    <string name="cast_youtube">Youtube and Embedded link direct does not cast</string>
+    <string name="cast_play_custom">Playing in Connected Chromecast</string>
+    <string name="subscribe_now">SUBSCRIBE NOW</string>
+
+    <string name="count">%s Views</string>
+
+    <string name="dont_show_alert">Don\'t show alert</string>
+    <string name="watch_ad">Watch Ad</string>
+    <string name="watch_video_for">Watch video ad for Play Live TV or join permium and listen ad free Live TV</string>
+
+    <!--Don't Change language-->
+    <string name="todo">TODO</string>
+    <string name="default_todo">TODO</string>
+
+    <!-- Live Radio -->
+    <string name="live_radio">Podcasts</string>
+    <string name="radio_playing">Playing…</string>
+    <string name="radio_paused">Paused</string>
+    <string name="radio_stopped">Stopped</string>
+    <string name="radio_all_stations">All Podcasts</string>
+    <string name="radio_favorites">Favorites</string>
+    <string name="radio_login_to_fav">Please login to add favourites</string>
+
+    <!-- Sleep Timer -->
+    <string name="sleep_timer">Sleep Timer</string>
+    <string name="sleep_timer_15">15 minutes</string>
+    <string name="sleep_timer_30">30 minutes</string>
+    <string name="sleep_timer_45">45 minutes</string>
+    <string name="sleep_timer_60">60 minutes</string>
+    <string name="sleep_timer_custom">Custom…</string>
+    <string name="sleep_timer_custom_hint">Minutes</string>
+    <string name="sleep_timer_min_unit">min</string>
+    <string name="sleep_timer_set_btn">Set Timer</string>
+    <string name="sleep_timer_set_toast">Sleep timer set for %s min</string>
+    <string name="sleep_timer_cancel_active">Cancel timer (%s left)</string>
+    <string name="sleep_timer_cancelled">Sleep timer cancelled</string>
+    <string name="sleep_timer_invalid">Please enter a valid number of minutes</string>
+    <string name="sleep_timer_expired">Sleep timer expired. Stopping playback.</string>
+
+    <!-- Background Playback -->
+    <string name="live_tv">Live TV</string>
+    <string name="event">Event</string>
+    <string name="background_play">Play in Background</string>
+    <string name="stop_playback">Stop Playback</string>
+    <string name="media_playback_channel_name">Media Playback</string>
+    <string name="media_playback_channel_desc">Background audio for Podcasts and Live News</string>
+    <string name="now_playing">Now Playing</string>
+    <string name="background_play_started">Playing in background</string>
+    <string name="background_play_unsupported">Background play is only available for direct streams (HLS, DASH, MP4)</string>
+
+    <!-- Ethio News redesign strings -->
+    <string name="splash_tagline">Ethiopian News · Live TV · Podcasts</string>
+    <string name="tag_live">● LIVE</string>
+    <string name="tag_breaking">BREAKING</string>
+    <string name="tag_watch">Watch</string>
+    <string name="nav_header_subtitle">Ethiopia\'s News Hub</string>
+    <string name="section_live_news">Live News Channels</string>
+    <string name="section_podcasts">Podcasts &amp; Radio</string>
+    <string name="section_breaking">Breaking News</string>
+
+</resources>

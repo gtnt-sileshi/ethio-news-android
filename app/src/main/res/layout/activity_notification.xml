@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.NotificationActivity"
+    android:background="?ns_bg">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?ns_bg"
+        app:titleTextColor="?ns_bg_dark"
+        app:navigationIconTint="?ns_bg_dark"
+        app:navigationIcon="@drawable/ic_close"
+        app:title="Notification"
+        app:titleCentered="true" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@id/toolbar"
+        android:clipToPadding="true"
+        android:id="@+id/rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/ll_adView"
+        android:paddingEnd="@dimen/_5sdp"
+        android:paddingStart="@dimen/_5sdp"
+        android:layoutAnimation="@anim/layout_animation_from_bottom"/>
+
+    <ProgressBar
+        android:id="@+id/pb"
+        app:pb_color="#FFee44"
+        app:pb_colors="@array/progress_colors"
+        app:pb_max_sweep_angle="300"
+        app:pb_min_sweep_angle="10"
+        app:pb_rotation_speed="1.0"
+        app:pb_stroke_width="@dimen/_4sdp"
+        app:pb_sweep_speed="1.0"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:indeterminate="true"
+        android:layout_centerInParent="true"/>
+
+    <FrameLayout
+        android:visibility="gone"
+        android:id="@+id/fl_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="?attr/actionBarSize" />
+
+    <LinearLayout
+        android:id="@+id/ll_adView"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:background="?ns_bg_sub"
+        android:backgroundTint="?ns_bg_sub"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>

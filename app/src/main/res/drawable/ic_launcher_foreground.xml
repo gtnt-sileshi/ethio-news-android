@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Ethio News — Adaptive icon foreground
+  Bold "EN" monogram with signal arcs. Content within 72×72 safe zone centred at 54,54.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Signal arc 1 outermost -->
+    <path
+        android:pathData="M22,36 Q54,8 86,36"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:strokeAlpha="0.3"
+        android:fillColor="@android:color/transparent"/>
+
+    <!-- Signal arc 2 middle -->
+    <path
+        android:pathData="M30,43 Q54,18 78,43"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:strokeAlpha="0.6"
+        android:fillColor="@android:color/transparent"/>
+
+    <!-- Signal arc 3 innermost -->
+    <path
+        android:pathData="M38,50 Q54,28 70,50"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:strokeAlpha="0.9"
+        android:fillColor="@android:color/transparent"/>
+
+    <!-- Signal dot -->
+    <path
+        android:pathData="M54,56 m-3.5,0 a3.5,3.5 0 1,0 7,0 a3.5,3.5 0 1,0 -7,0"
+        android:fillColor="#FFFFFF"/>
+
+    <!-- Letter E — left bar -->
+    <path
+        android:pathData="M20,62 L20,96 L25,96 L25,62 Z"
+        android:fillColor="#FFFFFF"/>
+    <!-- E top bar -->
+    <path
+        android:pathData="M20,62 L44,62 L44,67 L20,67 Z"
+        android:fillColor="#FFFFFF"/>
+    <!-- E mid bar -->
+    <path
+        android:pathData="M20,77 L41,77 L41,82 L20,82 Z"
+        android:fillColor="#FFFFFF"/>
+    <!-- E bottom bar -->
+    <path
+        android:pathData="M20,91 L44,91 L44,96 L20,96 Z"
+        android:fillColor="#FFFFFF"/>
+
+    <!-- Letter N — left bar -->
+    <path
+        android:pathData="M50,62 L50,96 L55,96 L55,62 Z"
+        android:fillColor="#FFFFFF"/>
+    <!-- N diagonal -->
+    <path
+        android:pathData="M55,62 L55,67 L83,91 L83,96 L88,96 L88,91 L60,67 L60,62 Z"
+        android:fillColor="#FFFFFF"/>
+    <!-- N right bar -->
+    <path
+        android:pathData="M83,62 L83,96 L88,96 L88,62 Z"
+        android:fillColor="#FFFFFF"/>
+
+</vector>

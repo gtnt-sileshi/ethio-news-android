@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Ethio News Logo
+  A bold "EN" monogram inside a circle, with a signal-arc above — clean, editorial, news-first.
+  Primary: #1565C0 (Blue) | Accent: #FFFFFF | Signal: #1E88E5
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Outer circle background -->
+    <path
+        android:pathData="M54,54 m-52,0 a52,52 0 1,0 104,0 a52,52 0 1,0 -104,0"
+        android:fillColor="#1565C0"/>
+
+    <!-- Inner circle ring accent -->
+    <path
+        android:pathData="M54,54 m-44,0 a44,44 0 1,0 88,0 a44,44 0 1,0 -88,0"
+        android:fillColor="#0D47A1"/>
+
+    <!-- Signal arc 1 (outermost) -->
+    <path
+        android:pathData="M27,28 Q54,6 81,28"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:strokeAlpha="0.35"
+        android:fillColor="@android:color/transparent"/>
+
+    <!-- Signal arc 2 (middle) -->
+    <path
+        android:pathData="M33,34 Q54,16 75,34"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:strokeAlpha="0.6"
+        android:fillColor="@android:color/transparent"/>
+
+    <!-- Signal arc 3 (innermost) -->
+    <path
+        android:pathData="M39,40 Q54,26 69,40"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:strokeAlpha="0.9"
+        android:fillColor="@android:color/transparent"/>
+
+    <!-- Signal dot -->
+    <path
+        android:pathData="M54,46 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0"
+        android:fillColor="#FFFFFF"/>
+
+    <!-- Letter E — left vertical bar -->
+    <path
+        android:pathData="M26,56 L26,86 L30,86 L30,56 Z"
+        android:fillColor="#FFFFFF"/>
+
+    <!-- Letter E — top bar -->
+    <path
+        android:pathData="M26,56 L46,56 L46,60 L26,60 Z"
+        android:fillColor="#FFFFFF"/>
+
+    <!-- Letter E — middle bar -->
+    <path
+        android:pathData="M26,69 L43,69 L43,73 L26,73 Z"
+        android:fillColor="#FFFFFF"/>
+
+    <!-- Letter E — bottom bar -->
+    <path
+        android:pathData="M26,82 L46,82 L46,86 L26,86 Z"
+        android:fillColor="#FFFFFF"/>
+
+    <!-- Letter N — left vertical bar -->
+    <path
+        android:pathData="M51,56 L51,86 L55,86 L55,56 Z"
+        android:fillColor="#FFFFFF"/>
+
+    <!-- Letter N — diagonal stroke -->
+    <path
+        android:pathData="M55,56 L55,60 L78,82 L78,86 L82,86 L82,82 L59,60 L59,56 Z"
+        android:fillColor="#FFFFFF"/>
+
+    <!-- Letter N — right vertical bar -->
+    <path
+        android:pathData="M78,56 L78,86 L82,86 L82,56 Z"
+        android:fillColor="#FFFFFF"/>
+
+</vector>

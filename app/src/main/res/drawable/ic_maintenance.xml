@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+  <path
+      android:pathData="M43,21l-16,-0l-0,-8l16,-0z"
+      android:fillColor="?ns_border"/>
+  <path
+      android:pathData="M18,9H1V4A3,3 0,0 1,4 1H16zM11,18H5a1,1 0,0 1,0 -2h6a1,1 0,0 1,0 2zM15,26H5a1,1 0,0 1,0 -2H15a1,1 0,0 1,0 2zM23,22H5a1,1 0,0 1,0 -2H23a1,1 0,0 1,0 2zM23,18H15a1,1 0,0 1,0 -2h8a1,1 0,0 1,0 2zM17,14H5a1,1 0,0 1,0 -2H17a1,1 0,0 1,0 2zM23,14H21a1,1 0,0 1,0 -2h2a1,1 0,0 1,0 2z"
+      android:fillColor="?ns_border"/>
+  <path
+      android:pathData="M44,0L4,0A4,4 0,0 0,0 4L0,38a4,4 0,0 0,4 4h7.43a4.17,4.17 0,0 0,3.75 6L32.82,48a4.17,4.17 0,0 0,3.75 -6L44,42a4,4 0,0 0,4 -4L48,4A4,4 0,0 0,44 0ZM46,4L46,8L18.78,8l-1.5,-6L44,2A2,2 0,0 1,46 4ZM2,4A2,2 0,0 1,4 2L15.22,2l1.5,6L2,8ZM32.82,46L15.18,46A2.19,2.19 0,0 1,13 43.82c0,-0.8 -0.47,0.28 8.9,-16.59a2.41,2.41 0,0 1,4.2 0C35.5,44.16 35,43 35,43.82A2.19,2.19 0,0 1,32.82 46ZM46,38a2,2 0,0 1,-2 2L35.48,40L27.85,26.26a4.41,4.41 0,0 0,-7.7 0L12.52,40L4,40a2,2 0,0 1,-2 -2L2,10L46,10Z"
+      android:fillColor="?ns_title"/>
+  <path
+      android:pathData="M25,6H43a1,1 0,0 0,0 -2H25a1,1 0,0 0,0 2Z"
+      android:fillColor="?ns_title"/>
+  <path
+      android:pathData="M5,5m-1,0a1,1 0,1 1,2 0a1,1 0,1 1,-2 0"
+      android:fillColor="?ns_title"/>
+  <path
+      android:pathData="M9,5m-1,0a1,1 0,1 1,2 0a1,1 0,1 1,-2 0"
+      android:fillColor="?ns_title"/>
+  <path
+      android:pathData="M13,5m-1,0a1,1 0,1 1,2 0a1,1 0,1 1,-2 0"
+      android:fillColor="?ns_title"/>
+  <path
+      android:pathData="M24,42m-2,0a2,2 0,1 1,4 0a2,2 0,1 1,-4 0"
+      android:fillColor="#fc6459"/>
+  <path
+      android:pathData="M24,38h0a1.13,1.13 0,0 1,-1.12 -1l-0.63,-5A1.76,1.76 0,0 1,24 30h0a1.76,1.76 0,0 1,1.75 2l-0.63,5A1.13,1.13 0,0 1,24 38Z"
+      android:fillColor="#fc6459"/>
+  <path
+      android:pathData="M43,22H27a1,1 0,0 1,-1 -1V13a1,1 0,0 1,1 -1H43a1,1 0,0 1,1 1v8A1,1 0,0 1,43 22zM28,20H42V14H28zM43,37H38a1,1 0,0 1,0 -2h5a1,1 0,0 1,0 2zM43,33H35a1,1 0,0 1,0 -2h8a1,1 0,0 1,0 2z"
+      android:fillColor="?ns_title"/>
+</vector>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_100sdp"
+    android:background="?attr/selectableItemBackground">
+
+    <ImageView
+        android:id="@+id/iv_similar_img"
+        android:layout_width="@dimen/_130sdp"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:padding="@dimen/_8sdp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/material_design_default"
+        app:hv_border_color="?ns_border"
+        app:hv_border_width="@dimen/_1sdp"
+        app:hv_corner_radius="@dimen/_2sdp" />
+
+    <TextView
+        android:id="@+id/tv_similar_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10ssp"
+        android:layout_marginEnd="@dimen/_10ssp"
+        android:layout_toEndOf="@+id/iv_similar_img"
+        android:text="@string/app_name"
+        android:textAlignment="viewStart"
+        android:textColor="?ns_title"
+        android:textSize="@dimen/_13ssp" />
+
+    <TextView
+        android:id="@+id/tv_similar_pre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_similar_text"
+        android:layout_toEndOf="@+id/iv_similar_img"
+        android:background="@drawable/bg_live_tag"
+        android:layoutDirection="ltr"
+        android:paddingStart="@dimen/_6sdp"
+        android:paddingEnd="@dimen/_6sdp"
+        android:paddingTop="@dimen/_2sdp"
+        android:paddingBottom="@dimen/_2sdp"
+        android:text="@string/premium"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_11ssp"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_alignParentBottom="true"
+        android:background="?ns_border" />
+
+</RelativeLayout>

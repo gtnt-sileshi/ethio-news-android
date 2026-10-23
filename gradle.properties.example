@@ -1,0 +1,21 @@
+# Copy this file to gradle.properties and fill in your values.
+
+org.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8
+android.useAndroidX=true
+android.nonTransitiveRClass=true
+android.enableJetifier=true
+org.gradle.warning.mode=none
+org.gradle.unsafe.configuration-cache=true
+android.nonFinalResIds=true
+android.suppressUnsupportedCompileSdk=35
+
+# Your Laravel API base URL
+# Use http://10.0.2.2:8001/ for Android emulator pointing to localhost,
+# or your server URL for production.
+BASE_URL="https://your-api-url.com/"
+
+# API identifier — must match the value in your Laravel api.php / lb_helper.php
+API_NAME="ETHIOTV_APP"
+
+# Encryption key — must match the value in your Laravel backend
+ENC_KEY="your_enc_key_here"

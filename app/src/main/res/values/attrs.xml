@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Theme colour attributes -->
+    <attr name="ns_primary"       format="color" />
+    <attr name="ns_primary_sub"   format="color" />
+    <attr name="ns_bg"            format="color" />
+    <attr name="ns_bg_sub"        format="color" />
+    <attr name="ns_bg_dark"       format="color" />
+    <attr name="ns_title"         format="color" />
+    <attr name="ns_title_sub"     format="color" />
+    <attr name="ns_border"        format="color" />
+    <attr name="ns_dialog_bg"     format="color" />
+    <attr name="ns_dialog_bg_sub" format="color" />
+    <attr name="ns_icon_color"    format="color" />
+    <attr name="ns_white"         format="color" />
+    <attr name="ns_icon_back"     format="reference" />
+
+    <!-- ProgressBarView custom attributes -->
+    <attr name="pb_color"           format="color" />
+    <attr name="pb_colors"          format="reference" />
+    <attr name="pb_stroke_width"    format="dimension" />
+    <attr name="pb_min_sweep_angle" format="float" />
+    <attr name="pb_max_sweep_angle" format="float" />
+    <attr name="pb_rotation_speed"  format="float" />
+    <attr name="pb_sweep_speed"     format="float" />
+
+    <!-- ImageHelperView attrs -->
+    <attr name="hv_border_color"               format="color" />
+    <attr name="hv_border_width"               format="dimension" />
+    <attr name="hv_corner_radius"              format="dimension" />
+    <attr name="hv_corner_radius_top_left"     format="dimension" />
+    <attr name="hv_corner_radius_top_right"    format="dimension" />
+    <attr name="hv_corner_radius_bottom_left"  format="dimension" />
+    <attr name="hv_corner_radius_bottom_right" format="dimension" />
+    <attr name="hv_mutate_background"          format="boolean" />
+    <attr name="hv_oval"                       format="boolean" />
+
+    <!-- AppCheckBox attrs -->
+    <attr name="cbx_color_unchecked_stroke" format="color" />
+</resources>

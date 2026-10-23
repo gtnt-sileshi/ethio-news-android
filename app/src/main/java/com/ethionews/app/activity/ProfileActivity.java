@@ -77,9 +77,14 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void setupButton() {
-        // Avatar circle opens edit profile
+        // Edit profile banner card AND avatar circle both open edit profile
         findViewById(R.id.rl_profile).setOnClickListener(view ->
                 startActivity(new Intent(ProfileActivity.this, ProfileEditActivity.class)));
+        View editBanner = findViewById(R.id.rl_edit_banner);
+        if (editBanner != null) {
+            editBanner.setOnClickListener(view ->
+                    startActivity(new Intent(ProfileActivity.this, ProfileEditActivity.class)));
+        }
         findViewById(R.id.iv_notifications).setOnClickListener(view ->
                 startActivity(new Intent(ProfileActivity.this, NotificationActivity.class)));
         findViewById(R.id.ll_policy).setOnClickListener(view -> {

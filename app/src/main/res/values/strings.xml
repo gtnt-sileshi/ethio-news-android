@@ -263,6 +263,8 @@
     <string name="media_playback_channel_desc">Background audio for Podcasts and Live News</string>
     <string name="now_playing">Now Playing</string>
     <string name="background_play_started">Playing in background</string>
+    <string name="profile_edit_hint">Update your name, photo and details</string>
+    <string name="profile_section_account">ACCOUNT</string>
     <string name="background_play_unsupported">Background play is only available for direct streams (HLS, DASH, MP4)</string>
 
     <!-- Ethio News redesign strings -->

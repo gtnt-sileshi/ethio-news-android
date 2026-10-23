@@ -5,17 +5,17 @@
     android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?ns_bg"
+    android:background="?ns_bg_sub"
     tools:context=".activity.ProfileActivity">
 
-    <!-- ── Hero header ── -->
+    <!-- ── Hero ── -->
     <RelativeLayout
         android:id="@+id/rl_hero"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_200sdp"
         android:background="@drawable/bg_splash_full">
 
-        <!-- Real toolbar for setSupportActionBar — transparent overlay -->
+        <!-- Transparent toolbar for setSupportActionBar -->
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -25,7 +25,7 @@
             app:navigationIconTint="@color/white"
             app:titleTextColor="@color/white" />
 
-        <!-- Decorative circle top-right -->
+        <!-- Decorative circle -->
         <View
             android:layout_width="@dimen/_160sdp"
             android:layout_height="@dimen/_160sdp"
@@ -35,22 +35,7 @@
             android:layout_marginEnd="-50dp"
             android:background="@drawable/splash_circle_decoration" />
 
-        <!-- Close button (handled via toolbar navigation, kept for legacy click) -->
-        <ImageView
-            android:id="@+id/iv_close"
-            android:layout_width="@dimen/_40sdp"
-            android:layout_height="@dimen/_40sdp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:layout_marginStart="@dimen/_8sdp"
-            android:padding="@dimen/_8sdp"
-            android:src="@drawable/ic_close"
-            android:contentDescription="@string/todo"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:tint="@color/white" />
-
-        <!-- Notification bell -->
+        <!-- Notifications icon -->
         <ImageView
             android:id="@+id/iv_notifications"
             android:layout_width="@dimen/_40sdp"
@@ -65,20 +50,22 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             app:tint="@color/white" />
 
-        <!-- Avatar + name centered -->
+        <!-- Avatar centered -->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_16sdp"
             android:gravity="center"
             android:orientation="vertical">
 
+            <!-- Avatar + edit button -->
             <RelativeLayout
                 android:id="@+id/rl_profile"
                 android:layout_width="@dimen/_90sdp"
                 android:layout_height="@dimen/_90sdp">
 
+                <!-- Avatar image -->
                 <ImageView
                     android:id="@+id/iv_profile"
                     android:layout_width="@dimen/_80sdp"
@@ -90,59 +77,50 @@
                     app:hv_border_width="@dimen/_3sdp"
                     app:hv_corner_radius="@dimen/_50sdp" />
 
+                <!-- Loading spinner over avatar -->
+                <ProgressBar
+                    android:id="@+id/pb_iv_profile"
+                    android:layout_width="@dimen/_36sdp"
+                    android:layout_height="@dimen/_36sdp"
+                    android:layout_centerInParent="true"
+                    android:indeterminateTint="@color/white"
+                    android:visibility="gone" />
+
+                <!-- Edit pencil badge -->
                 <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@+id/iv_profile"
-                    android:layout_alignTop="@+id/iv_profile"
-                    android:layout_alignEnd="@+id/iv_profile"
-                    android:layout_alignBottom="@+id/iv_profile">
-
-                    <ProgressBar
-                        android:id="@+id/pb_iv_profile"
-                        android:layout_width="@dimen/_36sdp"
-                        android:layout_height="@dimen/_36sdp"
-                        android:layout_centerInParent="true"
-                        android:indeterminateTint="@color/white"
-                        android:visibility="gone" />
-
-                </RelativeLayout>
-
-                <!-- Edit button -->
-                <RelativeLayout
-                    android:layout_width="@dimen/_28sdp"
-                    android:layout_height="@dimen/_28sdp"
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_25sdp"
                     android:layout_alignBottom="@+id/iv_profile"
                     android:layout_alignEnd="@+id/iv_profile"
                     android:background="@drawable/bg_btn">
-
                     <ImageView
-                        android:layout_width="@dimen/_16sdp"
-                        android:layout_height="@dimen/_16sdp"
+                        android:layout_width="@dimen/_14sdp"
+                        android:layout_height="@dimen/_14sdp"
                         android:layout_centerInParent="true"
-                        android:contentDescription="@string/todo"
                         android:src="@drawable/ic_edit"
+                        android:contentDescription="@string/todo"
                         app:tint="@color/white" />
-
                 </RelativeLayout>
 
             </RelativeLayout>
 
+            <!-- Name -->
             <TextView
                 android:id="@+id/tv_profile_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_16ssp"
                 android:textStyle="bold"
                 android:text="@string/app_name" />
 
+            <!-- Email -->
             <TextView
                 android:id="@+id/tv_profile_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_3sdp"
                 android:textColor="#B3FFFFFF"
                 android:textSize="@dimen/_12ssp"
                 android:text="@string/app_name" />
@@ -151,7 +129,7 @@
 
     </RelativeLayout>
 
-    <!-- ── Scroll content below hero ── -->
+    <!-- ── Scroll content ── -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -162,41 +140,90 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@drawable/bg_form_card"
-            android:paddingTop="@dimen/_20sdp"
-            android:paddingBottom="@dimen/_24sdp"
-            android:paddingStart="@dimen/_16sdp"
-            android:paddingEnd="@dimen/_16sdp">
+            android:background="?ns_bg_sub"
+            android:paddingBottom="@dimen/_24sdp">
 
-            <!-- Section: Account -->
+            <!-- ── Edit profile shortcut card ── -->
+            <LinearLayout
+                android:id="@+id/rl_edit_banner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:background="@drawable/bg_profile_edit_banner"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/_16sdp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/edit_account"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_13ssp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:text="@string/profile_edit_hint"
+                        android:textColor="#CCffffff"
+                        android:textSize="@dimen/_11ssp" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="@dimen/_36sdp"
+                    android:layout_height="@dimen/_36sdp"
+                    android:padding="@dimen/_8sdp"
+                    android:src="@drawable/ic_arrow_right"
+                    android:contentDescription="@string/todo"
+                    app:tint="@color/white" />
+
+            </LinearLayout>
+
+            <!-- Section label: Account Actions -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Account"
-                android:textColor="?ns_primary"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:text="@string/profile_section_account"
+                android:textColor="?ns_title_sub"
                 android:textSize="@dimen/_11ssp"
                 android:textStyle="bold"
                 android:letterSpacing="0.08"
-                android:layout_marginBottom="@dimen/_8sdp"
                 tools:ignore="HardcodedText" />
 
+            <!-- Actions card -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
                 android:orientation="vertical"
-                android:background="@drawable/bg_news_card"
-                android:layout_marginBottom="@dimen/_16sdp">
+                android:background="@drawable/bg_profile_card">
 
                 <!-- Privacy Policy -->
                 <LinearLayout
                     android:id="@+id/ll_policy"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_55sdp"
+                    android:layout_height="@dimen/_60sdp"
                     android:background="?attr/selectableItemBackground"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingStart="@dimen/_14sdp"
-                    android:paddingEnd="@dimen/_14sdp">
+                    android:paddingStart="@dimen/_16sdp"
+                    android:paddingEnd="@dimen/_16sdp">
 
                     <RelativeLayout
                         android:layout_width="@dimen/_36sdp"
@@ -204,44 +231,56 @@
                         android:background="@drawable/bg_icon_blue"
                         android:layout_marginEnd="@dimen/_14sdp">
                         <ImageView
-                            android:layout_width="@dimen/_20sdp"
-                            android:layout_height="@dimen/_20sdp"
+                            android:layout_width="@dimen/_18sdp"
+                            android:layout_height="@dimen/_18sdp"
                             android:layout_centerInParent="true"
                             android:src="@drawable/ic_shield_keyhole"
                             android:contentDescription="@string/todo"
                             app:tint="@color/white" />
                     </RelativeLayout>
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/privacy_policy"
-                        android:textColor="?ns_title"
-                        android:textSize="@dimen/_13ssp"
-                        android:textStyle="bold" />
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/privacy_policy"
+                            android:textColor="?ns_title"
+                            android:textSize="@dimen/_13ssp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/this_app_privacy_policy"
+                            android:textColor="?ns_title_sub"
+                            android:textSize="@dimen/_11ssp" />
+                    </LinearLayout>
 
                     <ImageView
-                        android:layout_width="@dimen/_18sdp"
-                        android:layout_height="@dimen/_18sdp"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
                         android:src="@drawable/ic_arrow_right"
                         android:contentDescription="@string/todo"
                         app:tint="?ns_title_sub" />
 
                 </LinearLayout>
 
-                <View android:layout_width="match_parent" android:layout_height="@dimen/_1sdp" android:background="?ns_border" android:layout_marginStart="@dimen/_60sdp" />
+                <View android:layout_width="match_parent" android:layout_height="@dimen/_1sdp"
+                    android:background="?ns_border" android:layout_marginStart="@dimen/_60sdp" />
 
-                <!-- Terms -->
+                <!-- Terms & Conditions -->
                 <LinearLayout
                     android:id="@+id/ll_terms"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_55sdp"
+                    android:layout_height="@dimen/_60sdp"
                     android:background="?attr/selectableItemBackground"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingStart="@dimen/_14sdp"
-                    android:paddingEnd="@dimen/_14sdp">
+                    android:paddingStart="@dimen/_16sdp"
+                    android:paddingEnd="@dimen/_16sdp">
 
                     <RelativeLayout
                         android:layout_width="@dimen/_36sdp"
@@ -249,44 +288,56 @@
                         android:background="@drawable/bg_icon_teal"
                         android:layout_marginEnd="@dimen/_14sdp">
                         <ImageView
-                            android:layout_width="@dimen/_20sdp"
-                            android:layout_height="@dimen/_20sdp"
+                            android:layout_width="@dimen/_18sdp"
+                            android:layout_height="@dimen/_18sdp"
                             android:layout_centerInParent="true"
                             android:src="@drawable/ic_todo"
                             android:contentDescription="@string/todo"
                             app:tint="@color/white" />
                     </RelativeLayout>
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/terms_and_conditions"
-                        android:textColor="?ns_title"
-                        android:textSize="@dimen/_13ssp"
-                        android:textStyle="bold" />
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/terms_and_conditions"
+                            android:textColor="?ns_title"
+                            android:textSize="@dimen/_13ssp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/this_app_terms"
+                            android:textColor="?ns_title_sub"
+                            android:textSize="@dimen/_11ssp" />
+                    </LinearLayout>
 
                     <ImageView
-                        android:layout_width="@dimen/_18sdp"
-                        android:layout_height="@dimen/_18sdp"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
                         android:src="@drawable/ic_arrow_right"
                         android:contentDescription="@string/todo"
                         app:tint="?ns_title_sub" />
 
                 </LinearLayout>
 
-                <View android:layout_width="match_parent" android:layout_height="@dimen/_1sdp" android:background="?ns_border" android:layout_marginStart="@dimen/_60sdp" />
+                <View android:layout_width="match_parent" android:layout_height="@dimen/_1sdp"
+                    android:background="?ns_border" android:layout_marginStart="@dimen/_60sdp" />
 
-                <!-- Delete account -->
+                <!-- Delete Account -->
                 <LinearLayout
                     android:id="@+id/ll_trash"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_55sdp"
+                    android:layout_height="@dimen/_60sdp"
                     android:background="?attr/selectableItemBackground"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingStart="@dimen/_14sdp"
-                    android:paddingEnd="@dimen/_14sdp">
+                    android:paddingStart="@dimen/_16sdp"
+                    android:paddingEnd="@dimen/_16sdp">
 
                     <RelativeLayout
                         android:layout_width="@dimen/_36sdp"
@@ -294,44 +345,56 @@
                         android:background="@drawable/bg_icon_red"
                         android:layout_marginEnd="@dimen/_14sdp">
                         <ImageView
-                            android:layout_width="@dimen/_20sdp"
-                            android:layout_height="@dimen/_20sdp"
+                            android:layout_width="@dimen/_18sdp"
+                            android:layout_height="@dimen/_18sdp"
                             android:layout_centerInParent="true"
                             android:src="@drawable/ic_trash"
                             android:contentDescription="@string/todo"
                             app:tint="@color/white" />
                     </RelativeLayout>
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/delete_account"
-                        android:textColor="@color/news_live_red"
-                        android:textSize="@dimen/_13ssp"
-                        android:textStyle="bold" />
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/delete_account"
+                            android:textColor="@color/news_live_red"
+                            android:textSize="@dimen/_13ssp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/sure_delete_account"
+                            android:textColor="?ns_title_sub"
+                            android:textSize="@dimen/_11ssp" />
+                    </LinearLayout>
 
                     <ImageView
-                        android:layout_width="@dimen/_18sdp"
-                        android:layout_height="@dimen/_18sdp"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
                         android:src="@drawable/ic_arrow_right"
                         android:contentDescription="@string/todo"
                         app:tint="?ns_title_sub" />
 
                 </LinearLayout>
 
-                <View android:layout_width="match_parent" android:layout_height="@dimen/_1sdp" android:background="?ns_border" android:layout_marginStart="@dimen/_60sdp" />
+                <View android:layout_width="match_parent" android:layout_height="@dimen/_1sdp"
+                    android:background="?ns_border" android:layout_marginStart="@dimen/_60sdp" />
 
                 <!-- Logout -->
                 <LinearLayout
                     android:id="@+id/ll_logout"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_55sdp"
+                    android:layout_height="@dimen/_60sdp"
                     android:background="?attr/selectableItemBackground"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingStart="@dimen/_14sdp"
-                    android:paddingEnd="@dimen/_14sdp">
+                    android:paddingStart="@dimen/_16sdp"
+                    android:paddingEnd="@dimen/_16sdp">
 
                     <RelativeLayout
                         android:layout_width="@dimen/_36sdp"
@@ -339,26 +402,37 @@
                         android:background="@drawable/bg_icon_orange"
                         android:layout_marginEnd="@dimen/_14sdp">
                         <ImageView
-                            android:layout_width="@dimen/_20sdp"
-                            android:layout_height="@dimen/_20sdp"
+                            android:layout_width="@dimen/_18sdp"
+                            android:layout_height="@dimen/_18sdp"
                             android:layout_centerInParent="true"
                             android:src="@drawable/ic_logout"
                             android:contentDescription="@string/todo"
                             app:tint="@color/white" />
                     </RelativeLayout>
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/logout"
-                        android:textColor="?ns_title"
-                        android:textSize="@dimen/_13ssp"
-                        android:textStyle="bold" />
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/logout"
+                            android:textColor="?ns_title"
+                            android:textSize="@dimen/_13ssp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/logout_success"
+                            android:textColor="?ns_title_sub"
+                            android:textSize="@dimen/_11ssp" />
+                    </LinearLayout>
 
                     <ImageView
-                        android:layout_width="@dimen/_18sdp"
-                        android:layout_height="@dimen/_18sdp"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
                         android:src="@drawable/ic_arrow_right"
                         android:contentDescription="@string/todo"
                         app:tint="?ns_title_sub" />
@@ -371,6 +445,7 @@
 
     </androidx.core.widget.NestedScrollView>
 
+    <!-- Ad banner at bottom -->
     <LinearLayout
         android:id="@+id/ll_adView"
         android:layout_alignParentBottom="true"

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- White/theme card for profile action rows -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="?ns_bg" />
+    <corners android:radius="@dimen/_12sdp" />
+</shape>

@@ -241,7 +241,7 @@ public class SPHelper {
         return sharedPreferences.getBoolean(TAG_IS_SUPP_VPN, false);
     }
     public Boolean getIsLogin(){
-        return sharedPreferences.getBoolean(TAG_IS_LOGGED_IN, false);
+        return sharedPreferences.getBoolean(TAG_IS_LOGGED_IN, true);
     }
     public Boolean getIsGoogleLogin(){
         return sharedPreferences.getBoolean(TAG_IS_GOOGLE_LOGIN, false);

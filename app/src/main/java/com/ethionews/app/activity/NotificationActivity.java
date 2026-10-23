@@ -157,10 +157,10 @@ public class NotificationActivity extends AppCompatActivity {
     private void setEmpty() {
         if (!arrayList.isEmpty()) {
             rv.setVisibility(View.VISIBLE);
-            pb.setVisibility(View.INVISIBLE);
+            pb.setVisibility(View.GONE);
             frameLayout.setVisibility(View.GONE);
         } else {
-            pb.setVisibility(View.INVISIBLE);
+            pb.setVisibility(View.GONE);
             rv.setVisibility(View.GONE);
             frameLayout.setVisibility(View.VISIBLE);
 

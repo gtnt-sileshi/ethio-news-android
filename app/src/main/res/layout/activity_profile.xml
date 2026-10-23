@@ -12,7 +12,7 @@
     <RelativeLayout
         android:id="@+id/rl_hero"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_200sdp"
+        android:layout_height="@dimen/_235sdp"
         android:background="@drawable/bg_splash_full">
 
         <!-- Transparent toolbar for setSupportActionBar -->
@@ -50,12 +50,12 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             app:tint="@color/white" />
 
-        <!-- Avatar centered -->
+        <!-- Avatar below toolbar — pushed down so it doesn't overlap the title bar -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="@dimen/_16sdp"
+            android:layout_below="@id/toolbar"
+            android:layout_marginTop="@dimen/_10sdp"
             android:gravity="center"
             android:orientation="vertical">
 

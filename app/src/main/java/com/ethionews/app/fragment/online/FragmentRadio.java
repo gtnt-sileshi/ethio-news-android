@@ -338,7 +338,7 @@ public class FragmentRadio extends Fragment {
     private void loadEnd(ArrayList<ItemRadio> data) {
         if (data.isEmpty()) {
             isOver = true;
-            try { adapter.hideHeader(); } catch (Exception e) { Log.e(TAG, "hideHeader", e); }
+            if (adapter != null) adapter.hideHeader();
             errorMsg = getString(R.string.err_no_data_found);
             setEmpty();
         } else {
@@ -386,7 +386,7 @@ public class FragmentRadio extends Fragment {
             rv.setAdapter(adapter);
             rv.scheduleLayoutAnimation();
         } else {
-            adapter.notifyDataSetChanged();
+            if (adapter != null) adapter.notifyDataSetChanged();
         }
         setEmpty();
     }

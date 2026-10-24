@@ -104,7 +104,7 @@ public class FragmentEvent extends Fragment {
                         getData();
                     }, 0);
                 } else {
-                    adapter.hideHeader();
+                    if (adapter != null) adapter.hideHeader();
                 }
             }
         });
@@ -179,11 +179,7 @@ public class FragmentEvent extends Fragment {
         }
         if (arrayListData.isEmpty()) {
             isOver = true;
-            try {
-                adapter.hideHeader();
-            } catch (Exception e) {
-                Log.e(TAG, "Error hideHeader", e);
-            }
+            if (adapter != null) adapter.hideHeader();
             errorMsg = getString(R.string.err_no_data_found);
             setEmpty();
         } else {
@@ -210,7 +206,7 @@ public class FragmentEvent extends Fragment {
             setEmpty();
             loadNativeAds();
         } else {
-            adapter.notifyDataSetChanged();
+            if (adapter != null) adapter.notifyDataSetChanged();
         }
     }
 

@@ -161,6 +161,18 @@ public class LoadAbout extends AsyncTaskExecutor<String, String, String> {
                             Callback.setInterstitialAdShow(Integer.parseInt(c.optString("interstital_ad_click","5")));
                             Callback.setNativeAdShow(Integer.parseInt(c.optString("native_position","6")));
                             Callback.setRewardCredit(Integer.parseInt(c.optString("reward_credit","1")));
+                        } else {
+                            // Ads are disabled — clear all placement flags so stale values
+                            // from a previous session where ads were enabled don't linger.
+                            Callback.setIsOpenAd(false);
+                            Callback.setIsBannerAdHome(false);
+                            Callback.setIsBannerAdPostDetails(false);
+                            Callback.setIsBannerAdCatDetails(false);
+                            Callback.setIsBannerAdSearch(false);
+                            Callback.setIsInterAd(false);
+                            Callback.setIsNativeAdPost(false);
+                            Callback.setIsNativeAdCat(false);
+                            Callback.setIsRewardAd(false);
                         }
                     }
 

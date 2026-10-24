@@ -47,7 +47,7 @@ public class LoadAbout extends AsyncTaskExecutor<String, String, String> {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject c = jsonArray.getJSONObject(i);
 
-                if (!c.has(Callback.TAG_SUCCESS)) {
+                if (!c.has(Callback.TAG_SUCCESS) || c.has("app_name")) {
 
                     // App Details -----------------------------------------------------------------
                     String email = c.getString("app_email");

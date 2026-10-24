@@ -147,10 +147,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         bottomNav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.tv_nav_home)      { pageChange(0); currentNavIndex = 0; }
-            else if (id == R.id.tv_nav_latest)   { pageChange(1); currentNavIndex = 1; }
-            else if (id == R.id.tv_nav_most)     { pageChange(2); currentNavIndex = 2; }
-            else if (id == R.id.tv_nav_category) { pageChange(3); currentNavIndex = 3; }
-            else if (id == R.id.tv_nav_restore)  { pageChange(4); currentNavIndex = 4; }
+            else if (id == R.id.tv_nav_topics)  { pageChange(1); currentNavIndex = 1; }
+            else if (id == R.id.tv_nav_saved)   { pageChange(2); currentNavIndex = 2; }
+            else if (id == R.id.tv_nav_tv)      { pageChange(3); currentNavIndex = 3; }
+            else if (id == R.id.tv_nav_radio)   { pageChange(4); currentNavIndex = 4; }
             return true;
         });
         loadDashboardFrag();
@@ -304,8 +304,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     break;
             }
         }
+        if (Boolean.TRUE.equals(Callback.getIsOpenAd()) && spHelper.getIsAdOn()) {
+            MyApplication app = (MyApplication) getApplication();
+            app.loadAd(MainActivity.this);
+        }
     }
-
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -314,26 +317,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.nav_home){
             if (currentNavIndex != 0) pageChange(0);
             bottomNavigationView(0);
-        } else if (id == R.id.nav_latest){
+        } else if (id == R.id.nav_topics){
             if (currentNavIndex != 1) pageChange(1);
             bottomNavigationView(1);
-        } else if (id == R.id.nav_most){
+        } else if (id == R.id.nav_saved){
             if (currentNavIndex != 2) pageChange(2);
             bottomNavigationView(2);
-        } else if (id == R.id.nav_category){
+        } else if (id == R.id.nav_tv){
             if (currentNavIndex != 3) pageChange(3);
             bottomNavigationView(3);
-        } else if (id == R.id.nav_restore){
+        } else if (id == R.id.nav_radio){
             if (currentNavIndex != 4) pageChange(4);
             bottomNavigationView(4);
-        } else if (id == R.id.nav_radio){
-            FragmentRadio radio = new FragmentRadio();
-            loadFrag(radio, getString(R.string.live_radio), fm);
-            currentNavIndex = -1; // radio is not a bottom-nav tab
         } else if (id == R.id.nav_event){
             FragmentEvent event = new FragmentEvent();
             loadFrag(event, getString(R.string.live_event), fm);
-            currentNavIndex = -1; // event is not a bottom-nav tab
+            currentNavIndex = -1;
         } else if (id == R.id.nav_suggest){
             startActivity(new Intent(MainActivity.this, SuggestionActivity.class));
         } else if (id == R.id.nav_settings){
@@ -346,8 +345,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void bottomNavigationView(int pos) {
         if (bottomNav == null) return;
-        int[] ids = {R.id.tv_nav_home, R.id.tv_nav_latest, R.id.tv_nav_most,
-                     R.id.tv_nav_category, R.id.tv_nav_restore};
+        int[] ids = {R.id.tv_nav_home, R.id.tv_nav_topics, R.id.tv_nav_saved,
+                     R.id.tv_nav_tv, R.id.tv_nav_radio};
         if (pos >= 0 && pos < ids.length) {
             bottomNav.setSelectedItemId(ids[pos]);
         }
@@ -409,13 +408,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // Initialize the map with titles and corresponding actions
                 titleToNavInfoMap.put(getString(R.string.dashboard), new NavInfo(R.id.nav_home, 0));
                 titleToNavInfoMap.put(getString(R.string.nav_home), new NavInfo(R.id.nav_home, 0));
-                titleToNavInfoMap.put(getString(R.string.latest_posts), new NavInfo(R.id.tv_nav_latest, 1));
-                titleToNavInfoMap.put(getString(R.string.trending_posts), new NavInfo(R.id.tv_nav_most, 2));
-                titleToNavInfoMap.put(getString(R.string.categories), new NavInfo(R.id.nav_category, 3));
-                titleToNavInfoMap.put(getString(R.string.saved_posts), new NavInfo(R.id.tv_nav_restore, 4));
-                titleToNavInfoMap.put(getString(R.string.search), new NavInfo(R.id.nav_home, 5));
-                titleToNavInfoMap.put(getString(R.string.live_radio), new NavInfo(R.id.nav_home, 0));
-                titleToNavInfoMap.put(getString(R.string.live_event), new NavInfo(R.id.nav_home, 0));
+                titleToNavInfoMap.put(getString(R.string.topics), new NavInfo(R.id.nav_topics, 1));
+                titleToNavInfoMap.put(getString(R.string.saved), new NavInfo(R.id.nav_home, 2));
+                titleToNavInfoMap.put(getString(R.string.live_tv), new NavInfo(R.id.nav_home, 3));
+                titleToNavInfoMap.put(getString(R.string.live_radio), new NavInfo(R.id.nav_home, 4));
+                titleToNavInfoMap.put(getString(R.string.search), new NavInfo(R.id.nav_home, 0));
 
                 // Update the navigation view and bottom navigation view if the title is in the map
                 NavInfo navInfo = titleToNavInfoMap.get(title);
@@ -437,29 +434,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void pageChange(int bottomNavIndex) {
-        if (bottomNavIndex == 0){
-            // Home: show blog feed (primary content)
+        if (bottomNavIndex == 0) {
             FragmentBlog home = FragmentBlog.newInstance(
                 com.ethionews.app.callback.Method.METHOD_BLOG_POSTS, "", "", getString(R.string.nav_home));
             loadFrag(home, getString(R.string.dashboard), fm);
-        } else if (bottomNavIndex == 1){
-            // Latest: latest blog posts
-            FragmentBlog latest = FragmentBlog.newInstance(
-                com.ethionews.app.callback.Method.METHOD_BLOG_POSTS, "", "", getString(R.string.latest_posts));
-            loadFrag(latest, getString(R.string.latest_posts), fm);
-        } else if (bottomNavIndex == 2){
-            // Trending: most-viewed blog posts
-            FragmentBlog trending = FragmentBlog.newInstance(
-                com.ethionews.app.callback.Method.METHOD_BLOG_TRENDING, "", "", getString(R.string.trending_posts));
-            loadFrag(trending, getString(R.string.trending_posts), fm);
-        } else if (bottomNavIndex == 3){
-            FragmentCategories category = new FragmentCategories();
-            loadFrag(category, getString(R.string.categories), fm);
-        } else if (bottomNavIndex == 4){
-            // Saved posts (device-based bookmarks, replaces recently-watched)
+        } else if (bottomNavIndex == 1) {
+            // Topics — blog categories
+            FragmentCategories topics = new FragmentCategories();
+            loadFrag(topics, getString(R.string.topics), fm);
+        } else if (bottomNavIndex == 2) {
+            // Saved — bookmarked blog posts
             FragmentBlog saved = FragmentBlog.newInstance(
-                com.ethionews.app.callback.Method.METHOD_SAVED_POSTS, "", "", getString(R.string.saved_posts));
-            loadFrag(saved, getString(R.string.saved_posts), fm);
+                com.ethionews.app.callback.Method.METHOD_SAVED_POSTS, "", "", getString(R.string.saved));
+            loadFrag(saved, getString(R.string.saved), fm);
+        } else if (bottomNavIndex == 3) {
+            // TV — live TV channels
+            FragmentLatest tv = new FragmentLatest();
+            loadFrag(tv, getString(R.string.live_tv), fm);
+        } else if (bottomNavIndex == 4) {
+            // Radio
+            FragmentRadio radio = new FragmentRadio();
+            loadFrag(radio, getString(R.string.live_radio), fm);
         }
     }
 

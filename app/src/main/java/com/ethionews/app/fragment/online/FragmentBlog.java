@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import com.ethionews.app.R;
 import com.ethionews.app.activity.BlogPostActivity;
 import com.ethionews.app.adapter.AdapterBlogPost;
+import com.ethionews.app.callback.Callback;
 import com.ethionews.app.callback.Method;
 import com.ethionews.app.executor.LoadBlogPosts;
 import com.ethionews.app.interfaces.BlogPostsListener;
@@ -65,6 +67,10 @@ public class FragmentBlog extends Fragment {
     private boolean isLoading = false;
     private boolean hasMore   = true;
 
+    // Debounced live search
+    private final Handler searchHandler = new Handler(Looper.getMainLooper());
+    private Runnable searchRunnable;
+
     public static FragmentBlog newInstance(String method, String catId, String tagId, String title) {
         FragmentBlog f = new FragmentBlog();
         Bundle args = new Bundle();
@@ -80,7 +86,12 @@ public class FragmentBlog extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_blog, container, false);
 
-        helper = new Helper(getActivity());
+        helper = new Helper(getActivity(), (pos, type) -> {
+            if (getActivity() == null || pos < 0 || pos >= postList.size()) return;
+            Intent intent = new Intent(getActivity(), BlogPostActivity.class);
+            intent.putExtra(BlogPostActivity.EXTRA_POST_ID, postList.get(pos).getId());
+            startActivity(intent);
+        });
 
         if (getArguments() != null) {
             apiMethod = getArguments().getString(ARG_METHOD, Method.METHOD_BLOG_POSTS);
@@ -94,14 +105,33 @@ public class FragmentBlog extends Fragment {
         flEmpty  = root.findViewById(R.id.fl_empty);
         rvBlog   = root.findViewById(R.id.rv_blog);
 
+        // Banner ad
+        LinearLayout adView = root.findViewById(R.id.ll_adView);
+        helper.showBannerAd(adView, Callback.PAGE_HOME);
+
+        // Preload AdMob native ads if enabled
+        if (helper.canLoadNativeAds(getContext(), Callback.PAGE_NATIVE_POST)
+                && (Callback.getAdNetwork().equals(Callback.AD_TYPE_ADMOB)
+                    || Callback.getAdNetwork().equals(Callback.AD_TYPE_META))) {
+            com.google.android.gms.ads.AdLoader adLoader = new com.google.android.gms.ads.AdLoader.Builder(
+                    requireContext(), Callback.getAdmobNativeAdID())
+                .forNativeAd(nativeAd -> {
+                    if (adapter != null) {
+                        java.util.List<com.google.android.gms.ads.nativead.NativeAd> ads = new java.util.ArrayList<>();
+                        ads.add(nativeAd);
+                        adapter.addAds(ads);
+                    }
+                })
+                .build();
+            adLoader.loadAds(new com.google.android.gms.ads.AdRequest.Builder().build(), 5);
+        }
+
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         rvBlog.setLayoutManager(llm);
         rvBlog.setItemAnimator(new DefaultItemAnimator());
 
         adapter = new AdapterBlogPost(getActivity(), postList, pos -> {
-            Intent intent = new Intent(getActivity(), BlogPostActivity.class);
-            intent.putExtra(BlogPostActivity.EXTRA_POST_ID, postList.get(pos).getId());
-            startActivity(intent);
+            helper.showInterAd(pos, "blog_post");
         });
         rvBlog.setAdapter(adapter);
 
@@ -219,13 +249,32 @@ public class FragmentBlog extends Fragment {
                 SearchView sv = (SearchView) item.getActionView();
                 if (sv != null) sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                     @Override public boolean onQueryTextSubmit(String query) {
+                        searchHandler.removeCallbacks(searchRunnable);
                         searchQuery = query;
                         apiMethod   = Method.METHOD_BLOG_SEARCH;
                         page        = 1;
                         loadPosts(true);
                         return true;
                     }
-                    @Override public boolean onQueryTextChange(String s) { return false; }
+                    @Override public boolean onQueryTextChange(String s) {
+                        searchHandler.removeCallbacks(searchRunnable);
+                        if (s.trim().isEmpty()) {
+                            // Reset to default feed when query cleared
+                            searchQuery = "";
+                            apiMethod = Method.METHOD_BLOG_POSTS;
+                            page = 1;
+                            loadPosts(true);
+                            return true;
+                        }
+                        searchRunnable = () -> {
+                            searchQuery = s;
+                            apiMethod = Method.METHOD_BLOG_SEARCH;
+                            page = 1;
+                            loadPosts(true);
+                        };
+                        searchHandler.postDelayed(searchRunnable, 400);
+                        return true;
+                    }
                 });
             }
             @Override public boolean onMenuItemSelected(@NonNull MenuItem item) { return false; }

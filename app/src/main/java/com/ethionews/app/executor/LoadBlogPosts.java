@@ -45,9 +45,12 @@ public class LoadBlogPosts extends AsyncTaskExecutor<String, String, String> {
             for (int i = 0; i < arr.length(); i++) {
                 JSONObject obj = arr.getJSONObject(i);
 
-                if (!obj.has(Callback.TAG_SUCCESS)) {
+                // Each post has success="1" AND an id field — treat it as a post.
+                // Only skip items that are pure error/status objects (no id).
+                if (obj.has("id")) {
                     list.add(parsePost(obj));
-                } else {
+                    verifyStatus = "1";
+                } else if (obj.has(Callback.TAG_SUCCESS)) {
                     verifyStatus = obj.getString(Callback.TAG_SUCCESS);
                     message      = obj.getString(Callback.TAG_MSG);
                 }

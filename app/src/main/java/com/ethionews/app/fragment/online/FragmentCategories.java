@@ -73,7 +73,7 @@ public class FragmentCategories extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_latest, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_categories, container, false);
 
         helper = new Helper(getActivity(), (position, type) -> openByCategory(position));
 
@@ -94,14 +94,7 @@ public class FragmentCategories extends Fragment {
         android.widget.LinearLayout adView = rootView.findViewById(R.id.ll_adView);
         helper.showBannerAd(adView, Callback.PAGE_CAT_DETAILS);
 
-        boolean isLandscape = ApplicationUtil.isLandscape(requireContext());
-        glm = new GridLayoutManager(getActivity(), isLandscape ? 4 : 3);
-        glm.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(int position) {
-                return (adapterCategories.getItemViewType(position) == -2 || adapterCategories.isHeader(position)) ? glm.getSpanCount() : 1;
-            }
-        });
+        glm = new GridLayoutManager(getActivity(), 1);
         rv.setLayoutManager(glm);
         rv.setItemAnimator(new DefaultItemAnimator());
         rv.addOnScrollListener(new EndlessRecyclerViewScrollListener(glm) {
@@ -128,27 +121,10 @@ public class FragmentCategories extends Fragment {
             }
         });
 
-        setNativeShow(isLandscape);
         loadCategories();
 
         addMenuProvider();
         return rootView;
-    }
-
-    private void setNativeShow(boolean isLandscape) {
-        if (isLandscape){
-            if(Callback.getNativeAdShow()%5 != 0) {
-                Callback.setNativeAdShow(Callback.getNativeAdShow() + 2);
-            } else {
-                Callback.setNativeAdShow(Callback.getNativeAdShow());
-            }
-        } else {
-            if(Callback.getNativeAdShow()%3 != 0) {
-                Callback.setNativeAdShow(Callback.getNativeAdShow() + 1);
-            } else {
-                Callback.setNativeAdShow(Callback.getNativeAdShow());
-            }
-        }
     }
 
     private void openByCategory(int position) {

@@ -25,18 +25,11 @@
         app:tabTextColor="?ns_title_sub"
         app:tabRippleColor="?attr/colorControlHighlight" />
 
-    <View
-        android:id="@+id/divider_tabs"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_1sdp"
-        android:layout_below="@id/tab_layout"
-        android:background="?ns_border" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/divider_tabs"
+        android:layout_below="@id/tab_layout"
         android:layout_above="@id/ll_adView"
         android:visibility="gone"
         android:layoutAnimation="@anim/layout_animation_from_bottom" />
@@ -61,7 +54,7 @@
         android:id="@+id/fl_empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/divider_tabs"
+        android:layout_below="@id/tab_layout"
         android:layout_above="@id/ll_adView"
         android:layout_centerInParent="true"
         android:layout_marginBottom="?attr/actionBarSize" />

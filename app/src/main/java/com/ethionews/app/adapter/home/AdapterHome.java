@@ -37,12 +37,14 @@ import com.ethionews.app.fragment.online.FragmentTrending;
 import com.ethionews.app.interfaces.InterAdListener;
 import com.ethionews.app.item.ItemPost;
 import com.ethionews.app.utils.helper.Helper;
+import com.ethionews.app.utils.helper.SPHelper;
 import com.ethionews.app.utils.recycler.RecyclerItemClickListener;
 
 public class AdapterHome extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     Context context;
     Helper helper;
+    SPHelper spHelper;
     List<ItemPost> arrayList;
     private boolean showFooter = true;
     int clickPos = 0;
@@ -61,6 +63,7 @@ public class AdapterHome extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.context = context;
         this.arrayList = arrayList;
         helper = new Helper(context, interAdListener);
+        spHelper = new SPHelper(context);
     }
 
     static class BannerHolder extends RecyclerView.ViewHolder {

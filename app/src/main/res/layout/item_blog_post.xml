@@ -28,8 +28,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_10sdp"
-        android:layout_marginTop="@dimen/_-14sdp"
-        android:background="@color/ethio_red"
+        android:layout_marginTop="@dimen/_n14sdp"
+        android:background="@drawable/bg_category_pill"
         android:paddingStart="@dimen/_8sdp"
         android:paddingEnd="@dimen/_8sdp"
         android:paddingTop="@dimen/_3sdp"
@@ -98,4 +98,14 @@
                 android:textSize="@dimen/_10ssp" />
         </LinearLayout>
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_native_ad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?ns_bg"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:visibility="gone"/>
+
 </LinearLayout>

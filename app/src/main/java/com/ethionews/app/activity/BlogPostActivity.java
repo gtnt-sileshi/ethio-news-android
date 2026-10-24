@@ -35,6 +35,7 @@ import com.ethionews.app.R;
 import com.ethionews.app.adapter.AdapterBlogComment;
 import com.ethionews.app.adapter.AdapterBlogPost;
 import com.ethionews.app.callback.Callback;
+import com.ethionews.app.callback.Callback;
 import com.ethionews.app.callback.Method;
 import com.ethionews.app.executor.LoadBlogComments;
 import com.ethionews.app.executor.LoadBlogPost;
@@ -103,6 +104,10 @@ public class BlogPostActivity extends AppCompatActivity {
         bindViews();
         setupRecyclers();
         loadPost();
+
+        // Banner ad
+        LinearLayout adView = findViewById(R.id.ll_adView);
+        helper.showBannerAd(adView, Callback.PAGE_POST_DETAILS);
     }
 
     private void bindViews() {

@@ -128,7 +128,7 @@ public class ReviewDialog {
                 }
             }, helper.getAPIRequest(Method.METHOD_RATINGS, 0, id, "", "",
                     report, deviceId, "", "", "", "",
-                    rate, "", null));
+                    "", rate, "", null));
             loadRating.execute();
         } else {
             Toast.makeText(ctx, ctx.getString(R.string.err_internet_not_connected), Toast.LENGTH_SHORT).show();

@@ -19,19 +19,11 @@
         app:navigationIconTint="?ns_bg_dark"
         app:titleTextColor="?ns_bg_dark" />
 
-    <!-- Accent bar below toolbar -->
-    <View
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_2sdp"
-        android:layout_below="@id/toolbar"
-        android:background="?ns_primary" />
-
     <!-- Scroll content -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/divider"
+        android:layout_below="@id/toolbar"
         android:layout_above="@id/ll_adView">
 
         <LinearLayout
@@ -102,13 +94,6 @@
                 android:layout_marginBottom="@dimen/_20sdp"
                 tools:text="News · Talk · Music" />
 
-            <!-- Divider -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_1sdp"
-                android:background="?ns_border"
-                android:layout_marginBottom="@dimen/_20sdp" />
-
             <!-- Status text -->
             <TextView
                 android:id="@+id/tv_radio_status"
@@ -175,12 +160,6 @@
             </LinearLayout>
 
             <!-- Description -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_1sdp"
-                android:background="?ns_border"
-                android:layout_marginBottom="@dimen/_12sdp" />
-
             <TextView
                 android:id="@+id/tv_radio_description"
                 android:layout_width="match_parent"

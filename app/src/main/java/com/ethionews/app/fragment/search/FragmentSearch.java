@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -51,6 +52,10 @@ public class FragmentSearch extends Fragment {
     private AdapterBlogPost adapter;
     private ArrayList<ItemBlogPost> arrayList;
     private String errorMsg;
+
+    // Debounced live search
+    private final Handler searchHandler = new Handler(Looper.getMainLooper());
+    private Runnable searchRunnable;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -164,6 +169,7 @@ public class FragmentSearch extends Fragment {
         @SuppressLint("NotifyDataSetChanged")
         @Override
         public boolean onQueryTextSubmit(String s) {
+            searchHandler.removeCallbacks(searchRunnable);
             if (helper.isNetworkAvailable()) {
                 Callback.setSearchItem(s.replace(" ", "%20"));
                 arrayList.clear();
@@ -174,6 +180,27 @@ public class FragmentSearch extends Fragment {
             }
             return true;
         }
-        @Override public boolean onQueryTextChange(String s) { return false; }
+        @SuppressLint("NotifyDataSetChanged")
+        @Override
+        public boolean onQueryTextChange(String s) {
+            searchHandler.removeCallbacks(searchRunnable);
+            if (s.trim().isEmpty()) {
+                arrayList.clear();
+                adapter.notifyDataSetChanged();
+                errorMsg = getString(R.string.search);
+                setEmpty();
+                return true;
+            }
+            searchRunnable = () -> {
+                if (helper.isNetworkAvailable()) {
+                    Callback.setSearchItem(s.replace(" ", "%20"));
+                    arrayList.clear();
+                    adapter.notifyDataSetChanged();
+                    search();
+                }
+            };
+            searchHandler.postDelayed(searchRunnable, 400);
+            return true;
+        }
     };
 }

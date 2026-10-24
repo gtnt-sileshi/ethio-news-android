@@ -34,6 +34,7 @@ import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.nativead.NativeAd;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 
@@ -43,9 +44,12 @@ import com.ethionews.app.adapter.AdapterVideo;
 import com.ethionews.app.callback.Callback;
 import com.ethionews.app.callback.Method;
 import com.ethionews.app.dialog.DialogUtil;
+import com.ethionews.app.executor.LoadCat;
 import com.ethionews.app.executor.LoadLive;
 import com.ethionews.app.fragment.search.FragmentSearchLive;
+import com.ethionews.app.interfaces.CategoryListener;
 import com.ethionews.app.interfaces.LiveListener;
+import com.ethionews.app.item.ItemCat;
 import com.ethionews.app.item.ItemData;
 import com.ethionews.app.utils.ApplicationUtil;
 import com.ethionews.app.utils.helper.Helper;
@@ -56,6 +60,7 @@ import com.ethionews.app.utils.recycler.RecyclerItemClickListener;
 public class FragmentLatest extends Fragment {
 
     private static final String TAG = "FragmentLatest";
+    private static final int TAB_ALL = 0;
     private Helper helper;
     private SPHelper spHelper;
     private RecyclerView rv;
@@ -70,6 +75,11 @@ public class FragmentLatest extends Fragment {
     private FloatingActionButton fab;
     private String errorMsg;
     private FrameLayout frameLayout;
+
+    // Tab + categories
+    private TabLayout tabLayout;
+    private final ArrayList<ItemCat> categoryList = new ArrayList<>();
+    private boolean isRebuildingTabs = false;
 
     private AdLoader adLoader;
     private final ArrayList<NativeAd> arrayListNativeAds = new ArrayList<>();
@@ -87,9 +97,24 @@ public class FragmentLatest extends Fragment {
         fab = rootView.findViewById(R.id.fab);
         pb = rootView.findViewById(R.id.pb);
         rv = rootView.findViewById(R.id.rv);
+        tabLayout = rootView.findViewById(R.id.tab_layout);
 
         android.widget.LinearLayout adView = rootView.findViewById(R.id.ll_adView);
         helper.showBannerAd(adView, Callback.PAGE_CAT_DETAILS);
+
+        // TabLayout setup — mirrors FragmentRadio pattern
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.live_tv)).setTag(TAB_ALL));
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if (isRebuildingTabs) return;
+                onTabChanged(tab);
+            }
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) { /* no-op */ }
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) { /* no-op */ }
+        });
 
         grid = new GridLayoutManager(getActivity(), 1);
         boolean isLandscape = ApplicationUtil.isLandscape(requireContext());
@@ -147,8 +172,72 @@ public class FragmentLatest extends Fragment {
         }
 
         getData();
+        loadCategories();
         addMenuProvider();
         return rootView;
+    }
+
+    // ── Tab layout ───────────────────────────────────────────────────
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void onTabChanged(TabLayout.Tab tab) {
+        Object tag = tab.getTag();
+        if (adapter != null) {
+            arrayList.clear();
+            adapter.notifyDataSetChanged();
+        } else {
+            arrayList.clear();
+        }
+        page = 1;
+        isOver = false;
+        isScroll = false;
+        adapter = null;
+        rv.setVisibility(View.GONE);
+        getData();
+    }
+
+    private void loadCategories() {
+        if (!helper.isNetworkAvailable()) return;
+        LoadCat loadCat = new LoadCat(new CategoryListener() {
+            @Override public void onStart() { /* no-op */ }
+            @Override
+            public void onEnd(String success, String verifyStatus, String message,
+                              ArrayList<ItemCat> arrayListCat) {
+                if (getActivity() == null) return;
+                if ("1".equals(success) && !arrayListCat.isEmpty()) {
+                    categoryList.clear();
+                    categoryList.addAll(arrayListCat);
+                    rebuildTabs();
+                }
+            }
+        }, helper.getAPIRequest(Method.METHOD_CAT, 1, "", "", "",
+                "", "", "", "", "", "", "", "", "", null));
+        loadCat.execute();
+    }
+
+    private void rebuildTabs() {
+        isRebuildingTabs = true;
+        TabLayout.Tab previousTab = tabLayout.getTabAt(tabLayout.getSelectedTabPosition());
+        Object previousTag = previousTab != null ? previousTab.getTag() : TAB_ALL;
+
+        tabLayout.removeAllTabs();
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.live_tv)).setTag(TAB_ALL));
+        for (ItemCat cat : categoryList) {
+            tabLayout.addTab(tabLayout.newTab().setText(cat.getName()).setTag(cat.getId()));
+        }
+
+        boolean restored = false;
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            TabLayout.Tab t = tabLayout.getTabAt(i);
+            if (t != null && previousTag != null && previousTag.equals(t.getTag())) {
+                tabLayout.selectTab(t);
+                restored = true;
+                break;
+            }
+        }
+        if (!restored) tabLayout.selectTab(tabLayout.getTabAt(0));
+
+        isRebuildingTabs = false;
     }
 
     private void getData() {
@@ -157,6 +246,17 @@ public class FragmentLatest extends Fragment {
             setEmpty();
             return;
         }
+
+        // Determine API method based on selected tab
+        TabLayout.Tab currentTab = tabLayout != null ? tabLayout.getTabAt(tabLayout.getSelectedTabPosition()) : null;
+        Object tabTag = currentTab != null ? currentTab.getTag() : TAB_ALL;
+        String method = Method.METHOD_LATEST;
+        String catId = "";
+        if (tabTag instanceof String) {
+            method = Method.METHOD_CAT_ID;
+            catId = (String) tabTag;
+        }
+
         LoadLive loadCategory = new LoadLive(new LiveListener() {
             @Override
             public void onStart() {
@@ -185,7 +285,7 @@ public class FragmentLatest extends Fragment {
                     setEmpty();
                 }
             }
-        }, helper.getAPIRequest(Method.METHOD_LATEST, page, "", "", "",
+        }, helper.getAPIRequest(method, page, "", catId, "",
                 "", "", "", "", "", "", "",
                 "", "", null));
         loadCategory.execute();

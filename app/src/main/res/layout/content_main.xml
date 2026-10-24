@@ -20,17 +20,12 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?ns_bg"
+            android:elevation="0dp"
             app:titleTextColor="?ns_bg_dark"
             app:navigationIconTint="?ns_bg_dark"
             app:navigationIcon="@drawable/ic_menu"
             app:title="@string/app_name"
             app:titleCentered="true" />
-
-        <!-- Bottom border line — editorial / newspaper divider -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_2sdp"
-            android:background="?ns_primary" />
 
     </LinearLayout>
 

@@ -4,8 +4,7 @@
 
     <dimen name="default_corner_radii">8dp</dimen>
 
-    <dimen name="_1sdp">1dp</dimen>
-    <dimen name="_2sdp">2dp</dimen>
+    <dimen name="_n14sdp">-14dp</dimen>    <dimen name="_1sdp">1dp</dimen>    <dimen name="_2sdp">2dp</dimen>
     <dimen name="_3sdp">3dp</dimen>
     <dimen name="_4sdp">4dp</dimen>
     <dimen name="_5sdp">5dp</dimen>
@@ -52,7 +51,9 @@
     <dimen name="_140sdp">140dp</dimen>
     <dimen name="_150sdp">150dp</dimen>
     <dimen name="_160sdp">160dp</dimen>
+    <dimen name="_170sdp">170dp</dimen>
     <dimen name="_200sdp">200dp</dimen>
+    <dimen name="_220sdp">220dp</dimen>
     <dimen name="_235sdp">235dp</dimen>
     <dimen name="_400sdp">400dp</dimen>
 

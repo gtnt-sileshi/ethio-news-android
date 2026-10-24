@@ -3,29 +3,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <!-- Bottom-nav tabs mirrored here so back-stack can sync -->
+    <!-- Bottom-nav tabs mirrored in the drawer -->
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/ic_home"
         android:title="@string/nav_home" />
 
     <item
-        android:id="@+id/nav_category"
+        android:id="@+id/nav_topics"
         android:icon="@drawable/ic_folders"
-        android:title="@string/categories" />
+        android:title="@string/topics" />
 
-    <!-- Supplementary features -->
+    <item
+        android:id="@+id/nav_saved"
+        android:icon="@drawable/ic_star"
+        android:title="@string/saved" />
+
+    <item
+        android:id="@+id/nav_tv"
+        android:icon="@drawable/ic_tv"
+        android:title="@string/live_tv" />
+
     <item
         android:id="@+id/nav_radio"
         android:icon="@drawable/ic_radio"
         android:title="@string/live_radio" />
 
+    <!-- Supplementary -->
     <item
         android:id="@+id/nav_event"
         android:icon="@drawable/ic_todo"
         android:title="@string/live_event" />
 
-    <!-- Content & feedback -->
     <item
         android:id="@+id/nav_suggest"
         android:icon="@drawable/ic_function_add"

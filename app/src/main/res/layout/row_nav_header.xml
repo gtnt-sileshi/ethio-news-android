@@ -59,11 +59,6 @@
 
     </LinearLayout>
 
-    <!-- Primary color accent bar under the header -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_1sdp"
-        android:layout_marginTop="@dimen/_12sdp"
-        android:background="?ns_primary" />
+    <!-- Primary color accent bar under the header — removed -->
 
 </LinearLayout>

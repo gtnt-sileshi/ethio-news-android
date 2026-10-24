@@ -142,7 +142,7 @@ public class AdapterEvent extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             myViewHolder.linearLayout.setOnClickListener(view ->
                     listener.onClick(getPosition(arrayList.get(holder.getAbsoluteAdapterPosition()).getId())));
 
-            if (Boolean.TRUE.equals(Callback.getIsAdsStatus()
+            if (Boolean.TRUE.equals(Callback.getIsAdsStatus())
                     && Callback.getIsNativeAdPost()
                     && (position != arrayList.size() - 1)
                     && (position + 1) % Callback.getNativeAdShow() == 0) {

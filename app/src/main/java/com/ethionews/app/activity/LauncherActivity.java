@@ -114,10 +114,18 @@ public class LauncherActivity extends AppCompatActivity {
     private void openMainActivity() {
         pb.setVisibility(View.VISIBLE);
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            Intent intent = new Intent(LauncherActivity.this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-            finish();
+            MyApplication app = (MyApplication) getApplication();
+            if (app.getAppOpenAdManager().isAdAvailable()
+                    && Boolean.TRUE.equals(!app.getAppOpenAdManager().getIsShowingAd())) {
+                // Show the open ad — it will navigate to MainActivity on dismiss
+                app.getAppOpenAdManager().showAdIfAvailable(LauncherActivity.this);
+            } else {
+                // No ad available — navigate directly
+                Intent intent = new Intent(LauncherActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+            }
         }, 3000);
     }
 

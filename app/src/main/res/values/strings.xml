@@ -12,6 +12,8 @@
 
     <!--Navigation drawer -->
     <string name="nav_home">Home</string>
+    <string name="topics">Topics</string>
+    <string name="saved">Saved</string>
     <string name="nav_settings">Settings</string>
     <string name="nav_profile">Profile</string>
     <string name="categories">Categories</string>
@@ -31,7 +33,7 @@
 
 
     <!--Login/Register -->
-    <string name="dashboard">Dashboard</string>
+    <string name="dashboard">Ethio News</string>
     <string name="search">Search</string>
     <string name="login">Login</string>
     <string name="logout">Logout</string>
@@ -230,11 +232,11 @@
     <string name="default_todo">TODO</string>
 
     <!-- Live Radio -->
-    <string name="live_radio">Podcasts</string>
+    <string name="live_radio">Radio</string>
     <string name="radio_playing">Playing…</string>
     <string name="radio_paused">Paused</string>
     <string name="radio_stopped">Stopped</string>
-    <string name="radio_all_stations">All Podcasts</string>
+    <string name="radio_all_stations">All Stations</string>
     <string name="radio_favorites">Favorites</string>
     <string name="radio_login_to_fav">Please login to add favourites</string>
 
@@ -260,7 +262,7 @@
     <string name="background_play">Play in Background</string>
     <string name="stop_playback">Stop Playback</string>
     <string name="media_playback_channel_name">Media Playback</string>
-    <string name="media_playback_channel_desc">Background audio for Podcasts and Live News</string>
+    <string name="media_playback_channel_desc">Background audio for Radio and Live News</string>
     <string name="now_playing">Now Playing</string>
     <string name="background_play_started">Playing in background</string>
     <string name="profile_edit_hint">Update your name, photo and details</string>
@@ -268,7 +270,7 @@
     <string name="background_play_unsupported">Background play is only available for direct streams (HLS, DASH, MP4)</string>
 
     <!-- Ethio News redesign strings -->
-    <string name="splash_tagline">Ethiopian News · Live TV · Podcasts</string>
+    <string name="splash_tagline">Ethiopian News · Live TV · Radio</string>
     <string name="tag_live">● LIVE</string>
     <string name="tag_breaking">BREAKING</string>
     <string name="tag_watch">Watch</string>

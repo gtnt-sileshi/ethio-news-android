@@ -44,11 +44,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_1sdp"
-                    android:background="?ns_border" />
-
                 <RelativeLayout
                     android:layout_marginTop="@dimen/_10sdp"
                     android:layout_marginStart="@dimen/_10sdp"
@@ -137,11 +132,6 @@
 
                 </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_1sdp"
-                    android:background="?ns_border" />
-
                 <WebView
                     android:id="@+id/webView_det"
                     android:layout_width="match_parent"
@@ -161,11 +151,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:layout_marginBottom="@dimen/_10sdp"/>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_1sdp"
-                    android:background="?ns_border" />
 
                 <LinearLayout
                     android:id="@+id/ll_similar"
@@ -234,12 +219,7 @@
 
     </RelativeLayout>
 
-    <View
-        android:layout_below="@id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_1sdp"
-        android:background="?ns_border" />
-
+    <!-- Banner ad at bottom -->
     <ProgressBar
         android:id="@+id/pb"
         android:layout_width="@dimen/_40sdp"

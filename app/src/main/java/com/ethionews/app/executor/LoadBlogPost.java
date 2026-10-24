@@ -43,71 +43,73 @@ public class LoadBlogPost extends AsyncTaskExecutor<String, String, String> {
         try {
             JSONObject root = new JSONObject(json);
 
-            // Try object response (get_blog_post returns {post:{}, related:[]})
-            try {
-                JSONObject wrapper = root.getJSONObject(Callback.TAG_ROOT);
-                JSONObject postObj = wrapper.getJSONArray("post").getJSONObject(0);
+            // API returns: {"ETHIONEWS_APP": [{"post": {...}, "related": [...]}]}
+            JSONArray rootArr = root.getJSONArray(Callback.TAG_ROOT);
+            if (rootArr.length() == 0) return "0";
+            JSONObject wrapper = rootArr.getJSONObject(0);
 
-                post = new ItemBlogPost(
-                    postObj.optString("id", ""),
-                    postObj.optString("title", ""),
-                    postObj.optString("slug", ""),
-                    postObj.optString("excerpt", ""),
-                    postObj.optString("content", ""),
-                    postObj.optString("featured_image", "").replace(" ", "%20"),
-                    postObj.optString("category_name", ""),
-                    postObj.optString("author_name", ""),
-                    postObj.optString("reading_time", "0"),
-                    postObj.optString("total_views", "0"),
-                    postObj.optString("total_share", "0"),
-                    postObj.optBoolean("featured", false),
-                    postObj.optBoolean("is_saved", false),
-                    postObj.optString("published_at", "")
-                );
-
-                // Parse tags
-                if (postObj.has("tags")) {
-                    JSONArray tagsArr = postObj.getJSONArray("tags");
-                    List<ItemBlogTag> tags = new ArrayList<>();
-                    for (int i = 0; i < tagsArr.length(); i++) {
-                        JSONObject t = tagsArr.getJSONObject(i);
-                        tags.add(new ItemBlogTag(
-                            t.optString("id", ""),
-                            t.optString("name", ""),
-                            t.optString("slug", "")
-                        ));
-                    }
-                    post.setTags(tags);
-                }
-
-                // Parse related posts
-                if (wrapper.has("related")) {
-                    JSONArray relArr = wrapper.getJSONArray("related");
-                    List<ItemBlogPost> related = new ArrayList<>();
-                    for (int i = 0; i < relArr.length(); i++) {
-                        JSONObject r = relArr.getJSONObject(i);
-                        related.add(new ItemBlogPost(
-                            r.optString("id", ""),
-                            r.optString("title", ""),
-                            r.optString("slug", ""),
-                            "",
-                            r.optString("featured_image", "").replace(" ", "%20"),
-                            r.optString("category_name", ""),
-                            "",
-                            "0", "0", false,
-                            r.optString("published_at", "")
-                        ));
-                    }
-                    post.setRelated(related);
-                }
+            // Check for error response
+            if (!wrapper.has("post")) {
+                verifyStatus = wrapper.optString(Callback.TAG_SUCCESS, "-1");
+                message      = wrapper.optString(Callback.TAG_MSG, "");
                 return "1";
-            } catch (Exception ignored) {}
+            }
 
-            // Fallback: error array response
-            JSONArray arr = root.getJSONArray(Callback.TAG_ROOT);
-            JSONObject obj = arr.getJSONObject(0);
-            verifyStatus = obj.getString(Callback.TAG_SUCCESS);
-            message      = obj.getString(Callback.TAG_MSG);
+            JSONObject postObj = wrapper.getJSONObject("post");
+
+            post = new ItemBlogPost(
+                postObj.optString("id", ""),
+                postObj.optString("title", ""),
+                postObj.optString("slug", ""),
+                postObj.optString("excerpt", ""),
+                postObj.optString("content", ""),
+                postObj.optString("featured_image", "").replace(" ", "%20"),
+                postObj.optString("category_name", ""),
+                postObj.optString("author_name", ""),
+                postObj.optString("reading_time", "0"),
+                postObj.optString("total_views", "0"),
+                postObj.optString("total_share", "0"),
+                postObj.optBoolean("featured", false),
+                postObj.optBoolean("is_saved", false),
+                postObj.optString("published_at", "")
+            );
+
+            // Parse tags
+            if (postObj.has("tags")) {
+                JSONArray tagsArr = postObj.getJSONArray("tags");
+                List<ItemBlogTag> tags = new ArrayList<>();
+                for (int i = 0; i < tagsArr.length(); i++) {
+                    JSONObject t = tagsArr.getJSONObject(i);
+                    tags.add(new ItemBlogTag(
+                        t.optString("id", ""),
+                        t.optString("name", ""),
+                        t.optString("slug", "")
+                    ));
+                }
+                post.setTags(tags);
+            }
+
+            // Parse related posts
+            if (wrapper.has("related")) {
+                JSONArray relArr = wrapper.getJSONArray("related");
+                List<ItemBlogPost> related = new ArrayList<>();
+                for (int i = 0; i < relArr.length(); i++) {
+                    JSONObject r = relArr.getJSONObject(i);
+                    related.add(new ItemBlogPost(
+                        r.optString("id", ""),
+                        r.optString("title", ""),
+                        r.optString("slug", ""),
+                        "",
+                        r.optString("featured_image", "").replace(" ", "%20"),
+                        r.optString("category_name", ""),
+                        "",
+                        "0", "0", false,
+                        r.optString("published_at", "")
+                    ));
+                }
+                post.setRelated(related);
+            }
+
             return "1";
         } catch (Exception e) {
             return "0";

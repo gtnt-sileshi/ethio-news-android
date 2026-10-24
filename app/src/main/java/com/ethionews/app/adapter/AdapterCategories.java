@@ -47,7 +47,6 @@ public class AdapterCategories extends RecyclerView.Adapter<RecyclerView.ViewHol
     Context context;
     List<ItemCat> arrayList;
     private boolean showFooter = true;
-    int columnWidth;
     private final RecyclerItemClickListener listener;
     private static final int VIEW_PROG = -1;
     private static final int VIEW_ADS = -2;
@@ -59,21 +58,21 @@ public class AdapterCategories extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.arrayList = arrayList;
         this.listener = listener;
         helper = new Helper(context);
-        columnWidth = ApplicationUtil.getColumnWidth(3, 0, context);
+        // Image size is now fixed in layout_cat.xml — no columnWidth needed
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
 
         private final ImageView logo;
         private final TextView title;
-        private final RelativeLayout relativeLayout;
+        private final View itemView2;
 
         MyViewHolder(View view) {
             super(view);
 
             title = view.findViewById(R.id.tv_title);
             logo = view.findViewById(R.id.iv_live_tv);
-            relativeLayout = view.findViewById(R.id.rl_live_tv);
+            itemView2 = view.findViewById(R.id.rl_live_tv);
         }
     }
 
@@ -122,7 +121,6 @@ public class AdapterCategories extends RecyclerView.Adapter<RecyclerView.ViewHol
         if (holder instanceof MyViewHolder myViewHolder) {
 
             myViewHolder.title.setText(arrayList.get(holder.getAbsoluteAdapterPosition()).getName());
-            myViewHolder.logo.setLayoutParams(new RelativeLayout.LayoutParams(columnWidth, columnWidth));
 
             Picasso.get()
                     .load(arrayList.get(holder.getAbsoluteAdapterPosition()).getImage())
@@ -132,7 +130,7 @@ public class AdapterCategories extends RecyclerView.Adapter<RecyclerView.ViewHol
                     .error(R.drawable.material_design_default)
                     .into(myViewHolder.logo);
 
-            myViewHolder.relativeLayout.setOnClickListener(v -> listener.onClickListener(
+            myViewHolder.itemView2.setOnClickListener(v -> listener.onClickListener(
                     arrayList.get(holder.getAbsoluteAdapterPosition()),holder.getAbsoluteAdapterPosition()));
 
         } else if (holder instanceof ADViewHolder adViewHolder) {

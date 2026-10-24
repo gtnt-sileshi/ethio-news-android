@@ -1,14 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Network Security Configuration
-
-    The app API (ethiotv.getinet.dev) is now HTTPS — no cleartext needed for it.
-    However, live TV streams and radio streams are often plain HTTP (e.g. bozztv.com),
-    so cleartext traffic is still permitted globally for media playback to work.
-
-    If you ever migrate all stream sources to HTTPS, remove the base-config block
-    and replace it with targeted domain-config entries for any remaining HTTP hosts.
--->
 <network-security-config>
     <base-config cleartextTrafficPermitted="true">
         <trust-anchors>
@@ -18,6 +8,6 @@
 
     <!-- API domain — always HTTPS, no cleartext needed -->
     <domain-config cleartextTrafficPermitted="false">
-        <domain includeSubdomains="true">ethiotv.getinet.dev</domain>
+        <domain includeSubdomains="true">ethionews.getinet.dev</domain>
     </domain-config>
 </network-security-config>

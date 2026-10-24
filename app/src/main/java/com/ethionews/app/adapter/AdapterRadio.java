@@ -26,6 +26,7 @@ public class AdapterRadio extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private final Context context;
     private final List<ItemRadio> arrayList;
+    private boolean showFooter = true;
     private final RecyclerItemClickListener listener;
     private final Boolean isPurchased;
     private final int columnWidth;
@@ -121,7 +122,7 @@ public class AdapterRadio extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return arrayList.size() + 1; // +1 for progress footer
+        return showFooter ? arrayList.size() + 1 : arrayList.size(); // +1 for progress footer
     }
 
     @Override
@@ -146,7 +147,10 @@ public class AdapterRadio extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public void hideHeader() {
         try {
-            notifyItemChanged(arrayList.size());
+            if (showFooter) {
+                showFooter = false;
+                notifyItemRemoved(arrayList.size());
+            }
         } catch (Exception e) {
             // ignore
         }

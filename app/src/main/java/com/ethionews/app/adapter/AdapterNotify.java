@@ -28,6 +28,7 @@ import com.ethionews.app.utils.helper.SPHelper;
 public class AdapterNotify extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final List<ItemNotify> arrayList;
+    private boolean showFooter = true;
     public final Context ctx;
     private final Helper helper;
     private final SPHelper spHelper;
@@ -136,7 +137,7 @@ public class AdapterNotify extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public int getItemCount() {
-        return arrayList.size() + 1;
+        return showFooter ? arrayList.size() + 1 : arrayList.size();
     }
 
     @Override
@@ -149,6 +150,9 @@ public class AdapterNotify extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public void hideHeader() {
-        notifyItemChanged(arrayList.size());
+        if (showFooter) {
+            showFooter = false;
+            notifyItemRemoved(arrayList.size());
+        }
     }
 }

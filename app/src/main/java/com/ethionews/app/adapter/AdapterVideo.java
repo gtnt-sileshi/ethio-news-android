@@ -46,6 +46,7 @@ public class AdapterVideo extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private final Context context;
     private List<ItemData> arrayList;
+    private boolean showFooter = true;
     private final List<ItemData> filteredArrayList;
     private final RecyclerItemClickListener listener;
     private NameFilter filter;
@@ -261,9 +262,10 @@ public class AdapterVideo extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public void hideHeader() {
         try {
-            // Notify the adapter that the footer/progress item changed so RecyclerView
-            // rebinds and hides it — avoids stale static reference to a detached view.
-            notifyItemChanged(arrayList.size());
+            if (showFooter) {
+                showFooter = false;
+                notifyItemRemoved(arrayList.size());
+            }
         } catch (Exception e) {
             Log.e("AdapterVideo", "hideHeader failed", e);
         }
@@ -275,7 +277,7 @@ public class AdapterVideo extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return arrayList.size() + 1;
+        return showFooter ? arrayList.size() + 1 : arrayList.size();
     }
 
     @Override

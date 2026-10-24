@@ -47,6 +47,7 @@ public class AdapterEvent extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private final Context context;
     private List<ItemEvent> arrayList;
+    private boolean showFooter = true;
     private final List<ItemEvent> filteredArrayList;
     private final RecyclerItemClickListener listener;
     private NameFilter filter;
@@ -243,7 +244,10 @@ public class AdapterEvent extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public void hideHeader() {
         try {
-            notifyItemChanged(arrayList.size());
+            if (showFooter) {
+                showFooter = false;
+                notifyItemRemoved(arrayList.size());
+            }
         } catch (Exception e) {
             Log.e("AdapterEvent", "hideHeader failed", e);
         }

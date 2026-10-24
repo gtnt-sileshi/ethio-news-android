@@ -46,6 +46,7 @@ public class AdapterCategories extends RecyclerView.Adapter<RecyclerView.ViewHol
     Helper helper;
     Context context;
     List<ItemCat> arrayList;
+    private boolean showFooter = true;
     int columnWidth;
     private final RecyclerItemClickListener listener;
     private static final int VIEW_PROG = -1;
@@ -240,7 +241,10 @@ public class AdapterCategories extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public void hideHeader() {
         try {
-            notifyItemChanged(arrayList.size());
+            if (showFooter) {
+                showFooter = false;
+                notifyItemRemoved(arrayList.size());
+            }
         } catch (Exception e) {
             Log.e("AdapterCategories", "hideHeader failed", e);
         }
@@ -252,7 +256,7 @@ public class AdapterCategories extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemCount() {
-        return arrayList.size() + 1;
+        return showFooter ? arrayList.size() + 1 : arrayList.size();
     }
 
     @Override

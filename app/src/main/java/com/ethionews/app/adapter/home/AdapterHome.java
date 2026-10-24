@@ -46,6 +46,7 @@ public class AdapterHome extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     Helper helper;
     SPHelper spHelper;
     List<ItemPost> arrayList;
+    private boolean showFooter = true;
     int clickPos = 0;
 
     private static final int VIEW_PROG = 0;
@@ -431,7 +432,10 @@ public class AdapterHome extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public void hideHeader() {
-        notifyItemChanged(arrayList.size());
+        if (showFooter) {
+            showFooter = false;
+            notifyItemRemoved(arrayList.size());
+        }
     }
 
     public boolean isHeader(int position) {

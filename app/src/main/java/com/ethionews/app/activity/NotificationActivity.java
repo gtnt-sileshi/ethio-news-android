@@ -148,10 +148,11 @@ public class NotificationActivity extends AppCompatActivity {
         if (Boolean.FALSE.equals(isScroll)) {
             adapter = new AdapterNotify(NotificationActivity.this, arrayList);
             rv.setAdapter(adapter);
-            setEmpty();
         } else {
             adapter.notifyDataSetChanged();
         }
+        // Always hide spinner and show correct state after any data load
+        setEmpty();
     }
 
     private void setEmpty() {

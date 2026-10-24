@@ -17,18 +17,15 @@ import java.util.List;
 
 import com.ethionews.app.R;
 import com.ethionews.app.item.ItemData;
-import com.ethionews.app.utils.helper.SPHelper;
 
 public class AdapterSimilar extends RecyclerView.Adapter<AdapterSimilar.ViewHolder> {
 
     private final RecyclerItemClickListener listener;
     private final List<ItemData> arrayList;
-    public final Boolean isPurchases;
 
     public AdapterSimilar(Context context, List<ItemData> arrayList, RecyclerItemClickListener listener) {
         this.arrayList = arrayList;
         this.listener = listener;
-        isPurchases = new SPHelper(context).getIsSubscribed();
     }
 
     @NonNull
@@ -54,11 +51,7 @@ public class AdapterSimilar extends RecyclerView.Adapter<AdapterSimilar.ViewHold
 
         holder.title.setText(itemPost.getTitle());
 
-        if (Boolean.TRUE.equals(isPurchases)){
-            holder.premiumView.setVisibility(View.GONE);
-        } else {
-            holder.premiumView.setVisibility(arrayList.get(position).getIsPremium() ? View.VISIBLE : View.GONE);
-        }
+        holder.premiumView.setVisibility(View.GONE);
         holder.bind(itemPost, listener);
     }
 

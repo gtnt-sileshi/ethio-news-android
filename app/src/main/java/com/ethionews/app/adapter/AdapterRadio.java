@@ -20,7 +20,6 @@ import java.util.List;
 import com.ethionews.app.R;
 import com.ethionews.app.item.ItemRadio;
 import com.ethionews.app.utils.ApplicationUtil;
-import com.ethionews.app.utils.helper.SPHelper;
 
 public class AdapterRadio extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -28,7 +27,6 @@ public class AdapterRadio extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private final List<ItemRadio> arrayList;
     private boolean showFooter = true;
     private final RecyclerItemClickListener listener;
-    private final Boolean isPurchased;
     private final int columnWidth;
 
     private static final int VIEW_ITEM = 0;
@@ -38,7 +36,6 @@ public class AdapterRadio extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.context = context;
         this.arrayList = arrayList;
         this.listener = listener;
-        this.isPurchased = new SPHelper(context).getIsSubscribed();
         boolean isLandscape = ApplicationUtil.isLandscape(context);
         this.columnWidth = ApplicationUtil.getColumnWidth(isLandscape ? 4 : 3, 0, context);
     }
@@ -99,19 +96,8 @@ public class AdapterRadio extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     .error(R.drawable.material_design_default)
                     .into(vh.logo);
 
-            if (Boolean.TRUE.equals(isPurchased)) {
-                vh.premiumBadge.setVisibility(View.GONE);
-            } else {
-                vh.premiumBadge.setVisibility(item.getIsPremium() ? View.VISIBLE : View.GONE);
-            }
-
-            vh.container.setOnClickListener(v -> {
-                if (Boolean.TRUE.equals(isPurchased) || !item.getIsPremium()) {
-                    listener.onClick(holder.getAbsoluteAdapterPosition());
-                } else {
-                    listener.onRewardAds(holder.getAbsoluteAdapterPosition());
-                }
-            });
+            vh.premiumBadge.setVisibility(View.GONE);
+            vh.container.setOnClickListener(v -> listener.onClick(holder.getAbsoluteAdapterPosition()));
 
         } else if (holder instanceof ProgressViewHolder) {
             if (getItemCount() == 1) {

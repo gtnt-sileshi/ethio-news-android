@@ -17,7 +17,6 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import com.ethionews.app.R;
-import com.ethionews.app.activity.PostIDActivity;
 import com.ethionews.app.interfaces.InterAdListener;
 import com.ethionews.app.item.ItemHomeSlider;
 import com.ethionews.app.utils.helper.Helper;
@@ -81,10 +80,9 @@ public class HomePagerAdapter extends RecyclerView.Adapter<HomePagerAdapter.Bann
     final InterAdListener interAdListener = new InterAdListener() {
         @Override
         public void onClick(int position, String type) {
-            Intent intent = new Intent(mContext, PostIDActivity.class);
-            intent.putExtra("page_type", "banner");
-            intent.putExtra("id", arrayList.get(position).getId());
-            intent.putExtra("name", arrayList.get(position).getTitle());
+            // Banners now link to blog posts by ID
+            Intent intent = new Intent(mContext, com.ethionews.app.activity.BlogPostActivity.class);
+            intent.putExtra(com.ethionews.app.activity.BlogPostActivity.EXTRA_POST_ID, arrayList.get(position).getId());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             mContext.startActivity(intent);
         }

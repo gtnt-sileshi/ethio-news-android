@@ -25,26 +25,24 @@ import java.util.Objects;
 
 import com.ethionews.app.R;
 import com.ethionews.app.activity.MainActivity;
-import com.ethionews.app.activity.PostIDActivity;
 import com.ethionews.app.activity.VideoDetailsActivity;
 import com.ethionews.app.callback.Callback;
+import com.ethionews.app.callback.Method;
+import com.ethionews.app.fragment.online.FragmentBlog;
 import com.ethionews.app.fragment.online.FragmentCategories;
 import com.ethionews.app.fragment.online.FragmentEvent;
 import com.ethionews.app.fragment.online.FragmentLatest;
-import com.ethionews.app.fragment.online.FragmentRecent;
 import com.ethionews.app.fragment.online.FragmentSectionLive;
 import com.ethionews.app.fragment.online.FragmentTrending;
 import com.ethionews.app.interfaces.InterAdListener;
 import com.ethionews.app.item.ItemPost;
 import com.ethionews.app.utils.helper.Helper;
-import com.ethionews.app.utils.helper.SPHelper;
 import com.ethionews.app.utils.recycler.RecyclerItemClickListener;
 
 public class AdapterHome extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     Context context;
     Helper helper;
-    SPHelper spHelper;
     List<ItemPost> arrayList;
     private boolean showFooter = true;
     int clickPos = 0;
@@ -63,7 +61,6 @@ public class AdapterHome extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.context = context;
         this.arrayList = arrayList;
         helper = new Helper(context, interAdListener);
-        spHelper = new SPHelper(context);
     }
 
     static class BannerHolder extends RecyclerView.ViewHolder {
@@ -253,16 +250,17 @@ public class AdapterHome extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             recentHolder.rv.setAdapter(recentHolder.adapter);
 
             recentHolder.viewAll.setOnClickListener(v -> {
-                FragmentRecent recent = new FragmentRecent();
+                FragmentBlog saved = FragmentBlog.newInstance(
+                    Method.METHOD_SAVED_POSTS, "", "", context.getString(R.string.saved_posts));
                 FragmentTransaction ft = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 ft.hide(((AppCompatActivity) context).getSupportFragmentManager()
                         .getFragments()
                         .get(((AppCompatActivity) context).getSupportFragmentManager().getBackStackEntryCount()));
-                ft.add(R.id.fragment, recent, context.getString(R.string.recently));
-                ft.addToBackStack(context.getString(R.string.recently));
+                ft.add(R.id.fragment, saved, context.getString(R.string.saved_posts));
+                ft.addToBackStack(context.getString(R.string.saved_posts));
                 ft.commit();
-                Objects.requireNonNull(((MainActivity) context).getSupportActionBar()).setTitle(context.getString(R.string.recently));
+                Objects.requireNonNull(((MainActivity) context).getSupportActionBar()).setTitle(context.getString(R.string.saved_posts));
                 ((MainActivity) context).bottomNavigationView(4);
             });
         }
@@ -360,16 +358,17 @@ public class AdapterHome extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             liveHolder.viewAll.setOnClickListener(v -> {
                 if (arrayList.get(holder.getAbsoluteAdapterPosition()).getSections().equals("recently")){
-                    FragmentRecent recently = new FragmentRecent();
+                    FragmentBlog saved = FragmentBlog.newInstance(
+                        Method.METHOD_SAVED_POSTS, "", "", context.getString(R.string.saved_posts));
                     FragmentTransaction ft = ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction();
                     ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                     ft.hide(((AppCompatActivity) context).getSupportFragmentManager()
                             .getFragments()
                             .get(((AppCompatActivity) context).getSupportFragmentManager().getBackStackEntryCount()));
-                    ft.add(R.id.fragment, recently, context.getString(R.string.recently));
-                    ft.addToBackStack(context.getString(R.string.recently));
+                    ft.add(R.id.fragment, saved, context.getString(R.string.saved_posts));
+                    ft.addToBackStack(context.getString(R.string.saved_posts));
                     ft.commit();
-                    Objects.requireNonNull(((MainActivity) context).getSupportActionBar()).setTitle(context.getString(R.string.recently));
+                    Objects.requireNonNull(((MainActivity) context).getSupportActionBar()).setTitle(context.getString(R.string.saved_posts));
                     ((MainActivity) context).bottomNavigationView(4);
                 } else if (arrayList.get(holder.getAbsoluteAdapterPosition()).getSections().equals("latest")){
                     FragmentLatest latest = new FragmentLatest();
@@ -462,12 +461,16 @@ public class AdapterHome extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             intent.putExtra("post_id", arrayList.get(clickPos).getArrayListLive().get(position).getId());
             context.startActivity(intent);
         } else if (type.equals(context.getString(R.string.categories))){
-            Intent intent = new Intent(context, PostIDActivity.class);
-            intent.putExtra("page_type", context.getString(R.string.categories));
-            intent.putExtra("id", arrayList.get(clickPos).getArrayListCategories().get(position).getId());
-            intent.putExtra("name", arrayList.get(clickPos).getArrayListCategories().get(position).getName());
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
+            FragmentBlog blogFrag = FragmentBlog.newInstance(
+                Method.METHOD_BLOG_BY_CAT,
+                arrayList.get(clickPos).getArrayListCategories().get(position).getId(), "",
+                arrayList.get(clickPos).getArrayListCategories().get(position).getName());
+            ((AppCompatActivity) context).getSupportFragmentManager()
+                .beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .add(R.id.fragment, blogFrag, arrayList.get(clickPos).getArrayListCategories().get(position).getName())
+                .addToBackStack(arrayList.get(clickPos).getArrayListCategories().get(position).getName())
+                .commit();
         } else if (type.equals(context.getString(R.string.live_event))) {
             Intent intent = new Intent(context, VideoDetailsActivity.class);
             intent.putExtra("post_id", arrayList.get(clickPos).getArrayListEvent().get(position).getPostId());

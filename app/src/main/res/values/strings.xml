@@ -277,4 +277,24 @@
     <string name="section_podcasts">Podcasts &amp; Radio</string>
     <string name="section_breaking">Breaking News</string>
 
+    <!-- Blog strings -->
+    <string name="blog">Blog</string>
+    <string name="blog_posts">Blog Posts</string>
+    <string name="latest_posts">Latest Posts</string>
+    <string name="trending_posts">Trending</string>
+    <string name="featured_posts">Featured</string>
+    <string name="saved_posts">Saved Posts</string>
+    <string name="comments">Comments</string>
+    <string name="write_comment">Write a comment…</string>
+    <string name="your_name">Your name</string>
+    <string name="submit_comment">Submit Comment</string>
+    <string name="related_posts">Related Posts</string>
+    <string name="save">Save</string>
+    <string name="unsave">Unsave</string>
+    <string name="min_read">%s min read</string>
+    <string name="by_author">By %s</string>
+    <string name="views_count">%s views</string>
+    <string name="comment_pending">Comment submitted and pending approval.</string>
+    <string name="err_field_required">This field is required</string>
+
 </resources>

@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Home feed -->
+    <!-- Home — blog feed -->
     <item
         android:id="@+id/tv_nav_home"
         android:icon="@drawable/ic_home"
         android:title="@string/nav_home" />
 
-    <!-- Breaking news (was Latest) -->
+    <!-- Latest posts -->
     <item
         android:id="@+id/tv_nav_latest"
         android:icon="@drawable/ic_list_check"
-        android:title="@string/latest" />
+        android:title="@string/latest_posts" />
 
-    <!-- Most Read (was Trending) -->
+    <!-- Trending posts -->
     <item
         android:id="@+id/tv_nav_most"
         android:icon="@drawable/ic_flashlight"
-        android:title="@string/trending" />
+        android:title="@string/trending_posts" />
 
-    <!-- Topics / Categories -->
+    <!-- Categories -->
     <item
         android:id="@+id/tv_nav_category"
         android:icon="@drawable/ic_folders"
         android:title="@string/categories" />
 
-    <!-- History -->
+    <!-- Saved posts (device-based bookmarks) -->
     <item
         android:id="@+id/tv_nav_restore"
         android:icon="@drawable/ic_history"
-        android:title="@string/recently" />
+        android:title="@string/saved_posts" />
 
 </menu>

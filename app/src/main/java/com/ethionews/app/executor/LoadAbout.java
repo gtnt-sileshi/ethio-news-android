@@ -37,9 +37,10 @@ public class LoadAbout extends AsyncTaskExecutor<String, String, String> {
     @Override
     protected String doInBackground(String strings) {
         try {
-            String json = ApplicationUtil.responsePost(Callback.API_URL, helper.getAPIRequest(Method.METHOD_APP_DETAILS,
-                    0, "", "", "", "", spHelper.getUserId(),
-                    "", "", "", "","","","", null));
+            String json = ApplicationUtil.responsePost(Callback.API_URL, helper.getAPIRequest(
+                    Method.METHOD_APP_DETAILS,
+                    0, "", "", "", "", "",
+                    "", "", "", "", "", "", "", null));
             JSONObject jsonObject = new JSONObject(json);
             JSONArray jsonArray = jsonObject.getJSONArray(Callback.TAG_ROOT);
 
@@ -65,14 +66,12 @@ public class LoadAbout extends AsyncTaskExecutor<String, String, String> {
                     Callback.setRecentLimit(Integer.parseInt(c.optString("api_latest_limit","10")));
 
                     // isSupported -----------------------------------------------------------------
-                    Boolean isRtl = Boolean.parseBoolean(c.getString("isRTL"));
-                    Boolean isMaintenance = Boolean.parseBoolean(c.getString("isMaintenance"));
-                    Boolean isScreenshot = Boolean.parseBoolean(c.getString("isScreenshot"));
-                    Boolean isApk = Boolean.parseBoolean(c.getString("isAPK"));
-                    Boolean isVpn = Boolean.parseBoolean(c.getString("isVPN"));
-                    Boolean isLogin = Boolean.parseBoolean(c.getString("isLogin"));
-                    Boolean isGoogleLogin = Boolean.parseBoolean(c.getString("isGoogleLogin"));
-                    spHelper.setIsSupported(isRtl, isMaintenance, isScreenshot, isApk, isVpn, isLogin, isGoogleLogin);
+                    Boolean isRtl         = Boolean.parseBoolean(c.optString("isRTL", "false"));
+                    Boolean isMaintenance = Boolean.parseBoolean(c.optString("isMaintenance", "false"));
+                    Boolean isScreenshot  = Boolean.parseBoolean(c.optString("isScreenshot", "false"));
+                    Boolean isApk         = Boolean.parseBoolean(c.optString("isAPK", "false"));
+                    Boolean isVpn         = Boolean.parseBoolean(c.optString("isVPN", "false"));
+                    spHelper.setIsSupported(isRtl, isMaintenance, isScreenshot, isApk, isVpn);
 
                     // AppUpdate -------------------------------------------------------------------
                     if (c.has("app_update_status")){

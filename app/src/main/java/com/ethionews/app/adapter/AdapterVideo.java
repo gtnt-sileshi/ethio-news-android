@@ -40,7 +40,6 @@ import com.ethionews.app.R;
 import com.ethionews.app.callback.Callback;
 import com.ethionews.app.item.ItemData;
 import com.ethionews.app.utils.ApplicationUtil;
-import com.ethionews.app.utils.helper.SPHelper;
 
 public class AdapterVideo extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -51,7 +50,6 @@ public class AdapterVideo extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private final RecyclerItemClickListener listener;
     private NameFilter filter;
     private int columnWidth = 0;
-    public final Boolean isPurchases;
     private static final int VIEW_PROG = -1;
     private static final int VIEW_ADS = -2;
     private static final int VIEW_ITEM = 0;
@@ -63,7 +61,6 @@ public class AdapterVideo extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.filteredArrayList = arrayList;
         this.context = context;
         this.listener = listener;
-        isPurchases = new SPHelper(context).getIsSubscribed();
         boolean isLandscape = ApplicationUtil.isLandscape(context);
         columnWidth = ApplicationUtil.getColumnWidth(isLandscape ? 4 : 3, 0, context);
     }
@@ -138,22 +135,10 @@ public class AdapterVideo extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     .error(R.drawable.material_design_default)
                     .into(myViewHolder.logo);
 
-            if (Boolean.TRUE.equals(isPurchases)){
-                myViewHolder.premiumView.setVisibility(View.GONE);
-            } else {
-                myViewHolder.premiumView.setVisibility(arrayList.get(position).getIsPremium() ? View.VISIBLE : View.GONE);
-            }
+            myViewHolder.premiumView.setVisibility(View.GONE);
 
             myViewHolder.relativeLayout.setOnClickListener(view -> {
-                if (Boolean.TRUE.equals(isPurchases)){
-                    listener.onClick(holder.getAbsoluteAdapterPosition());
-                } else {
-                    if (Boolean.TRUE.equals(arrayList.get(position).getIsPremium()) && Boolean.TRUE.equals(!isPurchases)){
-                        listener.onRewardAds(position);
-                    } else {
-                        listener.onClick(holder.getAbsoluteAdapterPosition());
-                    }
-                }
+                listener.onClick(holder.getAbsoluteAdapterPosition());
             });
 
 

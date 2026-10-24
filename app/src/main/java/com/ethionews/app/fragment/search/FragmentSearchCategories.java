@@ -2,7 +2,6 @@ package com.ethionews.app.fragment.search;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -30,12 +29,12 @@ import java.util.ArrayList;
 
 import com.ethionews.app.R;
 import com.ethionews.app.activity.MainActivity;
-import com.ethionews.app.activity.PostIDActivity;
 import com.ethionews.app.adapter.AdapterCategories;
 import com.ethionews.app.callback.Callback;
 import com.ethionews.app.callback.Method;
 import com.ethionews.app.dialog.DialogUtil;
 import com.ethionews.app.executor.LoadCat;
+import com.ethionews.app.fragment.online.FragmentBlog;
 import com.ethionews.app.interfaces.CategoryListener;
 import com.ethionews.app.item.ItemCat;
 import com.ethionews.app.utils.ApplicationUtil;
@@ -62,13 +61,16 @@ public class FragmentSearchCategories extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_latest, container, false);
 
         helper = new Helper(getActivity(), (position, type) -> {
-            if(adapterCat.getItem(position) != null) {
-                Intent intent = new Intent(getActivity(), PostIDActivity.class);
-                intent.putExtra("page_type", getString(R.string.categories));
-                intent.putExtra("id", arrayList.get(position).getId());
-                intent.putExtra("name", arrayList.get(position).getName());
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+            if (adapterCat.getItem(position) != null) {
+                FragmentBlog blogFrag = FragmentBlog.newInstance(
+                    Method.METHOD_BLOG_BY_CAT, arrayList.get(position).getId(), "", arrayList.get(position).getName());
+                androidx.fragment.app.FragmentManager fm = getParentFragmentManager();
+                androidx.fragment.app.FragmentTransaction ft = fm.beginTransaction();
+                ft.setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                ft.hide(fm.getFragments().get(fm.getBackStackEntryCount()));
+                ft.add(R.id.fragment, blogFrag, arrayList.get(position).getName());
+                ft.addToBackStack(arrayList.get(position).getName());
+                ft.commit();
             }
         });
 

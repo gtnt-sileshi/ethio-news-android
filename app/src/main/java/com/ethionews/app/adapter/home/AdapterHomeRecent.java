@@ -17,20 +17,17 @@ import java.util.List;
 
 import com.ethionews.app.R;
 import com.ethionews.app.item.ItemData;
-import com.ethionews.app.utils.helper.SPHelper;
 
 public class AdapterHomeRecent extends RecyclerView.Adapter<AdapterHomeRecent.MyViewHolder> {
 
     Context context;
     List<ItemData> arrayList;
     private final RecyclerItemClickListener listener;
-    public final Boolean isPurchases;
 
     public AdapterHomeRecent(Context context, List<ItemData> arrayList, RecyclerItemClickListener listener) {
         this.context = context;
         this.arrayList = arrayList;
         this.listener = listener;
-        isPurchases = new SPHelper(context).getIsSubscribed();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -65,17 +62,7 @@ public class AdapterHomeRecent extends RecyclerView.Adapter<AdapterHomeRecent.My
                 .placeholder(R.drawable.material_design_default)
                 .into(holder.logo);
 
-        holder.relativeLayout.setOnClickListener(v -> {
-            if (Boolean.TRUE.equals(isPurchases)){
-                listener.onClick(holder.getAbsoluteAdapterPosition());
-            } else {
-                if (Boolean.TRUE.equals(arrayList.get(position).getIsPremium()) && Boolean.TRUE.equals(!isPurchases)){
-                    listener.onRewardAds(position);
-                } else {
-                    listener.onClick(holder.getAbsoluteAdapterPosition());
-                }
-            }
-        });
+        holder.relativeLayout.setOnClickListener(v -> listener.onClick(holder.getAbsoluteAdapterPosition()));
     }
 
     @Override

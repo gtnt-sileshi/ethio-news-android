@@ -30,12 +30,13 @@ import com.ethionews.app.interfaces.SuccessListener;
 import com.ethionews.app.utils.IfSupported;
 import com.ethionews.app.utils.MediaPath;
 import com.ethionews.app.utils.helper.Helper;
-import com.ethionews.app.utils.helper.SPHelper;
+
+import android.provider.Settings;
 
 public class SuggestionActivity extends AppCompatActivity {
 
     private Helper helper;
-    private SPHelper spHelper;
+    private String deviceId;
     private TextView title;
     private TextView desc;
     private ImageView suggest;
@@ -53,7 +54,7 @@ public class SuggestionActivity extends AppCompatActivity {
         IfSupported.isScreenshot(this);
 
         helper = new Helper(this);
-        spHelper = new SPHelper(this);
+        deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -77,11 +78,7 @@ public class SuggestionActivity extends AppCompatActivity {
             } else if(desc.getText().toString().isEmpty()) {
                 Toast.makeText(SuggestionActivity.this, getString(R.string.enter_your_description_here_suggestion), Toast.LENGTH_SHORT).show();
             } else {
-                if(spHelper.isLogged()) {
-                    loadSuggestion();
-                } else {
-                    helper.clickLogin();
-                }
+                loadSuggestion();
             }
         });
 
@@ -116,8 +113,8 @@ public class SuggestionActivity extends AppCompatActivity {
                 }
             }
         }, helper.getAPIRequest(Method.METHOD_SUGGESTION, 0, "", "",
-                title.getText().toString(),desc.getText().toString(),
-                spHelper.getUserId(), "", "", "", "", "",
+                title.getText().toString(), desc.getText().toString(),
+                deviceId, "", "", "", "", "",
                 "", "", imagePath.isEmpty() ? null : new File(imagePath)));
         loadSuggestion.execute();
     }

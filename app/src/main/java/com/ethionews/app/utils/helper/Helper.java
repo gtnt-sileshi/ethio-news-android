@@ -35,7 +35,6 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -67,7 +66,6 @@ import java.util.Arrays;
 
 import com.ethionews.app.BuildConfig;
 import com.ethionews.app.R;
-import com.ethionews.app.activity.SignInActivity;
 import com.ethionews.app.callback.Callback;
 import com.ethionews.app.callback.Method;
 import com.ethionews.app.dialog.DialogUtil;
@@ -117,192 +115,132 @@ public class Helper {
     }
 
     public RequestBody getAPIRequest(String helper_name, int page, String itemID, String catID,
-                                     String searchText, String reportMessage, String userID,
+                                     String searchText, String reportMessage, String deviceID,
                                      String name, String email, String mobile, String gender,
                                      String password, String authID, String loginType, File file) {
         JsonObject jsObj = new JsonObject();
         jsObj.addProperty("helper_name", helper_name);
         jsObj.addProperty("application_id", ctx.getPackageName());
 
-        if (Method.METHOD_APP_DETAILS.equals(helper_name)){
-            jsObj.addProperty("user_id", userID);
-        } else if (Method.METHOD_LOGIN.equals(helper_name)){
-            jsObj.addProperty("user_email", email);
-            jsObj.addProperty("user_password", password);
-            jsObj.addProperty("auth_id", authID);
-            jsObj.addProperty("type", loginType);
-        } else if (Method.METHOD_REGISTER.equals(helper_name)){
-            jsObj.addProperty("user_name", name);
-            jsObj.addProperty("user_email", email);
-            jsObj.addProperty("user_phone", mobile);
-            jsObj.addProperty("user_gender", gender);
-            jsObj.addProperty("user_password", password);
-            jsObj.addProperty("auth_id", authID);
-            jsObj.addProperty("type", loginType);
-        } else if (Method.METHOD_PROFILE.equals(helper_name)) {
-            jsObj.addProperty("user_id", userID);
-        } else if (Method.METHOD_ACCOUNT_DELETE.equals(helper_name)) {
-            jsObj.addProperty("user_id", userID);
-        } else if (Method.METHOD_EDIT_PROFILE.equals(helper_name)){
-            jsObj.addProperty("user_id", userID);
-            jsObj.addProperty("user_name", name);
-            jsObj.addProperty("user_email", email);
-            jsObj.addProperty("user_phone", mobile);
-            jsObj.addProperty("user_password", password);
-        } else if (Method.METHOD_USER_IMAGES_UPDATE.equals(helper_name)){
-            jsObj.addProperty("user_id", userID);
-            jsObj.addProperty("type", loginType);
-        } else if (Method.METHOD_FORGOT_PASSWORD.equals(helper_name)){
-            jsObj.addProperty("user_email", email);
-        } else if (Method.METHOD_VERIFY_EMAIL.equals(helper_name)){
-            jsObj.addProperty("user_email", email);
-            jsObj.addProperty("otp", authID);           // reuse authID slot for OTP
-        } else if (Method.METHOD_RESEND_OTP.equals(helper_name)){
-            jsObj.addProperty("user_email", email);
-        } else if (Method.METHOD_NOTIFICATION.equals(helper_name)) {
-            jsObj.addProperty("page", String.valueOf(page));
-            jsObj.addProperty("user_id", userID);
-        } else if (Method.METHOD_REMOVE_NOTIFICATION.equals(helper_name)) {
-            jsObj.addProperty("post_id", itemID);
-            jsObj.addProperty("user_id", userID);
-        } else if (Method.METHOD_REPORT.equals(helper_name)) {
-            jsObj.addProperty("post_id", itemID);
-            jsObj.addProperty("user_id", userID);
-            jsObj.addProperty("report_title", searchText);
-            jsObj.addProperty("report_msg", reportMessage);
-        } else if (Method.METHOD_GET_RATINGS.equals(helper_name)) {
-            jsObj.addProperty("post_id", itemID);
-            jsObj.addProperty("device_id", userID);
-        } else if (Method.METHOD_RATINGS.equals(helper_name)) {
-            jsObj.addProperty("post_id", itemID);
-            jsObj.addProperty("device_id", userID);
-            jsObj.addProperty("rate", authID);
-            jsObj.addProperty("message", reportMessage);
-        }
+        // ── App details ────────────────────────────────────────────
+        if (Method.METHOD_APP_DETAILS.equals(helper_name)) {
+            // no extra params needed
 
-        else if (Method.METHOD_HOME.equals(helper_name)) {
-            jsObj.addProperty("user_id", userID);
-            if(!itemID.equals("")) {
-                jsObj.addProperty("post_ids", itemID);
-            }
+        // ── Blog (core) ────────────────────────────────────────────
+        } else if (Method.METHOD_BLOG_POSTS.equals(helper_name)) {
+            jsObj.addProperty("page", String.valueOf(page));
+        } else if (Method.METHOD_BLOG_POST.equals(helper_name)) {
+            jsObj.addProperty("post_id", itemID);
+            jsObj.addProperty("device_id", deviceID);
+        } else if (Method.METHOD_BLOG_BY_CAT.equals(helper_name)) {
+            jsObj.addProperty("cat_id", catID);
+            jsObj.addProperty("page", String.valueOf(page));
+        } else if (Method.METHOD_BLOG_FEATURED.equals(helper_name)) {
+            jsObj.addProperty("limit", String.valueOf(page));
+        } else if (Method.METHOD_BLOG_TRENDING.equals(helper_name)) {
+            jsObj.addProperty("page", String.valueOf(page));
+        } else if (Method.METHOD_BLOG_SEARCH.equals(helper_name)) {
+            jsObj.addProperty("page", String.valueOf(page));
+            jsObj.addProperty("search_text", searchText);
+        } else if (Method.METHOD_BLOG_TAGS.equals(helper_name)) {
+            // no extra params
+        } else if (Method.METHOD_BLOG_BY_TAG.equals(helper_name)) {
+            jsObj.addProperty("tag_id", catID);
+            jsObj.addProperty("page", String.valueOf(page));
+        } else if (Method.METHOD_BLOG_RECENT.equals(helper_name)) {
+            jsObj.addProperty("post_ids", itemID);
+        } else if (Method.METHOD_BLOG_COMMENTS.equals(helper_name)) {
+            jsObj.addProperty("post_id", itemID);
+            jsObj.addProperty("page", String.valueOf(page));
+        } else if (Method.METHOD_BLOG_COMMENT_POST.equals(helper_name)) {
+            jsObj.addProperty("post_id", itemID);
+            jsObj.addProperty("parent_id", catID);
+            jsObj.addProperty("author_name", name);
+            jsObj.addProperty("author_email", email);
+            jsObj.addProperty("content", reportMessage);
+            jsObj.addProperty("device_id", deviceID);
+        } else if (Method.METHOD_SAVE_POST.equals(helper_name)) {
+            jsObj.addProperty("post_id", itemID);
+            jsObj.addProperty("device_id", deviceID);
+        } else if (Method.METHOD_SAVED_POSTS.equals(helper_name)) {
+            jsObj.addProperty("page", String.valueOf(page));
+            jsObj.addProperty("device_id", deviceID);
+
+        // ── Home & navigation ──────────────────────────────────────
+        } else if (Method.METHOD_HOME.equals(helper_name)) {
+            // no extra params
         } else if (Method.METHOD_HOME_DETAILS.equals(helper_name)) {
             jsObj.addProperty("id", itemID);
-            jsObj.addProperty("user_id", userID);
+        } else if (Method.METHOD_CAT.equals(helper_name)) {
+            jsObj.addProperty("page", String.valueOf(page));
+            jsObj.addProperty("search_text", searchText);
+
+        // ── Live TV (supplementary) ────────────────────────────────
         } else if (Method.METHOD_LATEST.equals(helper_name)) {
             jsObj.addProperty("page", String.valueOf(page));
         } else if (Method.METHOD_MOST_VIEWED.equals(helper_name)) {
             jsObj.addProperty("page", String.valueOf(page));
-        } else if (Method.METHOD_CAT.equals(helper_name)) {
-            jsObj.addProperty("page", String.valueOf(page));
-            jsObj.addProperty("search_text", searchText);
-            jsObj.addProperty("search_type", loginType);
-        } else if (Method.METHOD_LIVE_RECENT.equals(helper_name)) {
-            jsObj.addProperty("page", String.valueOf(page));
-            jsObj.addProperty("post_ids", itemID);
-            jsObj.addProperty("user_id", userID);
-        } else if (Method.METHOD_LIVE_ID.equals(helper_name)) {
-            jsObj.addProperty("post_id", itemID);
-            jsObj.addProperty("user_id", userID);
-        } else if (Method.METHOD_CAT_ID.equals(helper_name)){
+        } else if (Method.METHOD_CAT_ID.equals(helper_name)) {
             jsObj.addProperty("cat_id", catID);
             jsObj.addProperty("page", String.valueOf(page));
-        } else if (Method.METHOD_POST_BY_FAV.equals(helper_name)) {
-            jsObj.addProperty("page", String.valueOf(page));
-            jsObj.addProperty("user_id", userID);
-        } else if (Method.METHOD_POST_BY_BANNER.equals(helper_name)){
-            jsObj.addProperty("page", String.valueOf(page));
+        } else if (Method.METHOD_LIVE_ID.equals(helper_name)) {
             jsObj.addProperty("post_id", itemID);
-        } else if (Method.METHOD_DO_FAV.equals(helper_name)) {
+        } else if (Method.METHOD_POST_BY_BANNER.equals(helper_name)) {
             jsObj.addProperty("post_id", itemID);
-            jsObj.addProperty("user_id", userID);
-            // type distinguishes TV ('live') vs radio ('radio') favourites.
-            // When empty the API defaults to 'live' for backward compatibility.
-            if (!loginType.isEmpty()) {
-                jsObj.addProperty("type", loginType);
-            }
+        } else if (Method.METHOD_SEARCH_LIVE.equals(helper_name)) {
+            jsObj.addProperty("page", String.valueOf(page));
+            jsObj.addProperty("search_text", searchText);
+
+        // ── Events (supplementary) ────────────────────────────────
         } else if (Method.METHOD_EVENT.equals(helper_name)) {
             jsObj.addProperty("page", String.valueOf(page));
-        }
 
-        else if (Method.METHOD_SEARCH_LIVE.equals(helper_name)) {
+        // ── Radio (supplementary) ─────────────────────────────────
+        } else if (Method.METHOD_RADIO_LIST.equals(helper_name)) {
             jsObj.addProperty("page", String.valueOf(page));
-            jsObj.addProperty("search_text", searchText);
-        } else if (Method.METHOD_SEARCH.equals(helper_name)) {
-            jsObj.addProperty("search_text", searchText);
-        }
-
-        // IP Radio
-        else if (Method.METHOD_RADIO_LIST.equals(helper_name)) {
-            jsObj.addProperty("page", String.valueOf(page));
-            jsObj.addProperty("user_id", userID);
+            jsObj.addProperty("device_id", deviceID);
         } else if (Method.METHOD_RADIO_BY_CAT.equals(helper_name)) {
             jsObj.addProperty("cat_id", catID);
             jsObj.addProperty("page", String.valueOf(page));
-            jsObj.addProperty("user_id", userID);
+            jsObj.addProperty("device_id", deviceID);
         } else if (Method.METHOD_RADIO_ID.equals(helper_name)) {
             jsObj.addProperty("post_id", itemID);
-            jsObj.addProperty("user_id", userID);
+            jsObj.addProperty("device_id", deviceID);
         } else if (Method.METHOD_RADIO_FAV.equals(helper_name)) {
             jsObj.addProperty("page", String.valueOf(page));
-            jsObj.addProperty("user_id", userID);
+            jsObj.addProperty("device_id", deviceID);
         } else if (Method.METHOD_SEARCH_RADIO.equals(helper_name)) {
             jsObj.addProperty("page", String.valueOf(page));
             jsObj.addProperty("search_text", searchText);
-            jsObj.addProperty("user_id", userID);
-        }
+            jsObj.addProperty("device_id", deviceID);
 
-        else if (Method.METHOD_SUGGESTION.equals(helper_name)) {
-            jsObj.addProperty("user_id", userID);
+        // ── Ratings (device-based) ────────────────────────────────
+        } else if (Method.METHOD_GET_RATINGS.equals(helper_name)) {
+            jsObj.addProperty("post_id", itemID);
+            jsObj.addProperty("device_id", deviceID);
+        } else if (Method.METHOD_RATINGS.equals(helper_name)) {
+            jsObj.addProperty("post_id", itemID);
+            jsObj.addProperty("device_id", deviceID);
+            jsObj.addProperty("rate", authID);
+            jsObj.addProperty("message", reportMessage);
+
+        // ── Reports & suggestions (device-based) ──────────────────
+        } else if (Method.METHOD_REPORT.equals(helper_name)) {
+            jsObj.addProperty("post_id", itemID);
+            jsObj.addProperty("device_id", deviceID);
+            jsObj.addProperty("report_title", searchText);
+            jsObj.addProperty("report_msg", reportMessage);
+        } else if (Method.METHOD_SUGGESTION.equals(helper_name)) {
             jsObj.addProperty("suggest_title", searchText);
             jsObj.addProperty("suggest_message", reportMessage);
+            jsObj.addProperty("device_id", deviceID);
         }
 
-        else if (Method.METHOD_UPDATE_FCM_TOKEN.equals(helper_name)) {
-            jsObj.addProperty("user_id", userID);
-            jsObj.addProperty("fcm_token", name); // 'name' param reused for the token string
-        }
-
-        else if (Method.TRANSACTION_URL.equals(helper_name)){
-            jsObj.addProperty("planId", itemID);
-            jsObj.addProperty("planName", catID);
-            jsObj.addProperty("planPrice", searchText);
-            jsObj.addProperty("planDuration", reportMessage);
-            jsObj.addProperty("planCurrencyCode", name);
-            jsObj.addProperty("user_id", userID);
-        }
-
-        switch (helper_name) {
-            case Method.METHOD_REGISTER, Method.METHOD_SUGGESTION -> {
-                final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/*");
-                MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
-                if (file != null) {
-                    builder.addFormDataPart("image_data", file.getName(), RequestBody.create(MEDIA_TYPE_PNG, file));
-                }
-                return builder.addFormDataPart("data", ApplicationUtil.toBase64(jsObj.toString())).build();
-            }
-            case Method.METHOD_USER_IMAGES_UPDATE -> {
-                // Send image as base64 inside JSON to avoid WAF blocking multipart uploads
-                if (file != null) {
-                    try {
-                        byte[] bytes = java.nio.file.Files.readAllBytes(file.toPath());
-                        String b64 = android.util.Base64.encodeToString(bytes, android.util.Base64.NO_WRAP);
-                        jsObj.addProperty("image_base64", b64);
-                    } catch (Exception e) {
-                        android.util.Log.e("Helper", "Failed to encode image", e);
-                    }
-                }
-                return new MultipartBody.Builder()
-                        .setType(MultipartBody.FORM)
-                        .addFormDataPart("data", ApplicationUtil.toBase64(jsObj.toString()))
-                        .build();
-            }
-            default -> {
-                return new MultipartBody.Builder()
-                        .setType(MultipartBody.FORM)
-                        .addFormDataPart("data", ApplicationUtil.toBase64(jsObj.toString()))
-                        .build();
-            }
-        }
+        // All requests use multipart form with base64-encoded JSON in "data" field
+        return new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("data", ApplicationUtil.toBase64(jsObj.toString()))
+                .build();
     }
 
     public void initializeAds() {
@@ -663,8 +601,7 @@ public class Helper {
 
     public void showRewardAds(int pos, RewardAdListener rewardAdListener) {
         if (Boolean.TRUE.equals(Callback.getIsRewardAd())
-                && Boolean.TRUE.equals(Callback.getIsAdsStatus())
-                && Boolean.TRUE.equals(!new SPHelper(ctx).getIsSubscribed())) {
+                && Boolean.TRUE.equals(Callback.getIsAdsStatus())) {
             if (Boolean.TRUE.equals(new SPHelper(ctx).getIsRewardAdWarned())) {
                 loadRewardAds(rewardAdListener, pos);
             } else {
@@ -865,14 +802,12 @@ public class Helper {
         });
         dialog.findViewById(R.id.btn_bottom_cancel).setOnClickListener(view1 -> dialog.dismiss());
         dialog.findViewById(R.id.ll_checkbox).setOnClickListener(view1 -> cb.setChecked(true));
-        dialog.findViewById(R.id.btn_bottom_subscribe).setOnClickListener(v -> DialogUtil.premiumDialog((Activity) ctx));
     }
 
     private boolean isInterAd() {
         if (isNetworkAvailable() && Boolean.TRUE.equals(Callback.getIsInterAd())
                 && Boolean.TRUE.equals(Callback.getIsAdsStatus())
-                && new GDPRChecker(ctx).canLoadAd()
-                && Boolean.TRUE.equals(!new SPHelper(ctx).getIsSubscribed())) {
+                && new GDPRChecker(ctx).canLoadAd()) {
             Callback.setAdCount(Callback.getAdCount() + 1);
             return Callback.getAdCount() % Callback.getInterstitialAdShow() == 0;
         } else {
@@ -882,8 +817,7 @@ public class Helper {
 
     private boolean isBannerAd(String page) {
         if (isNetworkAvailable() && Boolean.TRUE.equals(Callback.getIsAdsStatus())
-                && new GDPRChecker(ctx).canLoadAd()
-                && Boolean.TRUE.equals(!new SPHelper(ctx).getIsSubscribed())) {
+                && new GDPRChecker(ctx).canLoadAd()) {
             switch (page) {
                 case Callback.PAGE_HOME:
                     return Callback.getIsBannerAdHome();
@@ -903,8 +837,7 @@ public class Helper {
 
     public boolean canLoadNativeAds(Context context, String page) {
         if (Boolean.TRUE.equals(Callback.getIsAdsStatus())
-                && new GDPRChecker(context).canLoadAd()
-                && Boolean.TRUE.equals(!new SPHelper(ctx).getIsSubscribed())) {
+                && new GDPRChecker(context).canLoadAd()) {
             if (page.equals(Callback.PAGE_NATIVE_POST)){
                 return Callback.getIsNativeAdPost();
             } else if (page.equals(Callback.PAGE_NATIVE_CAT)){
@@ -915,34 +848,5 @@ public class Helper {
         } else {
             return false;
         }
-    }
-
-    public void clickLogin() {
-        SPHelper spHelper = new SPHelper(ctx);
-        if (spHelper.isLogged()) {
-            logout((Activity) ctx, spHelper);
-            Toast.makeText(ctx, ctx.getString(R.string.logout_success), Toast.LENGTH_SHORT).show();
-        } else {
-            Intent intent = new Intent(ctx, SignInActivity.class);
-            intent.putExtra("from", "app");
-            ctx.startActivity(intent);
-        }
-    }
-
-    public void logout(Activity activity, SPHelper spHelper) {
-        if (spHelper != null){
-            if (spHelper.getLoginType().equals(Method.LOGIN_TYPE_GOOGLE)) {
-                FirebaseAuth.getInstance().signOut();
-            }
-            spHelper.setIsAutoLogin(false);
-            spHelper.setIsLogged(false);
-            spHelper.setLoginDetails("", "", "", "", "", "",
-                    "", false, "", Method.LOGIN_TYPE_NORMAL);
-        }
-        Intent intent1 = new Intent(ctx, SignInActivity.class);
-        intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent1.putExtra("from", "");
-        ctx.startActivity(intent1);
-        activity.finish();
     }
 }

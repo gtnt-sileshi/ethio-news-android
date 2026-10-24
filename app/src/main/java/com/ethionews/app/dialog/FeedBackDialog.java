@@ -3,8 +3,10 @@ package com.ethionews.app.dialog;
 import static android.view.WindowManager.LayoutParams.MATCH_PARENT;
 import static android.view.WindowManager.LayoutParams.WRAP_CONTENT;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.provider.Settings;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -18,20 +20,20 @@ import com.ethionews.app.callback.Method;
 import com.ethionews.app.executor.LoadStatus;
 import com.ethionews.app.interfaces.SuccessListener;
 import com.ethionews.app.utils.helper.Helper;
-import com.ethionews.app.utils.helper.SPHelper;
 
 public class FeedBackDialog {
 
     private final Helper helper;
-    private final SPHelper spHelper;
+    private final String deviceId;
     private Dialog dialog;
     private final Activity ctx;
     private final ProgressDialog progressDialog;
 
+    @SuppressLint("HardwareIds")
     public FeedBackDialog(Activity ctx) {
         this.ctx = ctx;
         helper = new Helper(ctx);
-        spHelper = new SPHelper(ctx);
+        deviceId = Settings.Secure.getString(ctx.getContentResolver(), Settings.Secure.ANDROID_ID);
         progressDialog = new ProgressDialog(ctx);
     }
 
@@ -43,15 +45,11 @@ public class FeedBackDialog {
         dialog.findViewById(R.id.tv_cancel).setOnClickListener(view -> dismissDialog());
         dialog.findViewById(R.id.iv_close).setOnClickListener(view -> dismissDialog());
         dialog.findViewById(R.id.tv_submit).setOnClickListener(view -> {
-            if(etMessages.getText().toString().trim().isEmpty()) {
+            if (etMessages.getText().toString().trim().isEmpty()) {
                 etMessages.setError(ctx.getString(R.string.please_describe_the_problem));
                 etMessages.requestFocus();
             } else {
-                if(spHelper.isLogged()) {
-                    loadReportSubmit(etMessages.getText().toString(), id, title);
-                } else {
-                    helper.clickLogin();
-                }
+                loadReportSubmit(etMessages.getText().toString(), id, title);
             }
         });
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
@@ -81,7 +79,7 @@ public class FeedBackDialog {
                     dismissDialog();
                 }
             }, helper.getAPIRequest(Method.METHOD_REPORT, 0, itemID, "", reportTitle,
-                    reportMessages, spHelper.getUserId(), "", "", "", "",
+                    reportMessages, deviceId, "", "", "", "",
                     "", "", "", null));
             loadFav.execute();
         } else {
@@ -90,7 +88,7 @@ public class FeedBackDialog {
     }
 
     private void dismissDialog() {
-        if (dialog != null && dialog.isShowing()){
+        if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
         }
         if (progressDialog.isShowing()) {

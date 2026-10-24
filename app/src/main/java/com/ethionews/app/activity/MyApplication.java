@@ -114,7 +114,6 @@ public class MyApplication extends android.app.Application implements android.ap
         //   3. The "ads on" toggle is enabled
         if (Boolean.TRUE.equals(Callback.getIsOpenAd())
                 && Boolean.TRUE.equals(!Callback.getIsAppOpenAdShown())
-                && !spHelper.getIsSubscribed()
                 && spHelper.getIsAdOn()) {
             appOpenAdManager.showAdIfAvailable(currentActivity);
         }
@@ -159,7 +158,7 @@ public class MyApplication extends android.app.Application implements android.ap
 
     public void loadAd(@NonNull Activity activity) {
         if (Boolean.TRUE.equals(Callback.getIsOpenAd() && spHelper != null)
-                && (!spHelper.getIsSubscribed() || spHelper.getIsAdOn())) {
+                && spHelper.getIsAdOn()) {
             appOpenAdManager.loadAd(activity);
         }
     }

@@ -17,18 +17,15 @@ import java.util.List;
 
 import com.ethionews.app.R;
 import com.ethionews.app.item.ItemData;
-import com.ethionews.app.utils.helper.SPHelper;
 
 public class AdapterHomeLive extends RecyclerView.Adapter<AdapterHomeLive.MyViewHolder> {
 
     private final List<ItemData> arrayList;
     private final RecyclerItemClickListener listener;
-    public final Boolean isPurchases;
 
     public AdapterHomeLive(Context context, List<ItemData> arrayList, RecyclerItemClickListener listener) {
         this.arrayList = arrayList;
         this.listener = listener;
-        isPurchases = new SPHelper(context).getIsSubscribed();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -66,23 +63,9 @@ public class AdapterHomeLive extends RecyclerView.Adapter<AdapterHomeLive.MyView
                 .placeholder(R.drawable.material_design_default)
                 .into(holder.logo);
 
-        if (Boolean.TRUE.equals(isPurchases)){
-            holder.premiumView.setVisibility(View.GONE);
-        } else {
-            holder.premiumView.setVisibility(arrayList.get(position).getIsPremium() ? View.VISIBLE : View.GONE);
-        }
+        holder.premiumView.setVisibility(View.GONE);
 
-        holder.relativeLayout.setOnClickListener(v -> {
-            if (Boolean.TRUE.equals(isPurchases)){
-                listener.onClick(holder.getAbsoluteAdapterPosition());
-            } else {
-                if (Boolean.TRUE.equals(arrayList.get(position).getIsPremium()) && Boolean.TRUE.equals(!isPurchases)){
-                    listener.onRewardAds(position);
-                } else {
-                    listener.onClick(holder.getAbsoluteAdapterPosition());
-                }
-            }
-        });
+        holder.relativeLayout.setOnClickListener(v -> listener.onClick(holder.getAbsoluteAdapterPosition()));
     }
 
     @Override

@@ -71,6 +71,7 @@ public class RadioPlayerActivity extends AppCompatActivity {
     private TextView    tvStatus;
     private Helper      helper;
     private SPHelper    spHelper;
+    private String      deviceId;
     private ImageView   fav;
 
     private String streamUrl;
@@ -121,6 +122,7 @@ public class RadioPlayerActivity extends AppCompatActivity {
 
         helper   = new Helper(this);
         spHelper = new SPHelper(this);
+        deviceId = android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
 
         // Bind views
         ImageView ivLogo        = findViewById(R.id.iv_radio_logo);
@@ -241,42 +243,28 @@ public class RadioPlayerActivity extends AppCompatActivity {
     // ── Favorite ──────────────────────────────────────────────────────────────
 
     private void loadFav() {
-        if (!spHelper.isLogged()) {
-            helper.clickLogin();
-            return;
-        }
         if (!helper.isNetworkAvailable()) {
             Toast.makeText(this, getString(R.string.err_internet_not_connected), Toast.LENGTH_SHORT).show();
             return;
         }
         LoadStatus loadFav = new LoadStatus(new SuccessListener() {
             @Override
-            public void onStart() {
-                changeFav(!isFav);
-            }
+            public void onStart() { changeFav(!isFav); }
 
             @Override
             public void onEnd(String success, String favSuccess, String message) {
-                // success   = HTTP-level result ("1" = call succeeded, "0" = network/parse failure)
-                // favSuccess = JSON body "success" field:
-                //   "1" → added to favourites
-                //   "2" → removed from favourites
-                //   anything else → server-side error
                 boolean serverAccepted = success.equals("1") &&
                         (favSuccess.equals("1") || favSuccess.equals("2"));
                 if (serverAccepted) {
-                    // The optimistic toggle in onStart() already flipped the icon correctly —
-                    // just confirm it with a toast.
                     Toast.makeText(RadioPlayerActivity.this, message, Toast.LENGTH_SHORT).show();
                 } else {
-                    // Server rejected the request — revert the optimistic toggle
                     changeFav(!isFav);
                     Toast.makeText(RadioPlayerActivity.this,
                             getString(R.string.err_server_not_connected), Toast.LENGTH_SHORT).show();
                 }
             }
-        }, helper.getAPIRequest(Method.METHOD_DO_FAV, 0, radioId, "", "",
-                "", spHelper.getUserId(), "", "", "", "",
+        }, helper.getAPIRequest(Method.METHOD_RADIO_FAV, 0, radioId, "", "",
+                "", deviceId, "", "", "", "",
                 "", "", "radio", null));
         loadFav.execute();
     }

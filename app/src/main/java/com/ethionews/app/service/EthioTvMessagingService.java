@@ -16,18 +16,11 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import com.ethionews.app.R;
 import com.ethionews.app.activity.MainActivity;
-import com.ethionews.app.callback.Callback;
-import com.ethionews.app.callback.Method;
-import com.ethionews.app.utils.ApplicationUtil;
-import com.ethionews.app.utils.helper.Helper;
-import com.ethionews.app.utils.helper.SPHelper;
 
 /**
  * Handles incoming FCM messages.
  *
- * - onNewToken: subscribes to the "all" broadcast topic and sends the token
- *   to the Laravel backend so admins can target individual users.
- *
+ * - onNewToken: subscribes the device to the "all" broadcast topic.
  * - onMessageReceived: handles foreground notifications.
  *   Background/quit-state notifications are delivered automatically by the system.
  */
@@ -49,36 +42,6 @@ public class EthioTvMessagingService extends FirebaseMessagingService {
                         Log.w(TAG, "Failed to subscribe to 'all' topic");
                     }
                 });
-
-        // Send the token to the Laravel backend so the admin can target this
-        // specific user. Only send if the user is already logged in.
-        SPHelper spHelper = new SPHelper(getApplicationContext());
-        if (spHelper.isLogged()) {
-            String userId = spHelper.getUserId();
-            sendTokenToServer(userId, token);
-        }
-    }
-
-    /**
-     * Registers the FCM token with the backend on a background thread.
-     */
-    private void sendTokenToServer(String userId, String token) {
-        new Thread(() -> {
-            try {
-                Helper helper = new Helper(getApplicationContext());
-                // Reuses the 'name' parameter slot to carry the FCM token string.
-                okhttp3.RequestBody body = helper.getAPIRequest(
-                        Method.METHOD_UPDATE_FCM_TOKEN,
-                        0, "", "", "", "",
-                        userId,     // userID
-                        token,      // name  ← carries fcm_token
-                        "", "", "", "", "", "", null);
-                ApplicationUtil.responsePost(Callback.API_URL, body);
-                Log.d(TAG, "FCM token sent to server for user " + userId);
-            } catch (Exception e) {
-                Log.w(TAG, "Failed to send FCM token to server: " + e.getMessage());
-            }
-        }).start();
     }
 
     @Override

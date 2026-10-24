@@ -64,6 +64,7 @@ public class FragmentRadio extends Fragment {
 
     private Helper helper;
     private SPHelper spHelper;
+    private String deviceId;
     private RecyclerView rv;
     private AdapterRadio adapter;
     private ArrayList<ItemRadio> arrayList;
@@ -86,6 +87,8 @@ public class FragmentRadio extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_radio, container, false);
 
         spHelper = new SPHelper(requireActivity());
+        deviceId = android.provider.Settings.Secure.getString(
+                requireActivity().getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
         helper   = new Helper(getActivity(), (position, type) -> openRadio(position));
 
         arrayList = new ArrayList<>();
@@ -219,13 +222,9 @@ public class FragmentRadio extends Fragment {
         adapter = null;
         rv.setVisibility(View.GONE);
 
-        // Favorites tab requires login
+        // Favorites tab: device-based — no login required
         if (tag instanceof Integer && (Integer) tag == TAB_FAV) {
-            if (!spHelper.isLogged()) {
-                errorMsg = getString(R.string.radio_login_to_fav);
-                setEmpty();
-                return;
-            }
+            // no login check needed — device_id is used
         }
 
         getData();
@@ -283,7 +282,7 @@ public class FragmentRadio extends Fragment {
         Object tag = currentTab != null ? currentTab.getTag() : TAB_ALL;
 
         RequestBody request;
-        String userId = spHelper.getUserId();
+        String userId = deviceId;
 
         if (tag instanceof Integer) {
             int tagInt = (Integer) tag;

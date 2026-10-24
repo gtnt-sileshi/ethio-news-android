@@ -41,7 +41,6 @@ import com.ethionews.app.R;
 import com.ethionews.app.callback.Callback;
 import com.ethionews.app.item.ItemEvent;
 import com.ethionews.app.utils.ApplicationUtil;
-import com.ethionews.app.utils.helper.SPHelper;
 
 public class AdapterEvent extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -52,7 +51,6 @@ public class AdapterEvent extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private final RecyclerItemClickListener listener;
     private NameFilter filter;
     private static final int VIEW_PROG = -1;
-    public final Boolean isPurchases;
 
     Boolean isAdLoaded = false;
     List<NativeAd> mNativeAdsAdmob = new ArrayList<>();
@@ -62,7 +60,6 @@ public class AdapterEvent extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.filteredArrayList = arrayList;
         this.context = context;
         this.listener = clickListener;
-        isPurchases = new SPHelper(context).getIsSubscribed();
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -148,8 +145,7 @@ public class AdapterEvent extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             if (Boolean.TRUE.equals(Callback.getIsAdsStatus()
                     && Callback.getIsNativeAdPost()
                     && (position != arrayList.size() - 1)
-                    && (position + 1) % Callback.getNativeAdShow() == 0)
-                    && Boolean.TRUE.equals(!isPurchases)) {
+                    && (position + 1) % Callback.getNativeAdShow() == 0) {
                 try {
                     if (((MyViewHolder) holder).nativeAd.getChildCount() == 0) {
                         switch (Callback.getAdNetwork()) {

@@ -37,7 +37,6 @@ import com.google.android.gms.ads.nativead.NativeAd;
 import java.util.ArrayList;
 
 import com.ethionews.app.R;
-import com.ethionews.app.activity.PostIDActivity;
 import com.ethionews.app.adapter.AdapterCategories;
 import com.ethionews.app.callback.Callback;
 import com.ethionews.app.callback.Method;
@@ -76,7 +75,7 @@ public class FragmentCategories extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_latest, container, false);
 
-        helper = new Helper(getActivity(), (position, type) -> openPostIDActivity(position));
+        helper = new Helper(getActivity(), (position, type) -> openByCategory(position));
 
         try {
             homeSecId = getArguments().getString("id");
@@ -152,13 +151,17 @@ public class FragmentCategories extends Fragment {
         }
     }
 
-    private void openPostIDActivity(int position) {
-        Intent intent = new Intent(getActivity(), PostIDActivity.class);
-        intent.putExtra("page_type", getString(R.string.categories));
-        intent.putExtra("id", arrayList.get(position).getId());
-        intent.putExtra("name", arrayList.get(position).getName());
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+    private void openByCategory(int position) {
+        // Open blog posts filtered by this category
+        FragmentBlog blogFrag = FragmentBlog.newInstance(
+            Method.METHOD_BLOG_BY_CAT, arrayList.get(position).getId(), "", arrayList.get(position).getName());
+        FragmentManager fm = getParentFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        ft.hide(fm.getFragments().get(fm.getBackStackEntryCount()));
+        ft.add(R.id.fragment, blogFrag, arrayList.get(position).getName());
+        ft.addToBackStack(arrayList.get(position).getName());
+        ft.commit();
     }
 
     private void loadCategories() {

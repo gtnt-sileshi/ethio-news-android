@@ -19,7 +19,6 @@ import androidx.media3.exoplayer.ExoPlayer;
 import java.util.Objects;
 
 import com.ethionews.app.R;
-import com.ethionews.app.activity.BillingSubscribeActivity;
 import com.ethionews.app.callback.Callback;
 import com.ethionews.app.utils.ApplicationUtil;
 
@@ -356,27 +355,6 @@ public class DialogUtil {
         View view = dialog.findViewById(R.id.vw_dialog_bar);
         view.setVisibility(View.GONE);
 
-        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
-        dialog.getWindow().getAttributes().windowAnimations = R.style.dialogAnimation;
-        dialog.show();
-        Window window = dialog.getWindow();
-        if (window != null){
-            window.setLayout(MATCH_PARENT, WRAP_CONTENT);
-        }
-    }
-
-    public static void premiumDialog(Activity activity) {
-        if (dialog != null){
-            dialog = null;
-        }
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_app_premium);
-        dialog.findViewById(R.id.iv_dialog_close).setOnClickListener(view -> dialog.dismiss());
-        dialog.findViewById(R.id.tv_dialog_no).setOnClickListener(view -> {
-            dialog.dismiss();
-            activity.startActivity(new Intent(activity, BillingSubscribeActivity.class));
-        });
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
         dialog.getWindow().getAttributes().windowAnimations = R.style.dialogAnimation;
         dialog.show();

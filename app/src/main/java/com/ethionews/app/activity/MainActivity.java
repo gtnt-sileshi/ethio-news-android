@@ -44,11 +44,11 @@ import com.ethionews.app.callback.Callback;
 import com.ethionews.app.dialog.DialogUtil;
 import com.ethionews.app.executor.LoadAbout;
 import com.ethionews.app.fragment.FragmentDashBoard;
+import com.ethionews.app.fragment.online.FragmentBlog;
 import com.ethionews.app.fragment.online.FragmentCategories;
 import com.ethionews.app.fragment.online.FragmentEvent;
 import com.ethionews.app.fragment.online.FragmentLatest;
 import com.ethionews.app.fragment.online.FragmentRadio;
-import com.ethionews.app.fragment.online.FragmentRecent;
 import com.ethionews.app.fragment.online.FragmentTrending;
 import com.ethionews.app.interfaces.AboutListener;
 import com.ethionews.app.utils.IfSupported;
@@ -69,14 +69,10 @@ import com.ethionews.app.utils.helper.SPHelper;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     FragmentManager fm;
-    MenuItem menuLogin;
-    MenuItem menuProfile;
-    MenuItem menuSubscription;
     ReviewManager manager;
     ReviewInfo reviewInfo;
     Helper helper;
     DBHelper dbHelper;
-    SPHelper spHelper;
     NavigationView navigationView;
     BottomNavigationView bottomNav;
     int currentNavIndex = 0;
@@ -97,7 +93,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         helper = new Helper(this);
         dbHelper = new DBHelper(this);
-        spHelper = new SPHelper(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -137,13 +132,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        Menu menu = navigationView.getMenu();
-        menuLogin = menu.findItem(R.id.nav_login);
-        menuProfile = menu.findItem(R.id.nav_profile);
-        menuSubscription = menu.findItem(R.id.nav_subscription);
-
         new GDPRChecker(MainActivity.this).check();
-        changeLoginName();
         loadAboutData();
 
         manager = ReviewManagerFactory.create(this);
@@ -181,8 +170,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     private void loadDashboardFrag() {
-        FragmentDashBoard f1 = new FragmentDashBoard();
-        loadFrag(f1, getResources().getString(R.string.dashboard), fm);
+        // Blog is the primary home screen now
+        FragmentBlog home = com.ethionews.app.fragment.online.FragmentBlog.newInstance(
+            com.ethionews.app.callback.Method.METHOD_BLOG_POSTS, "", "", getString(R.string.nav_home));
+        loadFrag(home, getResources().getString(R.string.dashboard), fm);
         navigationView.setCheckedItem(R.id.nav_home);
     }
 
@@ -207,37 +198,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void changeLoginName() {
-        if (menuLogin == null) return;
-
-        boolean isLoginEnabled = spHelper.getIsLogin();
-        menuLogin.setVisible(isLoginEnabled);
-
-        menuSubscription.setVisible(true);
-        if (spHelper.isLogged()) {
-            menuProfile.setVisible(true);
-            // Show logout option only when login is enabled (user can undo their login)
-            if (isLoginEnabled) {
-                menuLogin.setTitle(getResources().getString(R.string.logout));
-                menuLogin.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_logout));
-            }
-            if (spHelper.getIsSubscribed()) {
-                menuSubscription.setVisible(false);
-            }
-        } else {
-            menuProfile.setVisible(false);
-            if (isLoginEnabled) {
-                menuLogin.setTitle(getResources().getString(R.string.login));
-                menuLogin.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_login));
-            }
-        }
-    }
-
-    /**
-     * Re-fetches app_details (ad config) on resume if enough time has elapsed.
-     * Silent — no loading spinner, no UI disruption. Just updates the static
-     * Callback fields and re-initialises ads if the network returned fresh values.
-     */
     private void refreshAdConfigIfNeeded() {
         if (!helper.isNetworkAvailable()) return;
         if (System.currentTimeMillis() - lastAdConfigFetch < AD_CONFIG_REFRESH_MS) return;
@@ -289,7 +249,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void initAds() {
-        if (Boolean.TRUE.equals(Callback.getIsInterAd()) && (!spHelper.getIsSubscribed() || spHelper.getIsAdOn())) {
+        SPHelper spHelper = new SPHelper(this);
+        if (Boolean.TRUE.equals(Callback.getIsInterAd()) && spHelper.getIsAdOn()) {
             switch (Callback.getAdNetwork()) {
                 case Callback.AD_TYPE_ADMOB :
                     AdManagerInterAdmob adManagerInterAdmob = new AdManagerInterAdmob(getApplicationContext());
@@ -318,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     break;
             }
         }
-        if (Boolean.TRUE.equals(Callback.getIsRewardAd()) && (!spHelper.getIsSubscribed() || spHelper.getIsAdOn())) {
+        if (Boolean.TRUE.equals(Callback.getIsRewardAd()) && spHelper.getIsAdOn()) {
             switch (Callback.getAdNetwork()) {
                 case Callback.AD_TYPE_ADMOB :
                     RewardAdAdmob rewardAdAdmob = new RewardAdAdmob(getApplicationContext());
@@ -374,26 +335,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             loadFrag(event, getString(R.string.live_event), fm);
             currentNavIndex = -1; // event is not a bottom-nav tab
         } else if (id == R.id.nav_suggest){
-            if (spHelper.isLogged()){
-                startActivity(new Intent(MainActivity.this, SuggestionActivity.class));
-            } else {
-                helper.clickLogin();
-            }
-        } else if (id == R.id.nav_fav){
-            Intent intent = new Intent(MainActivity.this, PostIDActivity.class);
-            intent.putExtra("page_type", getString(R.string.favourite));
-            intent.putExtra("id", "");
-            intent.putExtra("name", getString(R.string.favourite));
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        } else if (id == R.id.nav_subscription){
-            startActivity(new Intent(MainActivity.this, BillingSubscribeActivity.class));
-        } else if (id == R.id.nav_profile){
-            startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+            startActivity(new Intent(MainActivity.this, SuggestionActivity.class));
         } else if (id == R.id.nav_settings){
             startActivity(new Intent(MainActivity.this, SettingActivity.class));
-        } else if (id == R.id.nav_login){
-            helper.clickLogin();
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -413,7 +357,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onResume() {
-        changeLoginName();
         if (Boolean.TRUE.equals(Callback.isRecreate())) {
             Callback.setRecreate(false);
             recreate();
@@ -466,10 +409,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // Initialize the map with titles and corresponding actions
                 titleToNavInfoMap.put(getString(R.string.dashboard), new NavInfo(R.id.nav_home, 0));
                 titleToNavInfoMap.put(getString(R.string.nav_home), new NavInfo(R.id.nav_home, 0));
-                titleToNavInfoMap.put(getString(R.string.latest), new NavInfo(R.id.nav_latest, 1));
-                titleToNavInfoMap.put(getString(R.string.trending), new NavInfo(R.id.nav_most, 2));
+                titleToNavInfoMap.put(getString(R.string.latest_posts), new NavInfo(R.id.tv_nav_latest, 1));
+                titleToNavInfoMap.put(getString(R.string.trending_posts), new NavInfo(R.id.tv_nav_most, 2));
                 titleToNavInfoMap.put(getString(R.string.categories), new NavInfo(R.id.nav_category, 3));
-                titleToNavInfoMap.put(getString(R.string.recently), new NavInfo(R.id.nav_restore, 4));
+                titleToNavInfoMap.put(getString(R.string.saved_posts), new NavInfo(R.id.tv_nav_restore, 4));
                 titleToNavInfoMap.put(getString(R.string.search), new NavInfo(R.id.nav_home, 5));
                 titleToNavInfoMap.put(getString(R.string.live_radio), new NavInfo(R.id.nav_home, 0));
                 titleToNavInfoMap.put(getString(R.string.live_event), new NavInfo(R.id.nav_home, 0));
@@ -495,20 +438,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void pageChange(int bottomNavIndex) {
         if (bottomNavIndex == 0){
-            FragmentDashBoard home = new FragmentDashBoard();
+            // Home: show blog feed (primary content)
+            FragmentBlog home = FragmentBlog.newInstance(
+                com.ethionews.app.callback.Method.METHOD_BLOG_POSTS, "", "", getString(R.string.nav_home));
             loadFrag(home, getString(R.string.dashboard), fm);
         } else if (bottomNavIndex == 1){
-            FragmentLatest latest = new FragmentLatest();
-            loadFrag(latest, getString(R.string.latest), fm);
+            // Latest: latest blog posts
+            FragmentBlog latest = FragmentBlog.newInstance(
+                com.ethionews.app.callback.Method.METHOD_BLOG_POSTS, "", "", getString(R.string.latest_posts));
+            loadFrag(latest, getString(R.string.latest_posts), fm);
         } else if (bottomNavIndex == 2){
-            FragmentTrending most = new FragmentTrending();
-            loadFrag(most, getString(R.string.trending), fm);
+            // Trending: most-viewed blog posts
+            FragmentBlog trending = FragmentBlog.newInstance(
+                com.ethionews.app.callback.Method.METHOD_BLOG_TRENDING, "", "", getString(R.string.trending_posts));
+            loadFrag(trending, getString(R.string.trending_posts), fm);
         } else if (bottomNavIndex == 3){
             FragmentCategories category = new FragmentCategories();
             loadFrag(category, getString(R.string.categories), fm);
         } else if (bottomNavIndex == 4){
-            FragmentRecent recent = new FragmentRecent();
-            loadFrag(recent, getString(R.string.recently), fm);
+            // Saved posts (device-based bookmarks, replaces recently-watched)
+            FragmentBlog saved = FragmentBlog.newInstance(
+                com.ethionews.app.callback.Method.METHOD_SAVED_POSTS, "", "", getString(R.string.saved_posts));
+            loadFrag(saved, getString(R.string.saved_posts), fm);
         }
     }
 

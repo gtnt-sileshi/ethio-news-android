@@ -86,6 +86,7 @@ public class VideoDetailsActivity extends AppCompatActivity {
 
     private static final String TAG = "VideoDetailsActivity";
     private String postID;
+    private String deviceId;
     private Toolbar toolbar;
     private Helper helper;
     private SPHelper spHelper;
@@ -149,6 +150,7 @@ public class VideoDetailsActivity extends AppCompatActivity {
 
         helper = new Helper(this);
         spHelper = new SPHelper(this);
+        deviceId = android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
 
         fragmentManager = getSupportFragmentManager();
 
@@ -178,13 +180,7 @@ public class VideoDetailsActivity extends AppCompatActivity {
         getDetails();
 
         fav.setOnClickListener(v -> loadFav());
-        ivStar.setOnClickListener(v -> {
-            if (spHelper.isLogged()){
-                showRateDialog();
-            } else {
-                helper.clickLogin();
-            }
-        });
+        ivStar.setOnClickListener(v -> showRateDialog());
 
         similarView();
 
@@ -260,7 +256,7 @@ public class VideoDetailsActivity extends AppCompatActivity {
                 }
             }
         }, helper.getAPIRequest(Method.METHOD_LIVE_ID, 0, postID, "", "",
-                "", new SPHelper(this).getUserId(), "", "",
+                "", deviceId, "", "",
                 "","","","","",null));
         loadBank.execute();
     }
@@ -285,10 +281,6 @@ public class VideoDetailsActivity extends AppCompatActivity {
             DBHelper dbHelper = new DBHelper(VideoDetailsActivity.this);
             if (!itemLive.getIsPremium()){
                 dbHelper.addToRecent(itemLive);
-            } else {
-                if (spHelper.getIsSubscribed()){
-                    dbHelper.addToRecent(itemLive);
-                }
             }
         } catch (Exception e) {
             Log.e(TAG, "Error addToRecent", e);
@@ -675,10 +667,6 @@ public class VideoDetailsActivity extends AppCompatActivity {
     }
 
     private void loadFav() {
-        if (!spHelper.isLogged()) {
-            helper.clickLogin();
-            return;
-        }
         if (!helper.isNetworkAvailable()) {
             Toast.makeText(VideoDetailsActivity.this, getString(R.string.err_internet_not_connected), Toast.LENGTH_SHORT).show();
             return;
@@ -696,13 +684,12 @@ public class VideoDetailsActivity extends AppCompatActivity {
                     changeFav(itemLive.getIsFav());
                     Toast.makeText(VideoDetailsActivity.this, message, Toast.LENGTH_SHORT).show();
                 } else {
-                    // Revert the optimistic toggle on failure
                     changeFav(itemLive.getIsFav());
                     Toast.makeText(VideoDetailsActivity.this, getString(R.string.err_server_not_connected), Toast.LENGTH_SHORT).show();
                 }
             }
-        }, helper.getAPIRequest(Method.METHOD_DO_FAV, 0, itemLive.getId(), "", "",
-                "", spHelper.getUserId(), "", "", "", "",
+        }, helper.getAPIRequest(Method.METHOD_SAVE_POST, 0, itemLive.getId(), "", "",
+                "", deviceId, "", "", "", "",
                 "", "", "", null));
         loadFav.execute();
     }

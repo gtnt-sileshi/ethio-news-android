@@ -45,14 +45,6 @@ public class Callback implements Serializable {
         isRecreate = recreate;
     }
 
-    private static Boolean isProfileUpdate = false;
-    public static Boolean getIsProfileUpdate() {
-        return isProfileUpdate;
-    }
-    public static void setIsProfileUpdate(Boolean profileUpdate) {
-        isProfileUpdate = profileUpdate;
-    }
-
     private static int recentLimit = 10;
     public static int getRecentLimit() {
         return recentLimit;

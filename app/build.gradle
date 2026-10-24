@@ -50,11 +50,6 @@ android {
         storeArchive {
             enable = false
         }
-        debugSymbols {
-            // Package native debug symbols inside the AAB so Play Console
-            // can automatically process them without a manual upload.
-            enable = true
-        }
     }
 
     buildTypes.each {

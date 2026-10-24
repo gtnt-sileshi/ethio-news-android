@@ -39,6 +39,8 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             ndk.debugSymbolLevel = 'FULL'
+            // R8 full mode is enabled via android.enableR8.fullMode=true in gradle.properties.
+            // The new optimization{} DSL is AGP 9.3+ only — not available in 9.0.x.
         }
         debug {
             minifyEnabled false

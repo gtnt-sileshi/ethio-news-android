@@ -81,6 +81,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     BottomNavigationView bottomNav;
     int currentNavIndex = 0;
 
+    // Throttle: only re-fetch ad config if more than 30s since last fetch
+    private long lastAdConfigFetch = 0;
+    private static final long AD_CONFIG_REFRESH_MS = 30_000;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -229,8 +233,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * Re-fetches app_details (ad config) on resume if enough time has elapsed.
+     * Silent — no loading spinner, no UI disruption. Just updates the static
+     * Callback fields and re-initialises ads if the network returned fresh values.
+     */
+    private void refreshAdConfigIfNeeded() {
+        if (!helper.isNetworkAvailable()) return;
+        if (System.currentTimeMillis() - lastAdConfigFetch < AD_CONFIG_REFRESH_MS) return;
+
+        lastAdConfigFetch = System.currentTimeMillis();
+
+        LoadAbout refresh = new LoadAbout(MainActivity.this, new AboutListener() {
+            @Override
+            public void onStart() { /* silent — no UI change */ }
+
+            @Override
+            public void onEnd(String success, String verifyStatus, String message) {
+                if (isFinishing() || !success.equals("1")) return;
+                dbHelper.addToAbout();
+                helper.initializeAds();
+                initAds();
+            }
+        });
+        refresh.execute();
+    }
+
     public void loadAboutData() {
         if (helper.isNetworkAvailable()) {
+            lastAdConfigFetch = System.currentTimeMillis();
             LoadAbout loadAbout = new LoadAbout(MainActivity.this, new AboutListener() {
                 @Override
                 public void onStart() {
@@ -387,6 +418,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Callback.setRecreate(false);
             recreate();
         }
+        // Re-fetch ad config so admin changes take effect without app restart
+        refreshAdConfigIfNeeded();
         super.onResume();
     }
 

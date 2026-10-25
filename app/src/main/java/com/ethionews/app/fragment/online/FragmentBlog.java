@@ -29,6 +29,10 @@ import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.ArrayList;
 
+import com.google.ads.mediation.admob.AdMobAdapter;
+import com.google.ads.mediation.facebook.FacebookMediationAdapter;
+import com.google.android.gms.ads.AdRequest;
+
 import com.ethionews.app.R;
 import com.ethionews.app.activity.BlogPostActivity;
 import com.ethionews.app.adapter.AdapterBlogPost;
@@ -57,6 +61,7 @@ public class FragmentBlog extends Fragment {
     private ArrayList<ItemBlogPost> postList = new ArrayList<>();
 
     private String apiMethod;
+    private String originalMethod;  // remembers the method this instance was created with
     private String catId  = "";
     private String tagId  = "";
     private String searchQuery = "";
@@ -91,11 +96,13 @@ public class FragmentBlog extends Fragment {
         });
 
         if (getArguments() != null) {
-            apiMethod = getArguments().getString(ARG_METHOD, Method.METHOD_BLOG_POSTS);
-            catId     = getArguments().getString(ARG_CAT_ID, "");
-            tagId     = getArguments().getString(ARG_TAG_ID, "");
+            apiMethod     = getArguments().getString(ARG_METHOD, Method.METHOD_BLOG_POSTS);
+            originalMethod = apiMethod;
+            catId         = getArguments().getString(ARG_CAT_ID, "");
+            tagId         = getArguments().getString(ARG_TAG_ID, "");
         } else {
-            apiMethod = Method.METHOD_BLOG_POSTS;
+            apiMethod     = Method.METHOD_BLOG_POSTS;
+            originalMethod = apiMethod;
         }
 
         shimmerBlog = root.findViewById(R.id.shimmer_blog);
@@ -118,7 +125,19 @@ public class FragmentBlog extends Fragment {
                     }
                 })
                 .build();
-            adLoader.loadAds(new com.google.android.gms.ads.AdRequest.Builder().build(), 5);
+            Bundle extras = new Bundle();
+            AdRequest adRequest;
+            if (Callback.getAdNetwork().equals(Callback.AD_TYPE_META)) {
+                adRequest = new AdRequest.Builder()
+                        .addNetworkExtrasBundle(AdMobAdapter.class, new Bundle())
+                        .addNetworkExtrasBundle(FacebookMediationAdapter.class, extras)
+                        .build();
+            } else {
+                adRequest = new AdRequest.Builder()
+                        .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                        .build();
+            }
+            adLoader.loadAds(adRequest, 5);
         }
 
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
@@ -194,7 +213,15 @@ public class FragmentBlog extends Fragment {
     }
 
     private okhttp3.RequestBody buildRequest() {
-        String search = Method.METHOD_BLOG_SEARCH.equals(apiMethod) ? searchQuery : "";
+        // Pass search query for both blog search and saved posts filtering
+        String search = searchQuery;
+        if (Method.METHOD_BLOG_SEARCH.equals(apiMethod)) {
+            search = searchQuery;
+        } else if (Method.METHOD_SAVED_POSTS.equals(apiMethod)) {
+            search = searchQuery;
+        } else {
+            search = "";
+        }
         String deviceId = "";
         if (Method.METHOD_SAVED_POSTS.equals(apiMethod)) {
             deviceId = android.provider.Settings.Secure.getString(
@@ -252,8 +279,13 @@ public class FragmentBlog extends Fragment {
                     @Override public boolean onQueryTextSubmit(String query) {
                         searchHandler.removeCallbacks(searchRunnable);
                         searchQuery = query;
-                        apiMethod   = Method.METHOD_BLOG_SEARCH;
-                        page        = 1;
+                        if (Method.METHOD_BLOG_POSTS.equals(originalMethod)
+                                || Method.METHOD_BLOG_SEARCH.equals(originalMethod)) {
+                            apiMethod = Method.METHOD_BLOG_SEARCH;
+                        }
+                        // Saved/category/tag scoped methods keep originalMethod
+                        // and pass query as a filter within that scope
+                        page = 1;
                         loadPosts(true);
                         return true;
                     }
@@ -261,14 +293,17 @@ public class FragmentBlog extends Fragment {
                         searchHandler.removeCallbacks(searchRunnable);
                         if (s.trim().isEmpty()) {
                             searchQuery = "";
-                            apiMethod = Method.METHOD_BLOG_POSTS;
+                            apiMethod = originalMethod;
                             page = 1;
                             loadPosts(true);
                             return true;
                         }
                         searchRunnable = () -> {
                             searchQuery = s;
-                            apiMethod = Method.METHOD_BLOG_SEARCH;
+                            if (Method.METHOD_BLOG_POSTS.equals(originalMethod)
+                                    || Method.METHOD_BLOG_SEARCH.equals(originalMethod)) {
+                                apiMethod = Method.METHOD_BLOG_SEARCH;
+                            }
                             page = 1;
                             loadPosts(true);
                         };

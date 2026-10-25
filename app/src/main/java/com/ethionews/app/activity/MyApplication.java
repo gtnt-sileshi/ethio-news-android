@@ -157,7 +157,8 @@ public class MyApplication extends android.app.Application implements android.ap
     }
 
     public void loadAd(@NonNull Activity activity) {
-        if (Boolean.TRUE.equals(Callback.getIsOpenAd() && spHelper != null)
+        if (Boolean.TRUE.equals(Callback.getIsOpenAd())
+                && spHelper != null
                 && spHelper.getIsAdOn()) {
             appOpenAdManager.loadAd(activity);
         }

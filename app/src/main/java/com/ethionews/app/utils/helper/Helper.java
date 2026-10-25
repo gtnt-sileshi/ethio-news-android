@@ -165,6 +165,7 @@ public class Helper {
         } else if (Method.METHOD_SAVED_POSTS.equals(helper_name)) {
             jsObj.addProperty("page", String.valueOf(page));
             jsObj.addProperty("device_id", deviceID);
+            jsObj.addProperty("search_text", searchText);
 
         // ── Home & navigation ──────────────────────────────────────
         } else if (Method.METHOD_HOME.equals(helper_name)) {

@@ -113,20 +113,45 @@ public class LauncherActivity extends AppCompatActivity {
 
     private void openMainActivity() {
         pb.setVisibility(View.VISIBLE);
-        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            MyApplication app = (MyApplication) getApplication();
-            if (app.getAppOpenAdManager().isAdAvailable()
-                    && Boolean.TRUE.equals(!app.getAppOpenAdManager().getIsShowingAd())) {
-                // Show the open ad — it will navigate to MainActivity on dismiss
-                app.getAppOpenAdManager().showAdIfAvailable(LauncherActivity.this);
-            } else {
-                // No ad available — navigate directly
-                Intent intent = new Intent(LauncherActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                finish();
+
+        // Poll every 200 ms until the ad is loaded or the 8-second timeout expires.
+        // This prevents the race condition where the ad hasn't finished loading yet
+        // when the fixed 3-second delay fires, causing the ad to be skipped entirely.
+        final int POLL_INTERVAL_MS = 200;
+        final int MAX_WAIT_MS = 8000;
+        final int[] elapsed = {0};
+
+        Handler handler = new Handler(Looper.getMainLooper());
+        Runnable pollRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (isFinishing()) return;
+
+                MyApplication app = (MyApplication) getApplication();
+
+                if (app.getAppOpenAdManager().isAdAvailable()
+                        && Boolean.TRUE.equals(!app.getAppOpenAdManager().getIsShowingAd())) {
+                    // Ad is ready — show it; navigation to MainActivity happens on dismiss
+                    app.getAppOpenAdManager().showAdIfAvailable(LauncherActivity.this);
+                    return;
+                }
+
+                elapsed[0] += POLL_INTERVAL_MS;
+                if (elapsed[0] >= MAX_WAIT_MS) {
+                    // Timed out waiting for the ad — navigate directly
+                    Intent intent = new Intent(LauncherActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
+                    return;
+                }
+
+                // Not ready yet — check again after POLL_INTERVAL_MS
+                handler.postDelayed(this, POLL_INTERVAL_MS);
             }
-        }, 3000);
+        };
+        // Minimum 1-second splash before we start polling
+        handler.postDelayed(pollRunnable, 1000);
     }
 
     private void openDialogActivity(String type) {

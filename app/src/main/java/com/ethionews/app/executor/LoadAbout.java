@@ -126,6 +126,8 @@ public class LoadAbout extends AsyncTaskExecutor<String, String, String> {
                                     Callback.setAdmobBannerAdID(c.getString("mata_banner_ad_unit_id"));
                                     Callback.setAdmobInterstitialAdID(c.getString("mata_interstitial_ad_unit_id"));
                                     Callback.setAdmobNativeAdID(c.getString("mata_native_ad_manual_unit_id"));
+                                    Callback.setAdmobOpenAdID(c.optString("mata_app_open_ad_unit_id", ""));
+                                    Callback.setAdmobRewardAdID(c.optString("mata_reward_ad_unit_id", ""));
                                     break;
                                 case Callback.AD_TYPE_YANDEX:
                                     Callback.setYandexBannerAdID(c.getString("yandex_banner_ad_unit_id"));

@@ -45,15 +45,13 @@ public class AdapterRadio extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static class ItemViewHolder extends RecyclerView.ViewHolder {
         private final ImageView logo;
         private final TextView name;
-        private final TextView premiumBadge;
         private final RelativeLayout container;
 
         private ItemViewHolder(View view) {
             super(view);
-            logo        = view.findViewById(R.id.iv_live_tv);
-            name        = view.findViewById(R.id.tv_title);
-            premiumBadge = view.findViewById(R.id.tv_live_pre);
-            container   = view.findViewById(R.id.rl_live_tv);
+            logo      = view.findViewById(R.id.iv_live_tv);
+            name      = view.findViewById(R.id.tv_title);
+            container = view.findViewById(R.id.rl_live_tv);
         }
     }
 
@@ -96,7 +94,6 @@ public class AdapterRadio extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     .error(R.drawable.material_design_default)
                     .into(vh.logo);
 
-            vh.premiumBadge.setVisibility(View.GONE);
             vh.container.setOnClickListener(v -> listener.onClick(holder.getAbsoluteAdapterPosition()));
 
         } else if (holder instanceof ProgressViewHolder) {

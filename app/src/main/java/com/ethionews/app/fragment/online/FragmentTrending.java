@@ -17,6 +17,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.view.MenuHost;
@@ -62,7 +64,7 @@ public class FragmentTrending extends Fragment {
     private ArrayList<ItemData> arrayList;
     private int nativeAdPos = 0;
     private GridLayoutManager grid;
-    private ProgressBar pb;
+    private ShimmerFrameLayout shimmer;
     private FloatingActionButton fab;
     private String errorMsg;
     private FrameLayout frameLayout;
@@ -81,7 +83,7 @@ public class FragmentTrending extends Fragment {
 
         frameLayout = rootView.findViewById(R.id.fl_empty);
         fab = rootView.findViewById(R.id.fab);
-        pb = rootView.findViewById(R.id.pb);
+        shimmer = rootView.findViewById(R.id.shimmer_grid);
         rv = rootView.findViewById(R.id.rv);
 
         android.widget.LinearLayout adView = rootView.findViewById(R.id.ll_adView);
@@ -160,12 +162,15 @@ public class FragmentTrending extends Fragment {
                 if (arrayList.isEmpty()) {
                     frameLayout.setVisibility(View.GONE);
                     rv.setVisibility(View.GONE);
-                    pb.setVisibility(View.VISIBLE);
+                    shimmer.setVisibility(View.VISIBLE);
+                    shimmer.startShimmer();
                 }
             }
 
             @Override
             public void onEnd(String success, String verifyStatus, String message, ArrayList<ItemData> arrayListData) {
+                shimmer.stopShimmer();
+                shimmer.setVisibility(View.GONE);
                 if (getActivity() == null) {
                     return;
                 }
@@ -283,12 +288,14 @@ public class FragmentTrending extends Fragment {
     private void setEmpty() {
         if (!arrayList.isEmpty()) {
             rv.setVisibility(View.VISIBLE);
-            pb.setVisibility(View.INVISIBLE);
+            shimmer.stopShimmer();
+            shimmer.setVisibility(View.GONE);
             frameLayout.setVisibility(View.GONE);
         } else {
             rv.setVisibility(View.GONE);
             frameLayout.setVisibility(View.VISIBLE);
-            pb.setVisibility(View.INVISIBLE);
+            shimmer.stopShimmer();
+            shimmer.setVisibility(View.GONE);
 
             frameLayout.removeAllViews();
             LayoutInflater inflater = (LayoutInflater) requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);

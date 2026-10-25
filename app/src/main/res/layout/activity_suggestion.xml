@@ -1,184 +1,256 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?ns_bg_sub">
+    android:background="?ns_bg"
+    android:fitsSystemWindows="true">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
+    <!-- App Bar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="wrap_content"
         android:background="?ns_bg"
-        app:titleTextColor="?ns_bg_dark"
-        app:navigationIconTint="?ns_bg_dark"
-        app:navigationIcon="@drawable/ic_close"
-        app:title="@string/suggestion"
-        app:titleCentered="true" />
+        app:elevation="0dp">
 
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?ns_bg"
+            app:navigationIcon="@drawable/ic_arrow_left"
+            app:navigationIconTint="?ns_title"
+            app:title="@string/suggestion"
+            app:titleCentered="true"
+            app:titleTextColor="?ns_title"
+            app:titleTextAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="?ns_border" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Scrollable content -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/ll_bottom"
-        android:layout_below="@+id/toolbar">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/_80sdp">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/_16sdp">
 
+            <!-- Header card -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:background="@drawable/bg_sub"
                 android:orientation="vertical"
-                android:padding="@dimen/_10sdp">
+                android:gravity="center"
+                android:paddingTop="@dimen/_20sdp"
+                android:paddingBottom="@dimen/_20sdp"
+                android:layout_marginBottom="@dimen/_20sdp"
+                android:background="@drawable/bg_news_card">
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <ImageView
+                    android:layout_width="@dimen/_55sdp"
+                    android:layout_height="@dimen/_55sdp"
+                    android:src="@drawable/ic_star"
+                    app:tint="?colorPrimary"
+                    android:contentDescription="@string/suggestion"
+                    android:layout_marginBottom="@dimen/_10sdp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/suggestion"
+                    android:textColor="?ns_title"
+                    android:textSize="@dimen/_16ssp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/report_any_issues"
+                    android:textColor="?ns_title_sub"
+                    android:textSize="@dimen/_12ssp"
+                    android:gravity="center"
+                    android:paddingStart="@dimen/_20sdp"
+                    android:paddingEnd="@dimen/_20sdp"
+                    android:paddingTop="@dimen/_6sdp" />
+
+            </LinearLayout>
+
+            <!-- Title field -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_suggestion"
+                android:textColor="?ns_title"
+                android:textSize="@dimen/_13ssp"
+                android:textStyle="bold"
+                android:layout_marginBottom="@dimen/_6sdp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_16sdp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/enter_your_title_here_suggestion"
                     android:inputType="text"
-                    android:padding="@dimen/_9sdp"
-                    android:textSize="@dimen/_12ssp"
                     android:textColor="?ns_title"
-                    android:textColorHint="?ns_title_sub"
-                    android:background="@drawable/bg_card_edit_text"
+                    android:textSize="@dimen/_13ssp"
                     android:importantForAutofill="no"
-                    android:imeOptions="actionDone"/>
+                    android:imeOptions="actionNext" />
 
-                <androidx.appcompat.widget.AppCompatEditText
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Description field -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/description_suggestion"
+                android:textColor="?ns_title"
+                android:textSize="@dimen/_13ssp"
+                android:textStyle="bold"
+                android:layout_marginBottom="@dimen/_6sdp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_16sdp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/enter_your_description_here_suggestion"
                     android:gravity="top"
-                    android:maxLines="20"
                     android:minLines="4"
-                    android:padding="@dimen/_9sdp"
-                    android:textSize="@dimen/_12ssp"
-                    android:textColor="?ns_title"
-                    android:textColorHint="?ns_title_sub"
-                    android:background="@drawable/bg_card_edit_text"
-                    tools:ignore="Autofill,TextFields"
-                    android:importantForAutofill="no"
-                    android:layout_marginTop="@dimen/_10sdp"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:background="@drawable/bg_sub"
-                android:orientation="vertical"
-                android:padding="@dimen/_10sdp">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/select_image"
+                    android:maxLines="10"
+                    android:inputType="textMultiLine"
                     android:textColor="?ns_title"
                     android:textSize="@dimen/_13ssp"
-                    android:layout_marginBottom="@dimen/_10sdp"/>
+                    android:importantForAutofill="no"
+                    tools:ignore="Autofill,TextFields" />
 
-                <LinearLayout
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Attach image section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/select_image"
+                android:textColor="?ns_title"
+                android:textSize="@dimen/_13ssp"
+                android:textStyle="bold"
+                android:layout_marginBottom="@dimen/_6sdp" />
+
+            <!-- Image picker tap target -->
+            <LinearLayout
+                android:id="@+id/ll_sugg"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_110sdp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/bg_news_card"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <!-- Preview (hidden until image picked) -->
+                <ImageView
+                    android:id="@+id/iv_sugg"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_card_edit_text"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/_10sdp">
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/logo"
+                    app:hv_corner_radius="@dimen/_8sdp"
+                    android:visibility="gone" />
+
+                <!-- Placeholder shown before image picked -->
+                <LinearLayout
+                    android:id="@+id/ll_sugg_placeholder"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center">
 
                     <ImageView
-                        android:id="@+id/iv_sugg"
-                        android:layout_width="@dimen/_90sdp"
-                        android:layout_height="@dimen/_90sdp"
-                        android:src="@drawable/logo"
-                        app:hv_border_color="?ns_border"
-                        app:hv_corner_radius="@dimen/_5sdp"
-                        android:scaleType="centerCrop"/>
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:src="@drawable/ic_add"
+                        app:tint="?ns_title_sub"
+                        android:layout_marginBottom="@dimen/_6sdp"
+                        android:contentDescription="@string/select_image" />
 
-                    <LinearLayout
-                        android:id="@+id/ll_sugg"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        tools:ignore="UseCompoundDrawables">
-
-                        <ImageView
-                            android:layout_width="@dimen/_25sdp"
-                            android:layout_height="@dimen/_25sdp"
-                            android:src="@drawable/ic_add"
-                            app:tint="?ns_title"
-                            android:contentDescription="@string/todo"/>
-
-                        <TextView
-                            android:textColor="?ns_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_5sdp"
-                            android:text="@string/select_image"
-                            android:textSize="@dimen/_12ssp" />
-
-                    </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/select_image"
+                        android:textColor="?ns_title_sub"
+                        android:textSize="@dimen/_12ssp" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Optional — attach a screenshot or photo"
+                android:textColor="?ns_title_sub"
+                android:textSize="@dimen/_11ssp"
+                android:layout_marginBottom="@dimen/_24sdp" />
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 
-    <View
-        android:layout_below="@id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_1sdp"
-        android:background="?ns_border" />
-
+    <!-- Fixed submit button at bottom -->
     <LinearLayout
-        android:id="@+id/ll_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="?ns_bg"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_gravity="bottom"
+        android:background="?ns_bg">
 
-        <TextView
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="?ns_border" />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_sugg_submit"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_35sdp"
-            android:layout_margin="@dimen/_10sdp"
-            android:background="@drawable/btn_danger"
-            android:gravity="center"
+            android:layout_height="@dimen/_48sdp"
+            android:layout_margin="@dimen/_16sdp"
             android:text="@string/submit"
-            android:textColor="?ns_white"
-            android:textSize="@dimen/_13ssp"
+            android:textSize="@dimen/_14ssp"
             android:textStyle="bold"
-            tools:ignore="HardcodedText" />
+            app:cornerRadius="@dimen/_8sdp" />
 
         <LinearLayout
-            android:orientation="vertical"
             android:id="@+id/ll_adView"
-            android:background="?ns_bg"
-            android:backgroundTint="?ns_bg"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="?ns_bg" />
 
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_1sdp"
-        android:layout_above="@+id/ll_bottom"
-        android:background="?ns_border" />
-
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

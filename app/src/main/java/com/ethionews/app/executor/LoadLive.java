@@ -43,16 +43,12 @@ public class LoadLive extends AsyncTaskExecutor<String, String, String> {
 
                 if (!objJson.has(Callback.TAG_SUCCESS)) {
 
-                    String id = objJson.getString("id");
+                    String id    = objJson.getString("id");
                     String title = objJson.getString("live_title");
                     String image = objJson.getString("image").replace(" ", "%20");
-                    if (image.isEmpty()) {
-                        image = "null";
-                    }
-                    boolean isPremium = objJson.getBoolean("is_premium");
+                    if (image.isEmpty()) image = "null";
 
-                    ItemData objItem = new ItemData(id,title,image,isPremium);
-                    arrayList.add(objItem);
+                    arrayList.add(new ItemData(id, title, image));
 
                 } else {
                     verifyStatus = objJson.getString(Callback.TAG_SUCCESS);

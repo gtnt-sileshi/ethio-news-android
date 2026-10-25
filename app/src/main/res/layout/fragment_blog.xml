@@ -4,13 +4,6 @@
     android:layout_height="match_parent"
     android:background="?ns_bg">
 
-    <ProgressBar
-        android:id="@+id/pb_blog"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone" />
-
     <FrameLayout
         android:id="@+id/fl_empty"
         android:layout_width="match_parent"
@@ -33,5 +26,11 @@
         android:paddingTop="@dimen/_8sdp"
         android:clipToPadding="false"
         android:visibility="gone" />
+
+    <include
+        layout="@layout/layout_skeleton_blog"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/ll_adView" />
 
 </RelativeLayout>

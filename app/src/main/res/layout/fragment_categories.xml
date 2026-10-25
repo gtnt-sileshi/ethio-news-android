@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?ns_bg">
@@ -37,7 +36,8 @@
         android:tint="@color/white"
         android:visibility="invisible"
         app:fabSize="normal"
-        android:contentDescription="@string/todo" />
+        android:contentDescription="@string/todo"
+        xmlns:app="http://schemas.android.com/apk/res-auto" />
 
     <FrameLayout
         android:id="@+id/fl_empty"
@@ -47,13 +47,10 @@
         android:layout_centerInParent="true"
         android:layout_marginBottom="?attr/actionBarSize" />
 
-    <ProgressBar
-        android:id="@+id/pb"
-        android:layout_width="@dimen/_40sdp"
-        android:layout_height="@dimen/_40sdp"
-        android:layout_centerInParent="true"
-        android:indeterminate="true"
-        app:pb_color="#FFee44"
-        app:pb_colors="@array/progress_colors" />
+    <include
+        layout="@layout/layout_skeleton_categories"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/ll_adView" />
 
 </RelativeLayout>

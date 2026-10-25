@@ -137,7 +137,7 @@ public class VideoDetailsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-        toolbar.setNavigationOnClickListener(view -> finish());
+        toolbar.setNavigationOnClickListener(view -> handleOnBack());
 
         try {
             casty = Casty.create(this).withMiniController();
@@ -279,9 +279,7 @@ public class VideoDetailsActivity extends AppCompatActivity {
     private void addRecent() {
         try {
             DBHelper dbHelper = new DBHelper(VideoDetailsActivity.this);
-            if (!itemLive.getIsPremium()){
-                dbHelper.addToRecent(itemLive);
-            }
+            dbHelper.addToRecent(itemLive);
         } catch (Exception e) {
             Log.e(TAG, "Error addToRecent", e);
         }
@@ -410,7 +408,7 @@ public class VideoDetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem menuItem) {
         int id = menuItem.getItemId();
         if (id == android.R.id.home){
-            finish();
+            handleOnBack();
         } else if (id == R.id.menu_cast_play){
             playViaCast();
         } else if (id == R.id.menu_fields){
@@ -636,7 +634,7 @@ public class VideoDetailsActivity extends AppCompatActivity {
         mNestedScrollView.setVisibility(View.GONE);
         toolbar.setVisibility(View.GONE);
         frameLayout.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             WindowInsetsController ctrl = getWindow().getInsetsController();
             if (ctrl != null) {
@@ -680,15 +678,17 @@ public class VideoDetailsActivity extends AppCompatActivity {
             @Override
             public void onEnd(String success, String favSuccess, String message) {
                 if (success.equals("1")) {
-                    itemLive.setIsFav(message.equals("Added to Favourite") || message.equals("Added to Favourites"));
-                    changeFav(itemLive.getIsFav());
+                    // success = 1 → added, 2 → removed
+                    boolean added = "1".equals(favSuccess);
+                    itemLive.setIsFav(added);
+                    changeFav(added);
                     Toast.makeText(VideoDetailsActivity.this, message, Toast.LENGTH_SHORT).show();
                 } else {
                     changeFav(itemLive.getIsFav());
                     Toast.makeText(VideoDetailsActivity.this, getString(R.string.err_server_not_connected), Toast.LENGTH_SHORT).show();
                 }
             }
-        }, helper.getAPIRequest(Method.METHOD_SAVE_POST, 0, itemLive.getId(), "", "",
+        }, helper.getAPIRequest(Method.METHOD_LIVE_FAV, 0, itemLive.getId(), "", "",
                 "", deviceId, "", "", "", "",
                 "", "", "", null));
         loadFav.execute();

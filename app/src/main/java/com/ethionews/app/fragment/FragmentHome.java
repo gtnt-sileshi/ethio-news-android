@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,6 +23,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -44,7 +45,7 @@ public class FragmentHome extends Fragment {
 
     DBHelper dbHelper;
     Helper helper;
-    ProgressBar progressBar;
+    ShimmerFrameLayout shimmerHome;
     FrameLayout frameLayout;
     RecyclerView rv;
     AdapterHome adapterHome;
@@ -60,10 +61,10 @@ public class FragmentHome extends Fragment {
         arrayList = new ArrayList<>();
         dbHelper = new DBHelper(getActivity());
 
-        progressBar = rootView.findViewById(R.id.pb_home);
+        shimmerHome = rootView.findViewById(R.id.shimmer_blog);
         frameLayout = rootView.findViewById(R.id.fl_empty);
-
         rv = rootView.findViewById(R.id.rv_home);
+
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(llm);
         rv.setItemAnimator(new DefaultItemAnimator());
@@ -81,12 +82,14 @@ public class FragmentHome extends Fragment {
                 public void onStart() {
                     frameLayout.setVisibility(View.GONE);
                     rv.setVisibility(View.GONE);
-                    progressBar.setVisibility(View.VISIBLE);
+                    shimmerHome.setVisibility(View.VISIBLE);
+                    shimmerHome.startShimmer();
                 }
 
                 @Override
                 public void onEnd(String success, String message, ArrayList<ItemPost> arrayListPost) {
-                    progressBar.setVisibility(View.GONE);
+                    shimmerHome.stopShimmer();
+                    shimmerHome.setVisibility(View.GONE);
                     if (getActivity() == null) {
                         return;
                     }
@@ -111,14 +114,14 @@ public class FragmentHome extends Fragment {
     }
 
     private void loadHomeEnd(ArrayList<ItemPost> arrayListPost) {
-        if (arrayListPost.isEmpty()){
+        if (arrayListPost.isEmpty()) {
             errorMsg = getString(R.string.err_no_data_found);
             setEmpty();
             return;
         }
         arrayList.addAll(arrayListPost);
-        if (Boolean.TRUE.equals(Callback.getIsAdsStatus())){
-            arrayList.add(new ItemPost("100","ads","ads", "ads"));
+        if (Boolean.TRUE.equals(Callback.getIsAdsStatus())) {
+            arrayList.add(new ItemPost("100", "ads", "ads", "ads"));
         }
         adapterHome = new AdapterHome(getActivity(), arrayList);
         rv.setAdapter(adapterHome);
@@ -129,16 +132,18 @@ public class FragmentHome extends Fragment {
         if (!arrayList.isEmpty()) {
             rv.setVisibility(View.VISIBLE);
             frameLayout.setVisibility(View.GONE);
-            progressBar.setVisibility(View.GONE);
+            shimmerHome.stopShimmer();
+            shimmerHome.setVisibility(View.GONE);
         } else {
             rv.setVisibility(View.GONE);
             frameLayout.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.GONE);
+            shimmerHome.stopShimmer();
+            shimmerHome.setVisibility(View.GONE);
 
             frameLayout.removeAllViews();
-            LayoutInflater inflater = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inf = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            @SuppressLint("InflateParams") View myView = inflater.inflate(R.layout.row_empty, null);
+            @SuppressLint("InflateParams") View myView = inf.inflate(R.layout.row_empty, null);
 
             TextView textView = myView.findViewById(R.id.tv_empty_msg);
             textView.setText(errorMsg);
@@ -164,8 +169,6 @@ public class FragmentHome extends Fragment {
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
                 menu.clear();
                 menuInflater.inflate(R.menu.menu_search, menu);
-
-                // Configure the search menu item
                 MenuItem item = menu.findItem(R.id.menu_search);
                 item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_IF_ROOM);
                 SearchView searchView = (SearchView) item.getActionView();
@@ -176,7 +179,6 @@ public class FragmentHome extends Fragment {
 
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-                // Handle menu item selection if necessary
                 return false;
             }
         }, getViewLifecycleOwner());

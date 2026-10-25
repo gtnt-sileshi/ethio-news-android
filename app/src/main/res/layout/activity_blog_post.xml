@@ -49,14 +49,17 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/material_design_default" />
 
-            <!-- Loading -->
-            <ProgressBar
-                android:id="@+id/pb_blog"
-                android:layout_width="wrap_content"
+            <!-- Loading skeleton -->
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmer_blog_detail"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/_40sdp"
-                android:visibility="visible" />
+                app:shimmer_duration="1000"
+                app:shimmer_auto_start="true">
+
+                <include layout="@layout/skeleton_blog_detail" />
+
+            </com.facebook.shimmer.ShimmerFrameLayout>
 
             <!-- Main content -->
             <LinearLayout

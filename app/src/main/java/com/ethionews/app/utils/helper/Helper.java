@@ -174,6 +174,9 @@ public class Helper {
         } else if (Method.METHOD_CAT.equals(helper_name)) {
             jsObj.addProperty("page", String.valueOf(page));
             jsObj.addProperty("search_text", searchText);
+            if (loginType != null && !loginType.isEmpty()) {
+                jsObj.addProperty("search_type", loginType);
+            }
 
         // ── Live TV (supplementary) ────────────────────────────────
         } else if (Method.METHOD_LATEST.equals(helper_name)) {
@@ -233,6 +236,15 @@ public class Helper {
         } else if (Method.METHOD_SUGGESTION.equals(helper_name)) {
             jsObj.addProperty("suggest_title", searchText);
             jsObj.addProperty("suggest_message", reportMessage);
+            jsObj.addProperty("device_id", deviceID);
+
+        // ── Favourites (device-based, TV & Radio) ─────────────────
+        } else if (Method.METHOD_LIVE_FAV.equals(helper_name)
+                || Method.METHOD_RADIO_FAV_TOG.equals(helper_name)) {
+            jsObj.addProperty("post_id", itemID);
+            jsObj.addProperty("device_id", deviceID);
+        } else if (Method.METHOD_LIVE_FAV_LIST.equals(helper_name)) {
+            jsObj.addProperty("page", String.valueOf(page));
             jsObj.addProperty("device_id", deviceID);
         }
 

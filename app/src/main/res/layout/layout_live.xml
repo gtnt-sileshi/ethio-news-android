@@ -45,21 +45,4 @@
         android:textColor="?ns_title"
         android:textSize="@dimen/_12ssp" />
 
-    <!-- Premium badge -->
-    <TextView
-        android:id="@+id/tv_live_pre"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_5sdp"
-        android:layout_marginTop="@dimen/_5sdp"
-        android:background="@drawable/bg_live_tag"
-        android:paddingStart="@dimen/_6sdp"
-        android:paddingEnd="@dimen/_6sdp"
-        android:paddingTop="@dimen/_2sdp"
-        android:paddingBottom="@dimen/_2sdp"
-        android:text="@string/premium"
-        android:textColor="@color/white"
-        android:textSize="@dimen/_10ssp"
-        android:textStyle="bold" />
-
 </RelativeLayout>

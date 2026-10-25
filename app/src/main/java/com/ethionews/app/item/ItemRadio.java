@@ -11,25 +11,22 @@ public class ItemRadio implements Serializable {
     private final String logo;
     private final String genre;
     private final String description;
-    private final boolean isPremium;
     private boolean isFavourite;
 
     public ItemRadio(String id, String catID, String name, String streamUrl,
-                     String logo, String genre, String description, boolean isPremium) {
-        this(id, catID, name, streamUrl, logo, genre, description, isPremium, false);
+                     String logo, String genre, String description) {
+        this(id, catID, name, streamUrl, logo, genre, description, false);
     }
 
     public ItemRadio(String id, String catID, String name, String streamUrl,
-                     String logo, String genre, String description, boolean isPremium,
-                     boolean isFavourite) {
-        this.id = id;
-        this.catID = catID;
-        this.name = name;
-        this.streamUrl = streamUrl;
-        this.logo = logo;
-        this.genre = genre;
+                     String logo, String genre, String description, boolean isFavourite) {
+        this.id          = id;
+        this.catID       = catID;
+        this.name        = name;
+        this.streamUrl   = streamUrl;
+        this.logo        = logo;
+        this.genre       = genre;
         this.description = description;
-        this.isPremium = isPremium;
         this.isFavourite = isFavourite;
     }
 
@@ -40,8 +37,6 @@ public class ItemRadio implements Serializable {
     public String getLogo()        { return logo; }
     public String getGenre()       { return genre; }
     public String getDescription() { return description; }
-    public boolean getIsPremium()  { return isPremium; }
-
     public boolean getIsFav()      { return isFavourite; }
     public void setIsFav(boolean favourite) { this.isFavourite = favourite; }
 }

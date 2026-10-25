@@ -6,19 +6,20 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.WindowManager;
-import android.widget.ImageView;
+import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
+
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +29,6 @@ import com.ethionews.app.callback.Method;
 import com.ethionews.app.executor.LoadStatus;
 import com.ethionews.app.interfaces.SuccessListener;
 import com.ethionews.app.utils.IfSupported;
-import com.ethionews.app.utils.MediaPath;
 import com.ethionews.app.utils.helper.Helper;
 
 import android.provider.Settings;
@@ -37,23 +37,23 @@ public class SuggestionActivity extends AppCompatActivity {
 
     private Helper helper;
     private String deviceId;
-    private TextView title;
-    private TextView desc;
-    private ImageView suggest;
+    private TextInputEditText etTitle;
+    private TextInputEditText etDesc;
+    private ImageView ivSugg;
+    private LinearLayout llPlaceholder;
     private String imagePath = "";
     private Bitmap bitmap;
     private ProgressDialog progressDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         super.onCreate(savedInstanceState);
         IfSupported.applyTheme(this);
         setContentView(R.layout.activity_suggestion);
         IfSupported.isRTL(this);
         IfSupported.isScreenshot(this);
 
-        helper = new Helper(this);
+        helper   = new Helper(this);
         deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -61,32 +61,39 @@ public class SuggestionActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            toolbar.setNavigationOnClickListener(view -> finish());
+            toolbar.setNavigationOnClickListener(v -> finish());
         }
 
-        progressDialog = new ProgressDialog(SuggestionActivity.this);
+        progressDialog = new ProgressDialog(this);
 
-        suggest = findViewById(R.id.iv_sugg);
-        desc = findViewById(R.id.et_description);
-        title = findViewById(R.id.et_title);
+        etTitle      = findViewById(R.id.et_title);
+        etDesc       = findViewById(R.id.et_description);
+        ivSugg       = findViewById(R.id.iv_sugg);
+        llPlaceholder = findViewById(R.id.ll_sugg_placeholder);
 
+        // Tap anywhere on the image picker area
         findViewById(R.id.ll_sugg).setOnClickListener(v -> pickImage());
 
-        findViewById(R.id.btn_sugg_submit).setOnClickListener(v -> {
-            if(title.getText().toString().isEmpty()) {
-                Toast.makeText(SuggestionActivity.this, getString(R.string.enter_your_title_here_suggestion), Toast.LENGTH_SHORT).show();
-            } else if(desc.getText().toString().isEmpty()) {
-                Toast.makeText(SuggestionActivity.this, getString(R.string.enter_your_description_here_suggestion), Toast.LENGTH_SHORT).show();
+        MaterialButton btnSubmit = findViewById(R.id.btn_sugg_submit);
+        btnSubmit.setOnClickListener(v -> {
+            String titleText = etTitle.getText() != null ? etTitle.getText().toString().trim() : "";
+            String descText  = etDesc.getText()  != null ? etDesc.getText().toString().trim()  : "";
+            if (titleText.isEmpty()) {
+                etTitle.setError(getString(R.string.enter_your_title_here_suggestion));
+                etTitle.requestFocus();
+            } else if (descText.isEmpty()) {
+                etDesc.setError(getString(R.string.enter_your_description_here_suggestion));
+                etDesc.requestFocus();
             } else {
-                loadSuggestion();
+                loadSuggestion(titleText, descText);
             }
         });
 
         LinearLayout adView = findViewById(R.id.ll_adView);
-        helper.showBannerAd(adView,"");
+        helper.showBannerAd(adView, "");
     }
 
-    public void loadSuggestion() {
+    private void loadSuggestion(String titleText, String descText) {
         if (!helper.isNetworkAvailable()) {
             Toast.makeText(this, getString(R.string.err_internet_not_connected), Toast.LENGTH_SHORT).show();
             return;
@@ -102,18 +109,21 @@ public class SuggestionActivity extends AppCompatActivity {
                 progressDialog.dismiss();
                 if (isFinishing()) return;
                 if (success.equals("1")) {
+                    // Reset form
+                    etTitle.setText("");
+                    etDesc.setText("");
                     imagePath = "";
-                    bitmap = null;
-                    title.setText("");
-                    desc.setText("");
-                    suggest.setImageDrawable(ContextCompat.getDrawable(SuggestionActivity.this,R.drawable.logo));
-                    uploadDialog(message);
+                    bitmap    = null;
+                    ivSugg.setVisibility(View.GONE);
+                    llPlaceholder.setVisibility(View.VISIBLE);
+                    showSuccessDialog(message);
                 } else {
-                    Toast.makeText(SuggestionActivity.this, getString(R.string.err_server_not_connected), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SuggestionActivity.this,
+                            getString(R.string.err_server_not_connected), Toast.LENGTH_SHORT).show();
                 }
             }
         }, helper.getAPIRequest(Method.METHOD_SUGGESTION, 0, "", "",
-                title.getText().toString(), desc.getText().toString(),
+                titleText, descText,
                 deviceId, "", "", "", "", "",
                 "", "", imagePath.isEmpty() ? null : new File(imagePath)));
         loadSuggestion.execute();
@@ -131,32 +141,32 @@ public class SuggestionActivity extends AppCompatActivity {
         }
     }
 
-    private final ActivityResultLauncher<Intent> pickImageLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(), result -> {
+    private final ActivityResultLauncher<Intent> pickImageLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                     Uri imageUri = result.getData().getData();
                     try {
                         bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-                        suggest.setImageBitmap(bitmap);
+                        ivSugg.setImageBitmap(bitmap);
+                        ivSugg.setVisibility(View.VISIBLE);
+                        llPlaceholder.setVisibility(View.GONE);
+
                         File tempFile = File.createTempFile("sugg_", ".jpg", getCacheDir());
                         try (java.io.FileOutputStream fos = new java.io.FileOutputStream(tempFile)) {
                             bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fos);
                         }
                         imagePath = tempFile.getAbsolutePath();
                     } catch (IOException e) {
-                        Toast.makeText(SuggestionActivity.this, "Error pick Image.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.err_server), Toast.LENGTH_SHORT).show();
                     }
                 }
-            }
-    );
+            });
 
-    private void uploadDialog(String message) {
-        AlertDialog.Builder alertDialog;
-        alertDialog = new AlertDialog.Builder(SuggestionActivity.this, R.style.dialogTheme);
-        alertDialog.setTitle(getString(R.string.upload_success));
-        alertDialog.setMessage(message);
-        alertDialog.setNegativeButton(getString(R.string.ok), (dialog, which) -> {
-        });
-        alertDialog.show();
+    private void showSuccessDialog(String message) {
+        new AlertDialog.Builder(this, R.style.dialogTheme)
+                .setTitle(getString(R.string.upload_success))
+                .setMessage(message)
+                .setPositiveButton(getString(R.string.ok), (d, w) -> d.dismiss())
+                .show();
     }
 }

@@ -29,23 +29,6 @@
         android:textColor="?ns_title"
         android:textSize="@dimen/_13ssp" />
 
-    <TextView
-        android:id="@+id/tv_similar_pre"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_similar_text"
-        android:layout_toEndOf="@+id/iv_similar_img"
-        android:background="@drawable/bg_live_tag"
-        android:layoutDirection="ltr"
-        android:paddingStart="@dimen/_6sdp"
-        android:paddingEnd="@dimen/_6sdp"
-        android:paddingTop="@dimen/_2sdp"
-        android:paddingBottom="@dimen/_2sdp"
-        android:text="@string/premium"
-        android:textColor="@color/white"
-        android:textSize="@dimen/_11ssp"
-        android:textStyle="bold" />
-
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/_1sdp"

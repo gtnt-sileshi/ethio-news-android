@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,6 +24,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.ArrayList;
 
@@ -40,9 +41,6 @@ import com.ethionews.app.utils.helper.Helper;
 
 /**
  * Paginated blog post list with infinite-scroll and search.
- *
- * Pass the method name via newInstance() to reuse this fragment for
- * Latest, Trending, By-Category, Saved posts, etc.
  */
 public class FragmentBlog extends Fragment {
 
@@ -53,7 +51,7 @@ public class FragmentBlog extends Fragment {
 
     private Helper helper;
     private RecyclerView rvBlog;
-    private ProgressBar pbBlog;
+    private ShimmerFrameLayout shimmerBlog;
     private FrameLayout flEmpty;
     private AdapterBlogPost adapter;
     private ArrayList<ItemBlogPost> postList = new ArrayList<>();
@@ -67,7 +65,6 @@ public class FragmentBlog extends Fragment {
     private boolean isLoading = false;
     private boolean hasMore   = true;
 
-    // Debounced live search
     private final Handler searchHandler = new Handler(Looper.getMainLooper());
     private Runnable searchRunnable;
 
@@ -101,15 +98,13 @@ public class FragmentBlog extends Fragment {
             apiMethod = Method.METHOD_BLOG_POSTS;
         }
 
-        pbBlog   = root.findViewById(R.id.pb_blog);
-        flEmpty  = root.findViewById(R.id.fl_empty);
-        rvBlog   = root.findViewById(R.id.rv_blog);
+        shimmerBlog = root.findViewById(R.id.shimmer_blog);
+        flEmpty     = root.findViewById(R.id.fl_empty);
+        rvBlog      = root.findViewById(R.id.rv_blog);
 
-        // Banner ad
         LinearLayout adView = root.findViewById(R.id.ll_adView);
         helper.showBannerAd(adView, Callback.PAGE_HOME);
 
-        // Preload AdMob native ads if enabled
         if (helper.canLoadNativeAds(getContext(), Callback.PAGE_NATIVE_POST)
                 && (Callback.getAdNetwork().equals(Callback.AD_TYPE_ADMOB)
                     || Callback.getAdNetwork().equals(Callback.AD_TYPE_META))) {
@@ -135,14 +130,13 @@ public class FragmentBlog extends Fragment {
         });
         rvBlog.setAdapter(adapter);
 
-        // Infinite scroll
         rvBlog.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView rv, int dx, int dy) {
                 if (dy > 0 && !isLoading && hasMore) {
-                    int visible   = llm.getChildCount();
-                    int total     = llm.getItemCount();
-                    int firstVis  = llm.findFirstVisibleItemPosition();
+                    int visible  = llm.getChildCount();
+                    int total    = llm.getItemCount();
+                    int firstVis = llm.findFirstVisibleItemPosition();
                     if ((visible + firstVis) >= total - 3) {
                         page++;
                         loadPosts(false);
@@ -167,12 +161,14 @@ public class FragmentBlog extends Fragment {
         new LoadBlogPosts(new BlogPostsListener() {
             @Override public void onStart() {
                 if (fresh) {
-                    pbBlog.setVisibility(View.VISIBLE);
+                    shimmerBlog.setVisibility(View.VISIBLE);
+                    shimmerBlog.startShimmer();
                     rvBlog.setVisibility(View.GONE);
                 }
             }
             @Override public void onEnd(String success, String message, ArrayList<ItemBlogPost> posts) {
-                pbBlog.setVisibility(View.GONE);
+                shimmerBlog.stopShimmer();
+                shimmerBlog.setVisibility(View.GONE);
                 isLoading = false;
                 if (getActivity() == null) return;
 
@@ -199,14 +195,17 @@ public class FragmentBlog extends Fragment {
 
     private okhttp3.RequestBody buildRequest() {
         String search = Method.METHOD_BLOG_SEARCH.equals(apiMethod) ? searchQuery : "";
+        String deviceId = "";
+        if (Method.METHOD_SAVED_POSTS.equals(apiMethod)) {
+            deviceId = android.provider.Settings.Secure.getString(
+                requireActivity().getContentResolver(),
+                android.provider.Settings.Secure.ANDROID_ID);
+        }
         return helper.getAPIRequest(
             apiMethod, page,
-            /* itemID   */ "",
-            /* catID    */ catId.isEmpty() ? tagId : catId,
-            /* search   */ search,
-            /* report   */ "",
-            /* userID   */ "",
-            /* name     */ "", "", "", "", "", "", "", null
+            "", catId.isEmpty() ? tagId : catId,
+            search, "", deviceId,
+            "", "", "", "", "", "", "", null
         );
     }
 
@@ -215,12 +214,14 @@ public class FragmentBlog extends Fragment {
         if (!postList.isEmpty()) {
             rvBlog.setVisibility(View.VISIBLE);
             flEmpty.setVisibility(View.GONE);
-            pbBlog.setVisibility(View.GONE);
+            shimmerBlog.stopShimmer();
+            shimmerBlog.setVisibility(View.GONE);
             return;
         }
         rvBlog.setVisibility(View.GONE);
         flEmpty.setVisibility(View.VISIBLE);
-        pbBlog.setVisibility(View.GONE);
+        shimmerBlog.stopShimmer();
+        shimmerBlog.setVisibility(View.GONE);
         flEmpty.removeAllViews();
         LayoutInflater inf = (LayoutInflater) requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View mv = inf.inflate(R.layout.row_empty, null);
@@ -259,7 +260,6 @@ public class FragmentBlog extends Fragment {
                     @Override public boolean onQueryTextChange(String s) {
                         searchHandler.removeCallbacks(searchRunnable);
                         if (s.trim().isEmpty()) {
-                            // Reset to default feed when query cleared
                             searchQuery = "";
                             apiMethod = Method.METHOD_BLOG_POSTS;
                             page = 1;

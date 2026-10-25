@@ -263,7 +263,7 @@ public class RadioPlayerActivity extends AppCompatActivity {
                             getString(R.string.err_server_not_connected), Toast.LENGTH_SHORT).show();
                 }
             }
-        }, helper.getAPIRequest(Method.METHOD_RADIO_FAV, 0, radioId, "", "",
+        }, helper.getAPIRequest(Method.METHOD_RADIO_FAV_TOG, 0, radioId, "", "",
                 "", deviceId, "", "", "", "",
                 "", "", "radio", null));
         loadFav.execute();

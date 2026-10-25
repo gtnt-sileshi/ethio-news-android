@@ -64,10 +64,9 @@ public class LoadRadio extends AsyncTaskExecutor<String, String, String> {
                 if (logo.isEmpty()) logo = "null";
                 String genre       = objJson.optString("genre", "");
                 String description = objJson.optString("description", "");
-                boolean isPremium  = "true".equalsIgnoreCase(objJson.optString("isPremium", "false"));
                 boolean isFavourite = "true".equalsIgnoreCase(objJson.optString("is_favorite", "false"));
 
-                arrayList.add(new ItemRadio(id, catID, name, streamUrl, logo, genre, description, isPremium, isFavourite));
+                arrayList.add(new ItemRadio(id, catID, name, streamUrl, logo, genre, description, isFavourite));
             }
             return "1";
         } catch (Exception e) {

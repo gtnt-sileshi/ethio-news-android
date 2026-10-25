@@ -56,16 +56,19 @@ public class LoadLiveID extends AsyncTaskExecutor<String, String, String> {
                 String totalRate = objJson.getString("total_rate");
                 String totalViews = objJson.getString("total_views");
                 String totalShare = objJson.getString("total_share");
-                boolean isPremium = objJson.getBoolean("is_premium");
-                boolean isFav = objJson.getBoolean("is_favorite");
-
+                boolean isFav = objJson.optBoolean("is_favorite", false);
                 boolean isUserAgent = objJson.getBoolean("user_agent");
                 String userAgentName = objJson.getString("user_agent_name");
-                String playerType = objJson.getString("player_type");
+                String playerType    = objJson.getString("player_type");
+                String userRating    = objJson.optString("user_rating", "0");
+                String userMessage   = objJson.optString("user_message", "");
 
                 ItemLiveTv item = new ItemLiveTv(id, catID, title, liveUrl, image,
                         liveType, description, rateAvg, totalRate, totalViews, totalShare,
-                        isPremium, isFav, isUserAgent, userAgentName, playerType);
+                        isFav, isUserAgent, userAgentName, playerType);
+
+                item.setUserRating(userRating);
+                item.setUserMessage(userMessage);
 
                 arrayListLive.add(item);
             }
@@ -74,15 +77,12 @@ public class LoadLiveID extends AsyncTaskExecutor<String, String, String> {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject objJson = jsonArray.getJSONObject(i);
 
-                String id = objJson.getString("id");
+                String id    = objJson.getString("id");
                 String title = objJson.getString("live_title");
                 String image = objJson.getString("image").replace(" ", "%20");
-                if (image.isEmpty()) {
-                    image = "null";
-                }
-                boolean isPremium = objJson.getBoolean("is_premium");
+                if (image.isEmpty()) image = "null";
 
-                ItemData objItem = new ItemData(id,title,image,isPremium);
+                ItemData objItem = new ItemData(id, title, image);
                 arrayListRelated.add(objItem);
             }
 

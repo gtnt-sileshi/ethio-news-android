@@ -49,8 +49,6 @@ public class AdapterSimilarGrid extends RecyclerView.Adapter<AdapterSimilarGrid.
                 .into(holder.logo);
 
         holder.title.setText(itemPost.getTitle());
-
-        holder.premiumView.setVisibility(View.GONE);
         holder.bind(itemPost, listener);
     }
 
@@ -63,13 +61,11 @@ public class AdapterSimilarGrid extends RecyclerView.Adapter<AdapterSimilarGrid.
 
         private final ImageView logo;
         private final TextView title;
-        private final TextView premiumView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            logo = itemView.findViewById(R.id.iv_similar_img);
+            logo  = itemView.findViewById(R.id.iv_similar_img);
             title = itemView.findViewById(R.id.tv_similar_text);
-            premiumView = itemView.findViewById(R.id.tv_similar_pre);
         }
 
         public void bind(final ItemData itemPost, final RecyclerItemClickListener listener){

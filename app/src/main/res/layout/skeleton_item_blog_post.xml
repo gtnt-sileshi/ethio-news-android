@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Skeleton placeholder that mirrors item_blog_post.xml dimensions -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginStart="@dimen/_8sdp"
+    android:layout_marginEnd="@dimen/_8sdp"
+    android:layout_marginBottom="@dimen/_10sdp"
+    android:background="@drawable/bg_news_card">
+
+    <!-- Cover image placeholder -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_170sdp"
+        android:background="@color/skeleton_bone" />
+
+    <!-- Category pill placeholder -->
+    <View
+        android:layout_width="@dimen/_70sdp"
+        android:layout_height="@dimen/_18sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:background="@drawable/skeleton_pill" />
+
+    <!-- Text area -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingEnd="@dimen/_10sdp"
+        android:paddingTop="@dimen/_6sdp"
+        android:paddingBottom="@dimen/_10sdp">
+
+        <!-- Title line 1 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_13sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:background="@color/skeleton_bone" />
+
+        <!-- Title line 2 -->
+        <View
+            android:layout_width="@dimen/_160sdp"
+            android:layout_height="@dimen/_13sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:background="@color/skeleton_bone" />
+
+        <!-- Excerpt line 1 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_11sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:background="@color/skeleton_bone" />
+
+        <!-- Excerpt line 2 -->
+        <View
+            android:layout_width="@dimen/_200sdp"
+            android:layout_height="@dimen/_11sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:background="@color/skeleton_bone" />
+
+        <!-- Meta row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <View
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="@dimen/_10sdp"
+                android:background="@color/skeleton_bone" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <View
+                android:layout_width="@dimen/_50sdp"
+                android:layout_height="@dimen/_10sdp"
+                android:background="@color/skeleton_bone" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

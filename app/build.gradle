@@ -99,6 +99,7 @@ dependencies {
     implementation libs.lifecycle.process
     implementation libs.lifecycle.runtime
     annotationProcessor libs.lifecycle.compiler
+    implementation libs.shimmer
     // Only include the custom decoder extensions from libs/ — the core ExoPlayer
     // engine, extractor and UI are pulled via Maven (bundles.media3 + bundles.exoplayer)
     // and must NOT be duplicated here; doing so causes NoClassDefFoundError /

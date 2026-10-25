@@ -69,4 +69,7 @@
     <!-- Scrim over banners -->
     <color name="news_scrim_dark">#CC000000</color>
 
+    <!-- Skeleton / shimmer bone color — adapts per theme via values-night -->
+    <color name="skeleton_bone">#E0E0E0</color>
+
 </resources>

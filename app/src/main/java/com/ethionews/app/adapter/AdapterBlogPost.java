@@ -92,7 +92,7 @@ public class AdapterBlogPost extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == VIEW_PROGRESS) {
-            View v = LayoutInflater.from(context).inflate(R.layout.row_progressbar, parent, false);
+            View v = LayoutInflater.from(context).inflate(R.layout.skeleton_item_blog_post, parent, false);
             return new ProgressHolder(v);
         }
         View v = LayoutInflater.from(context).inflate(R.layout.item_blog_post, parent, false);

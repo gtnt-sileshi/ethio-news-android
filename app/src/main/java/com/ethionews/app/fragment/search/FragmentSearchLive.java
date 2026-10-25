@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,7 +58,7 @@ public class FragmentSearchLive extends Fragment {
     private Boolean isScroll = false;
     private int page = 1;
     private GridLayoutManager grid;
-    private ProgressBar pb;
+    private ShimmerFrameLayout shimmer;
     private FloatingActionButton fab;
     private String errorMsg;
     private FrameLayout frameLayout;
@@ -75,9 +75,12 @@ public class FragmentSearchLive extends Fragment {
 
         arrayList = new ArrayList<>();
 
+        // Clear any stale global search from other pages
+        Callback.setSearchItem("");
+
         frameLayout = rootView.findViewById(R.id.fl_empty);
         fab = rootView.findViewById(R.id.fab);
-        pb = rootView.findViewById(R.id.pb);
+        shimmer = rootView.findViewById(R.id.shimmer_grid);
         rv = rootView.findViewById(R.id.rv);
 
         android.widget.LinearLayout adView = rootView.findViewById(R.id.ll_adView);
@@ -142,13 +145,16 @@ public class FragmentSearchLive extends Fragment {
                 if (arrayList.isEmpty()) {
                     frameLayout.setVisibility(View.GONE);
                     rv.setVisibility(View.GONE);
-                    pb.setVisibility(View.VISIBLE);
+                    shimmer.setVisibility(View.VISIBLE);
+                    shimmer.startShimmer();
                 }
             }
 
             @Override
             public void onEnd(String success, String verifyStatus, String message,
                               ArrayList<ItemData> arrayListData) {
+                shimmer.stopShimmer();
+                shimmer.setVisibility(View.GONE);
                 if (getActivity() == null) {
                     return;
                 }
@@ -235,12 +241,14 @@ public class FragmentSearchLive extends Fragment {
     private void setEmpty() {
         if (!arrayList.isEmpty()) {
             rv.setVisibility(View.VISIBLE);
-            pb.setVisibility(View.INVISIBLE);
+            shimmer.stopShimmer();
+            shimmer.setVisibility(View.GONE);
             frameLayout.setVisibility(View.GONE);
         } else {
             rv.setVisibility(View.GONE);
             frameLayout.setVisibility(View.VISIBLE);
-            pb.setVisibility(View.INVISIBLE);
+            shimmer.stopShimmer();
+            shimmer.setVisibility(View.GONE);
 
             frameLayout.removeAllViews();
             LayoutInflater inflater = (LayoutInflater) requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -289,28 +297,46 @@ public class FragmentSearchLive extends Fragment {
         }, getViewLifecycleOwner());
     }
 
+    private final Handler searchHandler = new Handler(Looper.getMainLooper());
+    private Runnable searchRunnable;
+
     SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
         @SuppressLint("NotifyDataSetChanged")
         @Override
         public boolean onQueryTextSubmit(String s) {
-            if (helper.isNetworkAvailable()) {
-                page = 1;
-                isScroll = false;
-                Callback.setSearchItem(s.replace(" ", "%20"));
-                arrayList.clear();
-                if (adapter != null) {
-                    adapter.notifyDataSetChanged();
-                }
-                getData();
-            } else {
-                Toast.makeText(getActivity(), getResources().getString(R.string.err_internet_not_connected), Toast.LENGTH_SHORT).show();
-            }
-            return false;
+            searchHandler.removeCallbacks(searchRunnable);
+            doSearch(s);
+            return true;
         }
 
         @Override
         public boolean onQueryTextChange(String s) {
+            searchHandler.removeCallbacks(searchRunnable);
+            if (s.trim().isEmpty()) {
+                Callback.setSearchItem("");
+                resetAndSearch();
+                return true;
+            }
+            searchRunnable = () -> doSearch(s);
+            searchHandler.postDelayed(searchRunnable, 400);
             return true;
+        }
+
+        private void doSearch(String s) {
+            Callback.setSearchItem(s.replace(" ", "%20"));
+            resetAndSearch();
+        }
+
+        @SuppressLint("NotifyDataSetChanged")
+        private void resetAndSearch() {
+            page = 1;
+            isOver = false;
+            isScroll = false;
+            arrayList.clear();
+            if (adapter != null) adapter.notifyDataSetChanged();
+            adapter = null;
+            rv.setVisibility(View.GONE);
+            getData();
         }
     };
 }

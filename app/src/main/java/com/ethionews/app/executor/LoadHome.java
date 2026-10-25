@@ -108,8 +108,7 @@ public class LoadHome extends AsyncTaskExecutor<String, String, String> {
                         blogItems.add(new ItemData(
                             p.optString("id", ""),
                             p.optString("title", ""),
-                            img,
-                            false
+                            img
                         ));
                     }
                     latestPost.setArrayListLive(blogItems);
@@ -167,7 +166,7 @@ public class LoadHome extends AsyncTaskExecutor<String, String, String> {
                                 String img = c.optString("image", "").replace(" ", "%20");
                                 if (img.isEmpty()) img = "null";
                                 channels.add(new ItemData(
-                                    c.optString("id", ""), c.optString("live_title", ""), img, false
+                                    c.optString("id", ""), c.optString("live_title", ""), img
                                 ));
                             }
                             sectionPost.setArrayListLive(channels);
@@ -181,7 +180,7 @@ public class LoadHome extends AsyncTaskExecutor<String, String, String> {
                                 String img = p.optString("image", p.optString("featured_image", "")).replace(" ", "%20");
                                 if (img.isEmpty()) img = "null";
                                 String title = p.optString("title", p.optString("live_title", ""));
-                                blogItems.add(new ItemData(p.optString("id", ""), title, img, false));
+                                blogItems.add(new ItemData(p.optString("id", ""), title, img));
                             }
                             sectionPost.setArrayListLive(blogItems);
                             break;

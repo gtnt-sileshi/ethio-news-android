@@ -17,6 +17,8 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.view.MenuHost;
@@ -56,7 +58,7 @@ public class FragmentCategories extends Fragment {
     private RecyclerView rv;
     private AdapterCategories adapterCategories;
     private ArrayList<ItemCat> arrayList;
-    private ProgressBar progressBar;
+    private ShimmerFrameLayout shimmerCategories;
     private FrameLayout frameLayout;
     private GridLayoutManager glm;
     private Boolean isLoading = false;
@@ -87,7 +89,10 @@ public class FragmentCategories extends Fragment {
 
         arrayList = new ArrayList<>();
 
-        progressBar = rootView.findViewById(R.id.pb);
+        // Clear any stale search from other pages so categories always loads unfiltered
+        Callback.setSearchItem("");
+
+        shimmerCategories = rootView.findViewById(R.id.shimmer_categories);
         frameLayout = rootView.findViewById(R.id.fl_empty);
         rv = rootView.findViewById(R.id.rv);
 
@@ -97,27 +102,10 @@ public class FragmentCategories extends Fragment {
         glm = new GridLayoutManager(getActivity(), 1);
         rv.setLayoutManager(glm);
         rv.setItemAnimator(new DefaultItemAnimator());
-        rv.addOnScrollListener(new EndlessRecyclerViewScrollListener(glm) {
+        rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onLoadMore(int p, int totalItemsCount) {
-                if (getActivity() == null){
-                    return;
-                }
-                if (Boolean.FALSE.equals(isFromHome)) {
-                    if (Boolean.FALSE.equals(isOver)) {
-                        if (Boolean.FALSE.equals(isLoading)) {
-                            isLoading = true;
-                            new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                                isScroll = true;
-                                loadCategories();
-                            }, 0);
-                        }
-                    } else {
-                        adapterCategories.hideHeader();
-                    }
-                } else {
-                    adapterCategories.hideHeader();
-                }
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
             }
         });
 
@@ -128,15 +116,44 @@ public class FragmentCategories extends Fragment {
     }
 
     private void openByCategory(int position) {
-        // Open blog posts filtered by this category
-        FragmentBlog blogFrag = FragmentBlog.newInstance(
-            Method.METHOD_BLOG_BY_CAT, arrayList.get(position).getId(), "", arrayList.get(position).getName());
+        ItemCat cat = arrayList.get(position);
+        String type = cat.getType();
+
+        if (ItemCat.TYPE_LIVE.equals(type)) {
+            // Navigate to TV list filtered by this category
+            com.ethionews.app.fragment.online.FragmentLatest tvFrag =
+                new com.ethionews.app.fragment.online.FragmentLatest();
+            android.os.Bundle args = new android.os.Bundle();
+            args.putString("cat_id", cat.getId());
+            args.putString("cat_name", cat.getName());
+            tvFrag.setArguments(args);
+            loadChildFrag(tvFrag, cat.getName());
+
+        } else if (ItemCat.TYPE_RADIO.equals(type)) {
+            // Navigate to Radio list filtered by this category
+            com.ethionews.app.fragment.online.FragmentRadio radioFrag =
+                new com.ethionews.app.fragment.online.FragmentRadio();
+            android.os.Bundle args = new android.os.Bundle();
+            args.putString("cat_id", cat.getId());
+            args.putString("cat_name", cat.getName());
+            radioFrag.setArguments(args);
+            loadChildFrag(radioFrag, cat.getName());
+
+        } else {
+            // 'blog' or 'all' → open blog post list for this category
+            FragmentBlog blogFrag = FragmentBlog.newInstance(
+                Method.METHOD_BLOG_BY_CAT, cat.getId(), "", cat.getName());
+            loadChildFrag(blogFrag, cat.getName());
+        }
+    }
+
+    private void loadChildFrag(androidx.fragment.app.Fragment frag, String name) {
         FragmentManager fm = getParentFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         ft.hide(fm.getFragments().get(fm.getBackStackEntryCount()));
-        ft.add(R.id.fragment, blogFrag, arrayList.get(position).getName());
-        ft.addToBackStack(arrayList.get(position).getName());
+        ft.add(R.id.fragment, frag, name);
+        ft.addToBackStack(name);
         ft.commit();
     }
 
@@ -153,7 +170,8 @@ public class FragmentCategories extends Fragment {
                 if (arrayList.isEmpty()) {
                     frameLayout.setVisibility(View.GONE);
                     rv.setVisibility(View.GONE);
-                    progressBar.setVisibility(View.VISIBLE);
+                    shimmerCategories.setVisibility(View.VISIBLE);
+                    shimmerCategories.startShimmer();
                 }
             }
 
@@ -162,6 +180,8 @@ public class FragmentCategories extends Fragment {
                 if (getActivity() == null) {
                     return;
                 }
+                shimmerCategories.stopShimmer();
+                shimmerCategories.setVisibility(View.GONE);
                 if (success.equals("1")) {
                     loadCatEnd(verifyStatus, message, arrayListCat);
                 } else {
@@ -174,12 +194,11 @@ public class FragmentCategories extends Fragment {
                     errorMsg = getString(R.string.err_server);
                     setEmpty();
                 }
-                progressBar.setVisibility(View.GONE);
                 isLoading = false;
             }
-        }, helper.getAPIRequest(helperName, page, homeSecId, "", "", "",
-                "", "", "", "","","","",
-                "", null));
+        }, helper.getAPIRequest(helperName, page, homeSecId, "", Callback.getSearchItem(), "",
+                "", "", "", "", "", "", "",
+                Method.CAT_TYPE_BLOG, null));
         loadCat.execute();
     }
 
@@ -212,6 +231,9 @@ public class FragmentCategories extends Fragment {
                 }
             }
         }
+        // Categories API returns everything in one shot — no real pagination.
+        // Stop after the first load so endless scroll doesn't re-fetch duplicates.
+        isOver = true;
         page = page + 1;
         setAdapter();
     }
@@ -220,6 +242,8 @@ public class FragmentCategories extends Fragment {
     private void setAdapter() {
         if (Boolean.FALSE.equals(isScroll)) {
             adapterCategories = new AdapterCategories(getActivity(), arrayList, (itemCat, position) -> helper.showInterAd(position, ""));
+            // No pagination — hide the footer spinner immediately
+            adapterCategories.hideHeader();
             rv.setAdapter(adapterCategories);
             setEmpty();
             loadNativeAds();
@@ -265,11 +289,13 @@ public class FragmentCategories extends Fragment {
         if (!arrayList.isEmpty()) {
             rv.setVisibility(View.VISIBLE);
             frameLayout.setVisibility(View.GONE);
-            progressBar.setVisibility(View.GONE);
+            shimmerCategories.stopShimmer();
+            shimmerCategories.setVisibility(View.GONE);
         } else {
             rv.setVisibility(View.GONE);
             frameLayout.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.INVISIBLE);
+            shimmerCategories.stopShimmer();
+            shimmerCategories.setVisibility(View.GONE);
 
             frameLayout.removeAllViews();
             LayoutInflater inflater = (LayoutInflater) requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -317,24 +343,47 @@ public class FragmentCategories extends Fragment {
         }, getViewLifecycleOwner());
     }
 
+    private final Handler searchHandler = new Handler(Looper.getMainLooper());
+    private Runnable searchRunnable;
+
     SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+        @SuppressLint("NotifyDataSetChanged")
         @Override
         public boolean onQueryTextSubmit(@NonNull String s) {
-            Callback.setSearchItem(s.replace(" ", "%20"));
-            FragmentSearchCategories fSearch = new FragmentSearchCategories();
-            FragmentManager fm = getParentFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            ft.hide(getParentFragmentManager().getFragments().get(getParentFragmentManager().getBackStackEntryCount()));
-            ft.add(R.id.fragment, fSearch, getString(R.string.search_categories));
-            ft.addToBackStack(getString(R.string.search_categories));
-            ft.commit();
+            searchHandler.removeCallbacks(searchRunnable);
+            doSearch(s);
             return true;
         }
 
+        @SuppressLint("NotifyDataSetChanged")
         @Override
         public boolean onQueryTextChange(String s) {
-            return false;
+            searchHandler.removeCallbacks(searchRunnable);
+            if (s.trim().isEmpty()) {
+                // Cleared — reset to full unfiltered list
+                Callback.setSearchItem("");
+                resetAndReload();
+                return true;
+            }
+            searchRunnable = () -> doSearch(s);
+            searchHandler.postDelayed(searchRunnable, 400);
+            return true;
+        }
+
+        @SuppressLint("NotifyDataSetChanged")
+        private void doSearch(String s) {
+            Callback.setSearchItem(s.replace(" ", "%20"));
+            resetAndReload();
+        }
+
+        @SuppressLint("NotifyDataSetChanged")
+        private void resetAndReload() {
+            page = 1;
+            isOver = false;
+            isScroll = false;
+            arrayList.clear();
+            if (adapterCategories != null) adapterCategories.notifyDataSetChanged();
+            loadCategories();
         }
     };
 }

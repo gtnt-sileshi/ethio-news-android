@@ -32,14 +32,12 @@ public class AdapterHomeLive extends RecyclerView.Adapter<AdapterHomeLive.MyView
 
         ImageView logo;
         TextView title;
-        TextView premiumView;
         RelativeLayout relativeLayout;
 
         MyViewHolder(View view) {
             super(view);
-            title = view.findViewById(R.id.tv_live);
-            logo = view.findViewById(R.id.iv_live);
-            premiumView = view.findViewById(R.id.tv_live_premium);
+            title         = view.findViewById(R.id.tv_live);
+            logo          = view.findViewById(R.id.iv_live);
             relativeLayout = view.findViewById(R.id.rl_live_tv);
         }
     }
@@ -59,11 +57,9 @@ public class AdapterHomeLive extends RecyclerView.Adapter<AdapterHomeLive.MyView
         Picasso.get()
                 .load(arrayList.get(position).getThumb())
                 .centerCrop()
-                .resize(300,300)
+                .resize(300, 300)
                 .placeholder(R.drawable.material_design_default)
                 .into(holder.logo);
-
-        holder.premiumView.setVisibility(View.GONE);
 
         holder.relativeLayout.setOnClickListener(v -> listener.onClick(holder.getAbsoluteAdapterPosition()));
     }

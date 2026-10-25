@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Skeleton placeholder for the blog post detail screen -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!-- Cover image placeholder -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_220sdp"
+        android:background="@color/skeleton_bone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/_16sdp">
+
+        <!-- Category pill + read time row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="@dimen/_8sdp">
+
+            <View
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:background="@drawable/skeleton_pill" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <View
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_12sdp"
+                android:background="@color/skeleton_bone" />
+        </LinearLayout>
+
+        <!-- Title line 1 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_18sdp"
+            android:layout_marginBottom="@dimen/_6sdp"
+            android:background="@color/skeleton_bone" />
+
+        <!-- Title line 2 -->
+        <View
+            android:layout_width="@dimen/_200sdp"
+            android:layout_height="@dimen/_18sdp"
+            android:layout_marginBottom="@dimen/_12sdp"
+            android:background="@color/skeleton_bone" />
+
+        <!-- Author + views row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/_12sdp">
+
+            <View
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_12sdp"
+                android:background="@color/skeleton_bone" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <View
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_12sdp"
+                android:background="@color/skeleton_bone" />
+        </LinearLayout>
+
+        <!-- Content lines -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_12sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:background="@color/skeleton_bone" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_12sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:background="@color/skeleton_bone" />
+
+        <View
+            android:layout_width="@dimen/_235sdp"
+            android:layout_height="@dimen/_12sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:background="@color/skeleton_bone" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_12sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:background="@color/skeleton_bone" />
+
+        <View
+            android:layout_width="@dimen/_220sdp"
+            android:layout_height="@dimen/_12sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:background="@color/skeleton_bone" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_12sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:background="@color/skeleton_bone" />
+
+        <View
+            android:layout_width="@dimen/_170sdp"
+            android:layout_height="@dimen/_12sdp"
+            android:background="@color/skeleton_bone" />
+
+    </LinearLayout>
+
+</LinearLayout>

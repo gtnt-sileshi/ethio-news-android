@@ -7,13 +7,21 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
+
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuHost;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -65,6 +73,9 @@ public class FragmentRadio extends Fragment {
     private Helper helper;
     private SPHelper spHelper;
     private String deviceId;
+    private String searchQuery = "";
+    private final Handler searchHandler = new Handler(Looper.getMainLooper());
+    private Runnable searchRunnable;
     private RecyclerView rv;
     private AdapterRadio adapter;
     private ArrayList<ItemRadio> arrayList;
@@ -72,7 +83,7 @@ public class FragmentRadio extends Fragment {
     private Boolean isScroll = false;
     private int page = 1;
     private GridLayoutManager grid;
-    private ProgressBar pb;
+    private ShimmerFrameLayout shimmer;
     private FloatingActionButton fab;
     private FrameLayout frameLayout;
     private String errorMsg;
@@ -96,7 +107,7 @@ public class FragmentRadio extends Fragment {
         tabLayout   = rootView.findViewById(R.id.tab_layout);
         frameLayout = rootView.findViewById(R.id.fl_empty);
         fab         = rootView.findViewById(R.id.fab);
-        pb          = rootView.findViewById(R.id.pb);
+        shimmer     = rootView.findViewById(R.id.shimmer_grid);
         rv          = rootView.findViewById(R.id.rv);
 
         android.widget.LinearLayout adView = rootView.findViewById(R.id.ll_adView);
@@ -107,6 +118,7 @@ public class FragmentRadio extends Fragment {
 
         getData();
         loadCategories();
+        addMenuProvider();
         return rootView;
     }
 
@@ -160,7 +172,7 @@ public class FragmentRadio extends Fragment {
             }
         }, helper.getAPIRequest(Method.METHOD_CAT, 1, "", "", "",
                 "", "", "", "", "", "", "",
-                "", "", null));
+                "", Method.CAT_TYPE_RADIO, null));
         loadCat.execute();
     }
 
@@ -284,21 +296,23 @@ public class FragmentRadio extends Fragment {
         RequestBody request;
         String userId = deviceId;
 
-        if (tag instanceof Integer) {
+        // If there's an active search query, use search API regardless of tab
+        if (!searchQuery.isEmpty()) {
+            request = helper.getAPIRequest(Method.METHOD_SEARCH_RADIO, page, "", "",
+                    searchQuery, "", userId, "", "", "", "",
+                    "", "", "", null);
+        } else if (tag instanceof Integer) {
             int tagInt = (Integer) tag;
             if (tagInt == TAB_FAV) {
-                // Favourites tab
                 request = helper.getAPIRequest(Method.METHOD_RADIO_FAV, page, "", "",
                         "", "", userId, "", "", "", "",
                         "", "", "", null);
             } else {
-                // "All" tab
                 request = helper.getAPIRequest(Method.METHOD_RADIO_LIST, page, "", "",
                         "", "", userId, "", "", "", "",
                         "", "", "", null);
             }
         } else if (tag instanceof String) {
-            // Category tab — tag holds the category id
             String catId = (String) tag;
             request = helper.getAPIRequest(Method.METHOD_RADIO_BY_CAT, page, "", catId,
                     "", "", userId, "", "", "", "",
@@ -315,13 +329,16 @@ public class FragmentRadio extends Fragment {
                 if (arrayList.isEmpty()) {
                     frameLayout.setVisibility(View.GONE);
                     rv.setVisibility(View.GONE);
-                    pb.setVisibility(View.VISIBLE);
+                    shimmer.setVisibility(View.VISIBLE);
+                    shimmer.startShimmer();
                 }
             }
 
             @Override
             public void onEnd(String success, String verifyStatus, String message,
                              ArrayList<ItemRadio> arrayListData) {
+                shimmer.stopShimmer();
+                shimmer.setVisibility(View.GONE);
                 if (getActivity() == null) return;
                 if (success.equals("1")) {
                     loadEnd(arrayListData);
@@ -396,22 +413,80 @@ public class FragmentRadio extends Fragment {
         if (adapter == null || adapter.getItem(position) == null) return;
         ItemRadio item = arrayList.get(position);
         Intent intent = new Intent(getActivity(), RadioPlayerActivity.class);
-        intent.putExtra("radio_id", item.getId());
-        intent.putExtra("radio_name", item.getName());
-        intent.putExtra("stream_url", item.getStreamUrl());
-        intent.putExtra("logo", item.getLogo());
-        intent.putExtra("genre", item.getGenre());
+        intent.putExtra("radio_id",    item.getId());
+        intent.putExtra("radio_name",  item.getName());
+        intent.putExtra("stream_url",  item.getStreamUrl());
+        intent.putExtra("logo",        item.getLogo());
+        intent.putExtra("genre",       item.getGenre());
         intent.putExtra("description", item.getDescription());
-        intent.putExtra("isPremium", item.getIsPremium());
         intent.putExtra("is_favourite", item.getIsFav());
         startActivity(intent);
+    }
+
+    // ── Search ────────────────────────────────────────────────────────
+
+    private void addMenuProvider() {
+        MenuHost menuHost = requireActivity();
+        menuHost.addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+                menu.clear();
+                inflater.inflate(R.menu.menu_search, menu);
+                MenuItem item = menu.findItem(R.id.menu_search);
+                item.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_IF_ROOM);
+                SearchView sv = (SearchView) item.getActionView();
+                if (sv != null) sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @SuppressLint("NotifyDataSetChanged")
+                    @Override
+                    public boolean onQueryTextSubmit(String s) {
+                        searchHandler.removeCallbacks(searchRunnable);
+                        doSearch(s);
+                        return true;
+                    }
+                    @SuppressLint("NotifyDataSetChanged")
+                    @Override
+                    public boolean onQueryTextChange(String s) {
+                        searchHandler.removeCallbacks(searchRunnable);
+                        if (s.trim().isEmpty()) {
+                            searchQuery = "";
+                            resetAndReload();
+                            return true;
+                        }
+                        searchRunnable = () -> doSearch(s);
+                        searchHandler.postDelayed(searchRunnable, 400);
+                        return true;
+                    }
+                });
+            }
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem item) { return false; }
+        }, getViewLifecycleOwner());
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void doSearch(String s) {
+        searchQuery = s.replace(" ", "%20");
+        resetAndReload();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void resetAndReload() {
+        page = 1;
+        isOver = false;
+        isScroll = false;
+        arrayList.clear();
+        if (adapter != null) adapter.notifyDataSetChanged();
+        adapter = null;
+        rv.setVisibility(View.GONE);
+        getData();
     }
 
     // ── Empty state ───────────────────────────────────────────────────
 
     private void setEmpty() {
         if (getActivity() == null) return;
-        pb.setVisibility(View.GONE);
+        shimmer.stopShimmer();
+        shimmer.setVisibility(View.GONE);
         if (!arrayList.isEmpty()) {
             rv.setVisibility(View.VISIBLE);
             frameLayout.setVisibility(View.GONE);

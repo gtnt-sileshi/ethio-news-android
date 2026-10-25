@@ -37,7 +37,7 @@ import com.google.android.play.core.review.ReviewManagerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
+
 
 import com.ethionews.app.R;
 import com.ethionews.app.callback.Callback;
@@ -388,48 +388,55 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if (fm.getBackStackEntryCount() != 0) {
-            String title = fm.getFragments().get(fm.getBackStackEntryCount() - 1).getTag();
-            if (title != null) {
+        } else if (fm.getBackStackEntryCount() > 0) {
+            // Pop the current fragment synchronously so the count is accurate
+            fm.popBackStackImmediate();
 
-                // Custom class to hold both navigation ID and bottom navigation index
-                class NavInfo {
-                    final int navId;
-                    final int bottomNavIndex;
-                    NavInfo(int navId, int bottomNavIndex) {
-                        this.navId = navId;
-                        this.bottomNavIndex = bottomNavIndex;
-                    }
+            if (fm.getBackStackEntryCount() > 0) {
+                // Still have fragments — update title + nav to match the now-top fragment
+                String title = fm.getBackStackEntryAt(fm.getBackStackEntryCount() - 1).getName();
+                currentNavIndex = navIndexForTitle(title);
+                selectBottomNavSilently(currentNavIndex);
+                if (getSupportActionBar() != null && title != null) {
+                    getSupportActionBar().setTitle(title);
                 }
-
-                // Map to hold titles and corresponding NavInfo
-                Map<String, NavInfo> titleToNavInfoMap = new HashMap<>();
-
-                // Initialize the map with titles and corresponding actions
-                titleToNavInfoMap.put(getString(R.string.dashboard), new NavInfo(R.id.nav_home, 0));
-                titleToNavInfoMap.put(getString(R.string.nav_home), new NavInfo(R.id.nav_home, 0));
-                titleToNavInfoMap.put(getString(R.string.topics), new NavInfo(R.id.nav_topics, 1));
-                titleToNavInfoMap.put(getString(R.string.saved), new NavInfo(R.id.nav_home, 2));
-                titleToNavInfoMap.put(getString(R.string.live_tv), new NavInfo(R.id.nav_home, 3));
-                titleToNavInfoMap.put(getString(R.string.live_radio), new NavInfo(R.id.nav_home, 4));
-                titleToNavInfoMap.put(getString(R.string.search), new NavInfo(R.id.nav_home, 0));
-
-                // Update the navigation view and bottom navigation view if the title is in the map
-                NavInfo navInfo = titleToNavInfoMap.get(title);
-                if (navInfo != null) {
-                    navigationView.setCheckedItem(navInfo.navId);
-                    bottomNavigationView(navInfo.bottomNavIndex);
-                    pageChange(navInfo.bottomNavIndex);
+            } else {
+                // Back stack empty — we're back at the dashboard/home
+                currentNavIndex = 0;
+                selectBottomNavSilently(0);
+                navigationView.setCheckedItem(R.id.nav_home);
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setTitle(getString(R.string.app_name));
                 }
             }
-            if (getSupportActionBar() != null) {
-                getSupportActionBar().setTitle(Objects.equals(title, getString(R.string.dashboard)) ? getString(R.string.nav_home) : title);
-            }
-        } else if (reviewInfo != null){
+        } else if (reviewInfo != null) {
             Task<Void> flow = manager.launchReviewFlow(MainActivity.this, reviewInfo);
             flow.addOnCompleteListener(task1 -> DialogUtil.exitDialog(MainActivity.this));
         } else {
             DialogUtil.exitDialog(MainActivity.this);
+        }
+    }
+
+    /** Maps a fragment back-stack tag to its bottom-nav index. */
+    private int navIndexForTitle(String title) {
+        if (title == null) return 0;
+        if (title.equals(getString(R.string.topics)))     return 1;
+        if (title.equals(getString(R.string.saved)))      return 2;
+        if (title.equals(getString(R.string.live_tv)))    return 3;
+        if (title.equals(getString(R.string.live_radio))) return 4;
+        return 0;
+    }
+
+    /**
+     * Updates the bottom nav visual selection WITHOUT triggering the
+     * OnItemSelectedListener — avoids an infinite back/re-navigate loop.
+     */
+    private void selectBottomNavSilently(int pos) {
+        if (bottomNav == null) return;
+        int[] ids = {R.id.tv_nav_home, R.id.tv_nav_topics, R.id.tv_nav_saved,
+                     R.id.tv_nav_tv, R.id.tv_nav_radio};
+        if (pos >= 0 && pos < ids.length) {
+            bottomNav.getMenu().findItem(ids[pos]).setChecked(true);
         }
     }
 

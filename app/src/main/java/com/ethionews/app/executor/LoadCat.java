@@ -42,14 +42,12 @@ public class LoadCat extends AsyncTaskExecutor<String, String, String> {
                 JSONObject obj = jsonArray.getJSONObject(i);
 
                 if (!obj.has(Callback.TAG_SUCCESS)) {
-                    String id = obj.getString("cid");
-                    String name = obj.getString("category_name");
+                    String id    = obj.getString("cid");
+                    String name  = obj.getString("category_name");
+                    String type  = obj.optString("category_type", ItemCat.TYPE_ALL);
                     String image = obj.getString("category_image").replace(" ", "%20");
-                    if (image.isEmpty()) {
-                        image = "null";
-                    }
-                    ItemCat objItem = new ItemCat(id, name, image);
-                    arrayList.add(objItem);
+                    if (image.isEmpty()) image = "null";
+                    arrayList.add(new ItemCat(id, name, image, type));
                 } else {
                     verifyStatus = obj.getString(Callback.TAG_SUCCESS);
                     message = obj.getString(Callback.TAG_MSG);

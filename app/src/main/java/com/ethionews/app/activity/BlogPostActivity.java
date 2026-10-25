@@ -15,6 +15,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -64,7 +66,7 @@ public class BlogPostActivity extends AppCompatActivity {
 
     // Views
     private ImageView ivCover;
-    private ProgressBar pbBlog;
+    private ShimmerFrameLayout shimmerDetail;
     private LinearLayout llContent;
     private TextView tvCategory, tvReadTime, tvTitle, tvAuthor, tvViews;
     private WebView wvContent;
@@ -112,7 +114,7 @@ public class BlogPostActivity extends AppCompatActivity {
 
     private void bindViews() {
         ivCover       = findViewById(R.id.iv_blog_cover);
-        pbBlog        = findViewById(R.id.pb_blog);
+        shimmerDetail = findViewById(R.id.shimmer_blog_detail);
         llContent     = findViewById(R.id.ll_blog_content);
         tvCategory    = findViewById(R.id.tv_category);
         tvReadTime    = findViewById(R.id.tv_read_time);
@@ -141,12 +143,14 @@ public class BlogPostActivity extends AppCompatActivity {
         rvComments.setItemAnimator(new DefaultItemAnimator());
         rvComments.setAdapter(commentAdapter);
 
-        // Related posts
+        // Related posts — hide footer immediately since related posts are loaded
+        // all at once (not paginated); avoids a permanent spinner at the bottom
         relatedAdapter = new AdapterBlogPost(this, relatedList, pos -> {
             Intent i = new Intent(this, BlogPostActivity.class);
             i.putExtra(EXTRA_POST_ID, relatedList.get(pos).getId());
             startActivity(i);
         });
+        relatedAdapter.hideFooter();
         rvRelated.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rvRelated.setItemAnimator(new DefaultItemAnimator());
         rvRelated.setAdapter(relatedAdapter);
@@ -160,11 +164,13 @@ public class BlogPostActivity extends AppCompatActivity {
 
         new LoadBlogPost(new BlogPostDetailListener() {
             @Override public void onStart() {
-                pbBlog.setVisibility(View.VISIBLE);
+                shimmerDetail.setVisibility(View.VISIBLE);
+                shimmerDetail.startShimmer();
                 llContent.setVisibility(View.GONE);
             }
             @Override public void onEnd(String success, String message, ItemBlogPost post) {
-                pbBlog.setVisibility(View.GONE);
+                shimmerDetail.stopShimmer();
+                shimmerDetail.setVisibility(View.GONE);
                 if ("1".equals(success) && post != null) {
                     bindPost(post);
                 } else {
@@ -285,20 +291,26 @@ public class BlogPostActivity extends AppCompatActivity {
             return;
         }
 
-        if (!helper.isNetworkAvailable()) {
-            Toast.makeText(this, getString(R.string.err_internet_not_connected), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         new LoadStatus(new SuccessListener() {
             @Override public void onStart() {}
             @Override public void onEnd(String success, String verifyStatus, String message) {
-                if ("1".equals(success)) {
-                    Toast.makeText(BlogPostActivity.this, message, Toast.LENGTH_LONG).show();
+                // success = network result ("1"/"0"), verifyStatus = API success field
+                if ("1".equals(success) && "1".equals(verifyStatus)) {
+                    Toast.makeText(BlogPostActivity.this,
+                        message.isEmpty() ? getString(R.string.submit_comment) : message,
+                        Toast.LENGTH_LONG).show();
                     etCommentName.setText("");
                     etCommentBody.setText("");
+                } else if ("1".equals(success)) {
+                    // Network ok but API returned an error
+                    Toast.makeText(BlogPostActivity.this,
+                        message.isEmpty() ? getString(R.string.err_server) : message,
+                        Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(BlogPostActivity.this, message, Toast.LENGTH_SHORT).show();
+                    // doInBackground returned "0" — network/connection error
+                    Toast.makeText(BlogPostActivity.this,
+                        getString(R.string.err_server_not_connected),
+                        Toast.LENGTH_SHORT).show();
                 }
             }
         }, helper.getAPIRequest(
@@ -309,7 +321,6 @@ public class BlogPostActivity extends AppCompatActivity {
     }
 
     private void toggleSave(String id) {
-        if (!helper.isNetworkAvailable()) return;
         new LoadStatus(new SuccessListener() {
             @Override public void onStart() {}
             @Override public void onEnd(String success, String verifyStatus, String message) {

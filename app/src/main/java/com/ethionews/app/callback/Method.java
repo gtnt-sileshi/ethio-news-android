@@ -29,6 +29,12 @@ public class Method {
     public static final String METHOD_HOME_DETAILS = "home_collections";
     public static final String METHOD_CAT          = "cat_list";
 
+    // category_type filter values passed as search_type in METHOD_CAT
+    public static final String CAT_TYPE_ALL   = "all";
+    public static final String CAT_TYPE_BLOG  = "blog";
+    public static final String CAT_TYPE_LIVE  = "live";
+    public static final String CAT_TYPE_RADIO = "radio";
+
     // ── Live TV (supplementary) ────────────────────────────────────
     public static final String METHOD_LATEST         = "get_latest";
     public static final String METHOD_MOST_VIEWED    = "get_trending";
@@ -52,4 +58,9 @@ public class Method {
     public static final String METHOD_RATINGS     = "post_rating";
     public static final String METHOD_REPORT      = "post_report";
     public static final String METHOD_SUGGESTION  = "post_suggest";
+
+    // Favourites (device-based)
+    public static final String METHOD_LIVE_FAV        = "toggle_live_favourite";
+    public static final String METHOD_LIVE_FAV_LIST   = "get_live_favourite";
+    public static final String METHOD_RADIO_FAV_TOG   = "toggle_radio_favourite";
 }

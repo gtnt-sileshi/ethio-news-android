@@ -32,22 +32,6 @@
         android:background="@color/news_live_red"
         android:visibility="gone" />
 
-    <!-- Premium badge -->
-    <TextView
-        android:id="@+id/tv_live_premium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_5sdp"
-        android:background="@drawable/bg_live_tag"
-        android:paddingStart="@dimen/_6sdp"
-        android:paddingEnd="@dimen/_6sdp"
-        android:paddingTop="@dimen/_2sdp"
-        android:paddingBottom="@dimen/_2sdp"
-        android:text="@string/premium"
-        android:textColor="@color/white"
-        android:textSize="@dimen/_10ssp"
-        android:textStyle="bold" />
-
     <!-- Channel name -->
     <TextView
         android:id="@+id/tv_live"

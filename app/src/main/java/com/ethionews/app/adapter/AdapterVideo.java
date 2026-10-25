@@ -68,16 +68,13 @@ public class AdapterVideo extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static class MyViewHolder extends RecyclerView.ViewHolder {
 
         private final ImageView logo;
-        private final TextView premiumView;
         private final TextView title;
         private final RelativeLayout relativeLayout;
 
         private MyViewHolder(View view) {
             super(view);
-
-            title = view.findViewById(R.id.tv_title);
-            logo = view.findViewById(R.id.iv_live_tv);
-            premiumView = itemView.findViewById(R.id.tv_live_pre);
+            title         = view.findViewById(R.id.tv_title);
+            logo          = view.findViewById(R.id.iv_live_tv);
             relativeLayout = itemView.findViewById(R.id.rl_live_tv);
         }
     }
@@ -134,8 +131,6 @@ public class AdapterVideo extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     .placeholder(R.drawable.material_design_default)
                     .error(R.drawable.material_design_default)
                     .into(myViewHolder.logo);
-
-            myViewHolder.premiumView.setVisibility(View.GONE);
 
             myViewHolder.relativeLayout.setOnClickListener(view -> {
                 listener.onClick(holder.getAbsoluteAdapterPosition());

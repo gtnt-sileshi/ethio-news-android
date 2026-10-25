@@ -18,6 +18,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.view.MenuHost;
@@ -61,6 +63,7 @@ public class FragmentLatest extends Fragment {
 
     private static final String TAG = "FragmentLatest";
     private static final int TAB_ALL = 0;
+    private static final int TAB_FAV = -1;
     private Helper helper;
     private SPHelper spHelper;
     private RecyclerView rv;
@@ -71,10 +74,11 @@ public class FragmentLatest extends Fragment {
     private int page = 1;
     private int nativeAdPos = 0;
     private GridLayoutManager grid;
-    private ProgressBar pb;
+    private ShimmerFrameLayout shimmer;
     private FloatingActionButton fab;
     private String errorMsg;
     private FrameLayout frameLayout;
+    private String deviceId;
 
     // Tab + categories
     private TabLayout tabLayout;
@@ -90,12 +94,15 @@ public class FragmentLatest extends Fragment {
 
         spHelper = new SPHelper(requireActivity());
         helper = new Helper(getActivity(), (position, type) -> playLive(position));
+        deviceId = android.provider.Settings.Secure.getString(
+                requireActivity().getContentResolver(),
+                android.provider.Settings.Secure.ANDROID_ID);
 
         arrayList = new ArrayList<>();
 
         frameLayout = rootView.findViewById(R.id.fl_empty);
         fab = rootView.findViewById(R.id.fab);
-        pb = rootView.findViewById(R.id.pb);
+        shimmer = rootView.findViewById(R.id.shimmer_grid);
         rv = rootView.findViewById(R.id.rv);
         tabLayout = rootView.findViewById(R.id.tab_layout);
 
@@ -104,6 +111,7 @@ public class FragmentLatest extends Fragment {
 
         // TabLayout setup — mirrors FragmentRadio pattern
         tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.live_tv)).setTag(TAB_ALL));
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.radio_favorites)).setTag(TAB_FAV));
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -211,12 +219,11 @@ public class FragmentLatest extends Fragment {
                 }
             }
         }, helper.getAPIRequest(Method.METHOD_CAT, 1, "", "", "",
-                "", "", "", "", "", "", "", "", "", null));
+                "", "", "", "", "", "", "", "", Method.CAT_TYPE_LIVE, null));
         loadCat.execute();
     }
 
     private void rebuildTabs() {
-        isRebuildingTabs = true;
         TabLayout.Tab previousTab = tabLayout.getTabAt(tabLayout.getSelectedTabPosition());
         Object previousTag = previousTab != null ? previousTab.getTag() : TAB_ALL;
 
@@ -225,6 +232,7 @@ public class FragmentLatest extends Fragment {
         for (ItemCat cat : categoryList) {
             tabLayout.addTab(tabLayout.newTab().setText(cat.getName()).setTag(cat.getId()));
         }
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.radio_favorites)).setTag(TAB_FAV));
 
         boolean restored = false;
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
@@ -252,7 +260,9 @@ public class FragmentLatest extends Fragment {
         Object tabTag = currentTab != null ? currentTab.getTag() : TAB_ALL;
         String method = Method.METHOD_LATEST;
         String catId = "";
-        if (tabTag instanceof String) {
+        if (tabTag instanceof Integer && (Integer) tabTag == TAB_FAV) {
+            method = Method.METHOD_LIVE_FAV_LIST;
+        } else if (tabTag instanceof String) {
             method = Method.METHOD_CAT_ID;
             catId = (String) tabTag;
         }
@@ -263,12 +273,15 @@ public class FragmentLatest extends Fragment {
                 if (arrayList.isEmpty()) {
                     frameLayout.setVisibility(View.GONE);
                     rv.setVisibility(View.GONE);
-                    pb.setVisibility(View.VISIBLE);
+                    shimmer.setVisibility(View.VISIBLE);
+                    shimmer.startShimmer();
                 }
             }
 
             @Override
             public void onEnd(String success, String verifyStatus, String message, ArrayList<ItemData> arrayListData) {
+                shimmer.stopShimmer();
+                shimmer.setVisibility(View.GONE);
                 if (getActivity() == null) {
                     return;
                 }
@@ -276,8 +289,8 @@ public class FragmentLatest extends Fragment {
                     if (!verifyStatus.equals("-1")) {
                         loadCategoryEnd(arrayListData);
                     } else {
-                        DialogUtil.verifyDialog(requireActivity(), getString(R.string.err_unauthorized_access), message, () -> {
-                        });
+                        // -1 means "no data" for this tab, not an auth error
+                        errorMsg = message.isEmpty() ? getString(R.string.err_no_data_found) : message;
                         setEmpty();
                     }
                 } else {
@@ -286,7 +299,7 @@ public class FragmentLatest extends Fragment {
                 }
             }
         }, helper.getAPIRequest(method, page, "", catId, "",
-                "", "", "", "", "", "", "",
+                "", deviceId, "", "", "", "", "",
                 "", "", null));
         loadCategory.execute();
     }
@@ -398,12 +411,14 @@ public class FragmentLatest extends Fragment {
     private void setEmpty() {
         if (!arrayList.isEmpty()) {
             rv.setVisibility(View.VISIBLE);
-            pb.setVisibility(View.INVISIBLE);
+            shimmer.stopShimmer();
+            shimmer.setVisibility(View.GONE);
             frameLayout.setVisibility(View.GONE);
         } else {
             rv.setVisibility(View.GONE);
             frameLayout.setVisibility(View.VISIBLE);
-            pb.setVisibility(View.INVISIBLE);
+            shimmer.stopShimmer();
+            shimmer.setVisibility(View.GONE);
 
             frameLayout.removeAllViews();
             LayoutInflater inflater = (LayoutInflater) requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);

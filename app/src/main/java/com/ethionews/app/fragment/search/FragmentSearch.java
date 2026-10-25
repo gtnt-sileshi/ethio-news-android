@@ -13,9 +13,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
@@ -46,7 +47,7 @@ import com.ethionews.app.utils.helper.Helper;
 public class FragmentSearch extends Fragment {
 
     private Helper helper;
-    private ProgressBar progressBar;
+    private ShimmerFrameLayout shimmer;
     private FrameLayout frameLayout;
     private RecyclerView rv;
     private AdapterBlogPost adapter;
@@ -67,7 +68,7 @@ public class FragmentSearch extends Fragment {
         ((MainActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.search));
         ((MainActivity) getActivity()).bottomNavigationView(5);
 
-        progressBar = rootView.findViewById(R.id.pb_blog);
+        shimmer = rootView.findViewById(R.id.shimmer_blog);
         frameLayout = rootView.findViewById(R.id.fl_empty);
         rv = rootView.findViewById(R.id.rv_blog);
 
@@ -98,10 +99,12 @@ public class FragmentSearch extends Fragment {
             @Override public void onStart() {
                 frameLayout.setVisibility(View.GONE);
                 rv.setVisibility(View.GONE);
-                progressBar.setVisibility(View.VISIBLE);
+                shimmer.setVisibility(View.VISIBLE);
+                shimmer.startShimmer();
             }
             @Override public void onEnd(String success, String message, ArrayList<ItemBlogPost> posts) {
-                progressBar.setVisibility(View.GONE);
+                shimmer.stopShimmer();
+                shimmer.setVisibility(View.GONE);
                 if (getActivity() == null) return;
                 if ("1".equals(success) && !posts.isEmpty()) {
                     arrayList.clear();
@@ -124,11 +127,13 @@ public class FragmentSearch extends Fragment {
         if (!arrayList.isEmpty()) {
             rv.setVisibility(View.VISIBLE);
             frameLayout.setVisibility(View.GONE);
-            progressBar.setVisibility(View.GONE);
+            shimmer.stopShimmer();
+            shimmer.setVisibility(View.GONE);
         } else {
             rv.setVisibility(View.GONE);
             frameLayout.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.GONE);
+            shimmer.stopShimmer();
+            shimmer.setVisibility(View.GONE);
 
             frameLayout.removeAllViews();
             LayoutInflater inflater = (LayoutInflater) requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);

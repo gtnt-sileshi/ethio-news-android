@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 
 import com.google.ads.mediation.admob.AdMobAdapter;
+import com.google.ads.mediation.facebook.FacebookMediationAdapter;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
@@ -24,11 +25,18 @@ public class AdManagerInterAdmob {
 
     public void createAd() {
         AdRequest adRequest;
-        Bundle extras = new Bundle();
-        extras.putString("npa", "1");
-        adRequest = new AdRequest.Builder()
-                .addNetworkExtrasBundle(AdMobAdapter.class, extras)
-                .build();
+        if (Callback.getAdNetwork().equals(Callback.AD_TYPE_META)) {
+            // For Meta (Facebook) mediation, signal the adapter via FacebookMediationAdapter extras.
+            // Do NOT set npa=1 here — Meta handles consent independently.
+            adRequest = new AdRequest.Builder()
+                    .addNetworkExtrasBundle(AdMobAdapter.class, new Bundle())
+                    .addNetworkExtrasBundle(FacebookMediationAdapter.class, new Bundle())
+                    .build();
+        } else {
+            adRequest = new AdRequest.Builder()
+                    .addNetworkExtrasBundle(AdMobAdapter.class, new Bundle())
+                    .build();
+        }
 
         InterstitialAd.load(ctx, Callback.getAdmobInterstitialAdID(), adRequest, new InterstitialAdLoadCallback() {
             @Override
